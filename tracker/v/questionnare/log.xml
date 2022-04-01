@@ -1,2 +1,167 @@
 <?xml version="1.0"?>
-<capture.data><save.artefact.organization alias="[]" save="structurals" result="3"><save.column.organization.id result="mutall_data"/><save.column.organization.name result="Error. Attribute organization.name's data is missing"/><save.column.organization.organization result="3"><save.index.organization.id result="3"/></save.column.organization.organization></save.artefact.organization><save.artefact.organization alias="[]" save="cross_members" result="3"><save.column.organization.owner result="Error. Missing data for this foreign key"/></save.artefact.organization><save.query.stock result="0 log errors"><save.barrel.r0 result="check"><save.artefact.vehicle alias="[]" save="structurals" result="13"><save.column.vehicle.axles result="Error. Attribute vehicle.axles's data is missing"/><save.column.vehicle.body_type result="Error. Attribute vehicle.body_type's data is missing"/><save.column.vehicle.category result="Lorry"/><save.column.vehicle.logbook_no result="Error. Attribute vehicle.logbook_no's data is missing"/><save.column.vehicle.make_model result="Error. Attribute vehicle.make_model's data is missing"/><save.column.vehicle.manufacture_date result="Error. Attribute vehicle.manufacture_date's data is missing"/><save.column.vehicle.passengers_no result="Error. Attribute vehicle.passengers_no's data is missing"/><save.column.vehicle.reg_no result="kbe117y"/><save.column.vehicle.registration_date result="Error. Attribute vehicle.registration_date's data is missing"/><save.column.vehicle.weight result="Error. Attribute vehicle.weight's data is missing"/><save.column.vehicle.vehicle result="13"><save.index.vehicle.id result="13"/></save.column.vehicle.vehicle></save.artefact.vehicle><save.artefact.operator alias="[]" save="structurals" result="5394"><save.column.operator.email result="nick@gmail.com"/><save.column.operator.organization result="3"/><save.column.operator.operator result="5394"><save.index.operator.id result="5394"/></save.column.operator.operator></save.artefact.operator><save.artefact.stock alias="[]" save="structurals" result="1"><save.column.stock.datetime result="2022-02-03 11:59:07"/><save.column.stock.organization result="3"/><save.column.stock.session result="Morning"/><save.column.stock.vehicle result="13"/><save.column.stock.stock result="1"><save.index.stock.id result="1"/></save.column.stock.stock></save.artefact.stock><save.artefact.vehicle alias="[]" save="cross_members" result="13"/><save.artefact.operator alias="[]" save="cross_members" result="5394"/><save.artefact.stock alias="[]" save="cross_members" result="1"><save.column.stock.operator result="5394"/></save.artefact.stock></save.barrel.r0><save.barrel.r1 result="check"><save.artefact.vehicle alias="[]" save="structurals" result="13"><save.column.vehicle.axles result="Error. Attribute vehicle.axles's data is missing"/><save.column.vehicle.body_type result="Error. Attribute vehicle.body_type's data is missing"/><save.column.vehicle.category result="Lorry"/><save.column.vehicle.logbook_no result="Error. Attribute vehicle.logbook_no's data is missing"/><save.column.vehicle.make_model result="Error. Attribute vehicle.make_model's data is missing"/><save.column.vehicle.manufacture_date result="Error. Attribute vehicle.manufacture_date's data is missing"/><save.column.vehicle.passengers_no result="Error. Attribute vehicle.passengers_no's data is missing"/><save.column.vehicle.reg_no result="kbe117y"/><save.column.vehicle.registration_date result="Error. Attribute vehicle.registration_date's data is missing"/><save.column.vehicle.weight result="Error. Attribute vehicle.weight's data is missing"/><save.column.vehicle.vehicle result="13"><save.index.vehicle.id result="13"/></save.column.vehicle.vehicle></save.artefact.vehicle><save.artefact.operator alias="[]" save="structurals" result="5394"><save.column.operator.email result="nick@gmail.com"/><save.column.operator.organization result="3"/><save.column.operator.operator result="5394"><save.index.operator.id result="5394"/></save.column.operator.operator></save.artefact.operator><save.artefact.stock alias="[]" save="structurals" result="1"><save.column.stock.datetime result="2022-02-03 11:59:07"/><save.column.stock.organization result="3"/><save.column.stock.session result="Morning"/><save.column.stock.vehicle result="13"/><save.column.stock.stock result="1"><save.index.stock.id result="1"/></save.column.stock.stock></save.artefact.stock><save.artefact.vehicle alias="[]" save="cross_members" result="13"/><save.artefact.operator alias="[]" save="cross_members" result="5394"/><save.artefact.stock alias="[]" save="cross_members" result="1"><save.column.stock.operator result="5394"/></save.artefact.stock></save.barrel.r1><save.barrel.r2 result="check"><save.artefact.vehicle alias="[]" save="structurals" result="13"><save.column.vehicle.axles result="Error. Attribute vehicle.axles's data is missing"/><save.column.vehicle.body_type result="Error. Attribute vehicle.body_type's data is missing"/><save.column.vehicle.category result="Lorry"/><save.column.vehicle.logbook_no result="Error. Attribute vehicle.logbook_no's data is missing"/><save.column.vehicle.make_model result="Error. Attribute vehicle.make_model's data is missing"/><save.column.vehicle.manufacture_date result="Error. Attribute vehicle.manufacture_date's data is missing"/><save.column.vehicle.passengers_no result="Error. Attribute vehicle.passengers_no's data is missing"/><save.column.vehicle.reg_no result="kbe117y"/><save.column.vehicle.registration_date result="Error. Attribute vehicle.registration_date's data is missing"/><save.column.vehicle.weight result="Error. Attribute vehicle.weight's data is missing"/><save.column.vehicle.vehicle result="13"><save.index.vehicle.id result="13"/></save.column.vehicle.vehicle></save.artefact.vehicle><save.artefact.operator alias="[]" save="structurals" result="5394"><save.column.operator.email result="nick@gmail.com"/><save.column.operator.organization result="3"/><save.column.operator.operator result="5394"><save.index.operator.id result="5394"/></save.column.operator.operator></save.artefact.operator><save.artefact.stock alias="[]" save="structurals" result="1"><save.column.stock.datetime result="2022-02-03 11:59:07"/><save.column.stock.organization result="3"/><save.column.stock.session result="Morning"/><save.column.stock.vehicle result="13"/><save.column.stock.stock result="1"><save.index.stock.id result="1"/></save.column.stock.stock></save.artefact.stock><save.artefact.vehicle alias="[]" save="cross_members" result="13"/><save.artefact.operator alias="[]" save="cross_members" result="5394"/><save.artefact.stock alias="[]" save="cross_members" result="1"><save.column.stock.operator result="5394"/></save.artefact.stock></save.barrel.r2><save.barrel.r3 result="check"><save.artefact.vehicle alias="[]" save="structurals" result="1290"><save.column.vehicle.axles result="Error. Attribute vehicle.axles's data is missing"/><save.column.vehicle.body_type result="Error. Attribute vehicle.body_type's data is missing"/><save.column.vehicle.category result="Car"/><save.column.vehicle.logbook_no result="Error. Attribute vehicle.logbook_no's data is missing"/><save.column.vehicle.make_model result="Error. Attribute vehicle.make_model's data is missing"/><save.column.vehicle.manufacture_date result="Error. Attribute vehicle.manufacture_date's data is missing"/><save.column.vehicle.passengers_no result="Error. Attribute vehicle.passengers_no's data is missing"/><save.column.vehicle.reg_no result="kaw345g"/><save.column.vehicle.registration_date result="Error. Attribute vehicle.registration_date's data is missing"/><save.column.vehicle.weight result="Error. Attribute vehicle.weight's data is missing"/><save.column.vehicle.vehicle result="1290"><save.index.vehicle.id result="1290"/></save.column.vehicle.vehicle></save.artefact.vehicle><save.artefact.operator alias="[]" save="structurals" result="5394"><save.column.operator.email result="nick@gmail.com"/><save.column.operator.organization result="3"/><save.column.operator.operator result="5394"><save.index.operator.id result="5394"/></save.column.operator.operator></save.artefact.operator><save.artefact.stock alias="[]" save="structurals" result="2"><save.column.stock.datetime result="2022-02-03 13:16:04"/><save.column.stock.organization result="3"/><save.column.stock.session result="Morning"/><save.column.stock.vehicle result="1290"/><save.column.stock.stock result="2"><save.index.stock.id result="2"/></save.column.stock.stock></save.artefact.stock><save.artefact.vehicle alias="[]" save="cross_members" result="1290"/><save.artefact.operator alias="[]" save="cross_members" result="5394"/><save.artefact.stock alias="[]" save="cross_members" result="2"><save.column.stock.operator result="5394"/></save.artefact.stock></save.barrel.r3></save.query.stock></capture.data>
+<capture.data>
+    <save.artefact.organization alias="[]" save="structurals" result="3">
+        <save.column.organization.id result="mutall_data"/>
+        <save.column.organization.name result="Error. Attribute organization.name's data is missing"/>
+        <save.column.organization.organization result="3">
+            <save.index.organization.id result="3"/>
+        </save.column.organization.organization>
+    </save.artefact.organization>
+    <save.artefact.organization alias="[]" save="cross_members" result="3">
+        <save.column.organization.owner result="Error. Missing data for this foreign key"/>
+    </save.artefact.organization>
+    <save.query.flow result="0 log errors">
+        <save.barrel.r0 result="check">
+            <save.artefact.vehicle alias="[]" save="structurals" result="1">
+                <save.column.vehicle.axles result="Error. Attribute vehicle.axles's data is missing"/>
+                <save.column.vehicle.body_type result="Error. Attribute vehicle.body_type's data is missing"/>
+                <save.column.vehicle.category result="null"/>
+                <save.column.vehicle.logbook_no result="Error. Attribute vehicle.logbook_no's data is missing"/>
+                <save.column.vehicle.make_model result="Error. Attribute vehicle.make_model's data is missing"/>
+                <save.column.vehicle.manufacture_date result="Error. Attribute vehicle.manufacture_date's data is missing"/>
+                <save.column.vehicle.passengers_no result="Error. Attribute vehicle.passengers_no's data is missing"/>
+                <save.column.vehicle.reg_no result="KCH 123"/>
+                <save.column.vehicle.registration_date result="Error. Attribute vehicle.registration_date's data is missing"/>
+                <save.column.vehicle.weight result="Error. Attribute vehicle.weight's data is missing"/>
+                <save.column.vehicle.vehicle result="1">
+                    <save.index.vehicle.id result="1"/>
+                </save.column.vehicle.vehicle>
+            </save.artefact.vehicle>
+            <save.artefact.operator alias="[]" save="structurals" result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized">
+                <save.column.operator.email result="null"/>
+                <save.column.operator.organization result="3"/>
+                <save.column.operator.operator result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized">
+                    <save.index.operator.id result="Error. Unusable index: These columns, email, are invalid"/>
+                </save.column.operator.operator>
+            </save.artefact.operator>
+            <save.artefact.flow alias="[]" save="structurals" result="1">
+                <save.column.flow.datetime result="2021-12-06 10:51:00"/>
+                <save.column.flow.direction result="Incoming"/>
+                <save.column.flow.organization result="3"/>
+                <save.column.flow.vehicle result="1"/>
+                <save.column.flow.flow result="1">
+                    <save.index.flow.id result="1"/>
+                </save.column.flow.flow>
+            </save.artefact.flow>
+            <save.artefact.vehicle alias="[]" save="cross_members" result="1"/>
+            <save.artefact.operator alias="[]" save="cross_members" result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized"/>
+            <save.artefact.flow alias="[]" save="cross_members" result="1">
+                <save.column.flow.operator result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized"/>
+            </save.artefact.flow>
+        </save.barrel.r0>
+        <save.barrel.r1 result="check">
+            <save.artefact.vehicle alias="[]" save="structurals" result="2">
+                <save.column.vehicle.axles result="Error. Attribute vehicle.axles's data is missing"/>
+                <save.column.vehicle.body_type result="Error. Attribute vehicle.body_type's data is missing"/>
+                <save.column.vehicle.category result="null"/>
+                <save.column.vehicle.logbook_no result="Error. Attribute vehicle.logbook_no's data is missing"/>
+                <save.column.vehicle.make_model result="Error. Attribute vehicle.make_model's data is missing"/>
+                <save.column.vehicle.manufacture_date result="Error. Attribute vehicle.manufacture_date's data is missing"/>
+                <save.column.vehicle.passengers_no result="Error. Attribute vehicle.passengers_no's data is missing"/>
+                <save.column.vehicle.reg_no result="kbe 117"/>
+                <save.column.vehicle.registration_date result="Error. Attribute vehicle.registration_date's data is missing"/>
+                <save.column.vehicle.weight result="Error. Attribute vehicle.weight's data is missing"/>
+                <save.column.vehicle.vehicle result="2">
+                    <save.index.vehicle.id result="2"/>
+                </save.column.vehicle.vehicle>
+            </save.artefact.vehicle>
+            <save.artefact.operator alias="[]" save="structurals" result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized">
+                <save.column.operator.email result="null"/>
+                <save.column.operator.organization result="3"/>
+                <save.column.operator.operator result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized">
+                    <save.index.operator.id result="Error. Unusable index: These columns, email, are invalid"/>
+                </save.column.operator.operator>
+            </save.artefact.operator>
+            <save.artefact.flow alias="[]" save="structurals" result="2">
+                <save.column.flow.datetime result="2021-12-06 10:51:00"/>
+                <save.column.flow.direction result="Outgoing"/>
+                <save.column.flow.organization result="3"/>
+                <save.column.flow.vehicle result="2"/>
+                <save.column.flow.flow result="2">
+                    <save.index.flow.id result="2"/>
+                </save.column.flow.flow>
+            </save.artefact.flow>
+            <save.artefact.vehicle alias="[]" save="cross_members" result="2"/>
+            <save.artefact.operator alias="[]" save="cross_members" result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized"/>
+            <save.artefact.flow alias="[]" save="cross_members" result="2">
+                <save.column.flow.operator result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized"/>
+            </save.artefact.flow>
+        </save.barrel.r1>
+        <save.barrel.r2 result="check">
+            <save.artefact.vehicle alias="[]" save="structurals" result="3">
+                <save.column.vehicle.axles result="Error. Attribute vehicle.axles's data is missing"/>
+                <save.column.vehicle.body_type result="Error. Attribute vehicle.body_type's data is missing"/>
+                <save.column.vehicle.category result="null"/>
+                <save.column.vehicle.logbook_no result="Error. Attribute vehicle.logbook_no's data is missing"/>
+                <save.column.vehicle.make_model result="Error. Attribute vehicle.make_model's data is missing"/>
+                <save.column.vehicle.manufacture_date result="Error. Attribute vehicle.manufacture_date's data is missing"/>
+                <save.column.vehicle.passengers_no result="Error. Attribute vehicle.passengers_no's data is missing"/>
+                <save.column.vehicle.reg_no result="kjh 222"/>
+                <save.column.vehicle.registration_date result="Error. Attribute vehicle.registration_date's data is missing"/>
+                <save.column.vehicle.weight result="Error. Attribute vehicle.weight's data is missing"/>
+                <save.column.vehicle.vehicle result="3">
+                    <save.index.vehicle.id result="3"/>
+                </save.column.vehicle.vehicle>
+            </save.artefact.vehicle>
+            <save.artefact.operator alias="[]" save="structurals" result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized">
+                <save.column.operator.email result="null"/>
+                <save.column.operator.organization result="3"/>
+                <save.column.operator.operator result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized">
+                    <save.index.operator.id result="Error. Unusable index: These columns, email, are invalid"/>
+                </save.column.operator.operator>
+            </save.artefact.operator>
+            <save.artefact.flow alias="[]" save="structurals" result="3">
+                <save.column.flow.datetime result="2021-12-07 07:28:46"/>
+                <save.column.flow.direction result="Outgoing"/>
+                <save.column.flow.organization result="3"/>
+                <save.column.flow.vehicle result="3"/>
+                <save.column.flow.flow result="3">
+                    <save.index.flow.id result="3"/>
+                </save.column.flow.flow>
+            </save.artefact.flow>
+            <save.artefact.vehicle alias="[]" save="cross_members" result="3"/>
+            <save.artefact.operator alias="[]" save="cross_members" result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized"/>
+            <save.artefact.flow alias="[]" save="cross_members" result="3">
+                <save.column.flow.operator result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized"/>
+            </save.artefact.flow>
+        </save.barrel.r2>
+        <save.barrel.r3 result="check">
+            <save.artefact.vehicle alias="[]" save="structurals" result="4">
+                <save.column.vehicle.axles result="Error. Attribute vehicle.axles's data is missing"/>
+                <save.column.vehicle.body_type result="Error. Attribute vehicle.body_type's data is missing"/>
+                <save.column.vehicle.category result="null"/>
+                <save.column.vehicle.logbook_no result="Error. Attribute vehicle.logbook_no's data is missing"/>
+                <save.column.vehicle.make_model result="Error. Attribute vehicle.make_model's data is missing"/>
+                <save.column.vehicle.manufacture_date result="Error. Attribute vehicle.manufacture_date's data is missing"/>
+                <save.column.vehicle.passengers_no result="Error. Attribute vehicle.passengers_no's data is missing"/>
+                <save.column.vehicle.reg_no result="kan 966"/>
+                <save.column.vehicle.registration_date result="Error. Attribute vehicle.registration_date's data is missing"/>
+                <save.column.vehicle.weight result="Error. Attribute vehicle.weight's data is missing"/>
+                <save.column.vehicle.vehicle result="4">
+                    <save.index.vehicle.id result="4"/>
+                </save.column.vehicle.vehicle>
+            </save.artefact.vehicle>
+            <save.artefact.operator alias="[]" save="structurals" result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized">
+                <save.column.operator.email result="null"/>
+                <save.column.operator.organization result="3"/>
+                <save.column.operator.operator result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized">
+                    <save.index.operator.id result="Error. Unusable index: These columns, email, are invalid"/>
+                </save.column.operator.operator>
+            </save.artefact.operator>
+            <save.artefact.flow alias="[]" save="structurals" result="4">
+                <save.column.flow.datetime result="2021-12-07 07:33:57"/>
+                <save.column.flow.direction result="Incoming"/>
+                <save.column.flow.organization result="3"/>
+                <save.column.flow.vehicle result="4"/>
+                <save.column.flow.flow result="4">
+                    <save.index.flow.id result="4"/>
+                </save.column.flow.flow>
+            </save.artefact.flow>
+            <save.artefact.vehicle alias="[]" save="cross_members" result="4"/>
+            <save.artefact.operator alias="[]" save="cross_members" result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized"/>
+            <save.artefact.flow alias="[]" save="cross_members" result="4">
+                <save.column.flow.operator result="Error. No valid index found for table 'operator' because one or more identification columns is missing or oversized"/>
+            </save.artefact.flow>
+        </save.barrel.r3>
+    </save.query.flow>
+</capture.data>

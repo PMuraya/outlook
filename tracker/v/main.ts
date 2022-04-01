@@ -352,7 +352,7 @@ class tea_delivery extends popup<Iref> {
     //
     //In future, check if a file json file containing Iquestionnaire is selected.
     //For now, do nothing
-    async check():Promise<boolean> {
+    check(): boolean {
         return true;
     }
     //
@@ -384,7 +384,7 @@ class msg extends popup<Imsg> {
     //
     //In future, check if a file json file containing Iquestionnaire is selected.
     //For now, do nothing
-    async check():Promise<boolean> { return true; }
+    check(): boolean { return true; }
     //
     //Collect the message and media of communication specified by the user.
     async get_result(): Promise<Imsg> {
@@ -450,7 +450,7 @@ class load_data extends popup<boolean> {
     //
     //In future, check if a file json file containing Iquestionnare is selected.
     //For now, do nothing
-    async check():Promise<boolean> {
+    check(): boolean {
         return true;
     }
     //

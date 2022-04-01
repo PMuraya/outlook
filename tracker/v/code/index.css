@@ -55,11 +55,13 @@ Style the all the boxes. */
   grid-area: services;
   background-color: lightgoldenrodyellow;
   overflow: scroll;
+  overflow-x: hidden;
 }
 #event {
   grid-area: event;
   background-color: lightgoldenrodyellow;
   overflow: scroll;
+  overflow-x: hidden;
 }
 #content {
   grid-area: content;
@@ -70,6 +72,7 @@ Style the all the boxes. */
   grid-area: message;
   background-color: lightblue;
   overflow: scroll;
+  overflow-x: hidden;
 }
 
 /*

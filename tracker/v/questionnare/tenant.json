@@ -1,0 +1,19 @@
+[  {
+        "class_name": "capture\\query",
+        "args": [
+            "client",
+            "select name, title, quarterly, contact, phone, address, email",
+            "mutallco_rental"
+        ]
+   },
+   
+   ["mutall_users","user", [],"name", ["\\capture\\lookup","client","name"]],
+   ["mutall_users","user", [],"title", ["\\capture\\lookup","client","title"]],
+   ["rentize","tenant", [],"name", ["\\capture\\lookup","client","quarterly"]],
+   ["rentize","tenant", [],"contact", ["\\capture\\lookup","client","contact"]],
+   ["mutall_users","mobile", [],"num", ["\\capture\\lookup","client","phone"]],
+   ["mutall_users","user", [],"address", ["\\capture\\lookup","client","address"]],
+   ["mutall_users","user", [],"email", ["\\capture\\lookup","client","email"]],
+   ["rentize","tenant", [],"email", ["\\capture\\lookup","client","email"]]
+]
+

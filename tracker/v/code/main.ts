@@ -55,7 +55,7 @@ export default class main extends app.app {
     async new_msg(): Promise<void> {
         //
         //1. Create a pop that facilitates sending a new message.
-        const Msg = new msg.msg();
+        const Msg = new msg.msg(this);
         //
         //Collect all the data from the user.
         const result: msg.Imsg | undefined = await Msg.administer();
@@ -64,7 +64,6 @@ export default class main extends app.app {
         if (result === undefined) return;
         //
         //Use the questionnare in php class to save the data to the database.
-        this.win.alert(JSON.stringify(result));
         //
     }
     //

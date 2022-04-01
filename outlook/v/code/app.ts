@@ -15,9 +15,9 @@ import * as quest from "../../../schema/v/code/questionnaire.js"
 import * as viewer from "./viewer.js"
 
 //
-//A column on the application database that is linked to a corresponding one
-//on the user database. Sometimes this link is broken and needs to be
-//re-established.
+//Replica is a column on the application database that is linked to a 
+//corresponding one on the user database. Sometimes this link is broken and 
+//may need to be re-established.
 type replica = { ename: string, cname: string };
 
 //
@@ -674,17 +674,17 @@ export abstract class app extends outlook.page{
 
     //
     //Establish the links between the user database and application database
-    //e.g In tracker we link developers, CEO's, staff to the users 
-    //and organization to the business.
+    //For instance, in Tracker we link interns, CEOs and staff to the users, 
+    //organization and business respectively.
     async relink_user(): Promise<void> {
         //
-        //0. Yield/get all the replicas (i.e., entities, in the application, that have 
-        //a matching table in the user database) that have a broken link.
+        // Yield/get all the replicas (i.e., entities, in the application, that have 
+        //a matching table in the user database) that have have a broken link.
         const links = this.collect_broken_replicas();
         //
         //Continue only if there are broken links.
         if (links.length === 0) {
-            alert("The links are well linked");
+            alert("All links between the application datanase and mutall_users are well established");
             return;
         }
         //
@@ -692,19 +692,21 @@ export abstract class app extends outlook.page{
         const ok: boolean =
             await server.exec("tracker", [], "relink_user", [links]);
         //
-        //If not ok, alert the user the process has failed.
-        if (!ok) { alert("Process failed"); }
-        else { alert('Replicas relinked successfully'); }
+        //If not ok, alert the user that the process has failed.
+        if (!ok) alert("Process failed"); 
+        else alert('Replicas relinked successfully'); 
     }
     
     //
     //Yield both roles and business replicas that are broken.
     private collect_broken_replicas(): Array<replica> {
         //
-        //Start with an empty array.
+        //Start with an empty array pf replicas.
         let result: Array<replica> = [];
         //
-        //Get the role replicas.
+        //Get the role replicas
+        //
+        //Get the current application database roles.
         const role = this.dbase!.get_roles();
         //
         //Collect the role replicas.
@@ -712,9 +714,11 @@ export abstract class app extends outlook.page{
             role.map(role => { return { ename: role.key, cname: "user" } });
         //
         //Collect the business replicas.
+        //
+        //Get teh business entity        
         const ename: string = this.get_business_ename();
         //
-        //Merge the role and business replicas.
+        //Add teh business to the business replicas.
         replicas.push({ ename, cname: "business" });
         //
         //For each, merge ...
@@ -733,7 +737,8 @@ export abstract class app extends outlook.page{
         return result;
     }
     //
-    //Retrieve the entity that represents the business in this application.
+    //Retrieve the entity that represents the business in this application. It 
+    //has a (foreign key) column named business
     private get_business_ename(): string {
         //
         //Get all entities in the database.

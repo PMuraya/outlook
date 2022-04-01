@@ -7,11 +7,11 @@
             "mutall_carpark"
         ]
     },
-    ["mutall_ranix", "vehicle", [], "reg_no", ["\\capture\\lookup", "stock", "registration_number"]],
-    ["mutall_ranix", "vehicle", [], "category", ["\\capture\\lookup", "stock", "category"]],
-    ["mutall_ranix", "stock", [], "session", ["\\capture\\lookup", "stock", "daytime"]],
-    ["mutall_ranix", "stock", [], "datetime", ["\\capture\\lookup", "stock", "datetime"]],
-    ["mutall_ranix", "operator", [], "email", ["\\capture\\lookup", "stock", "operator"]],
+    ["mutall_ranix", "vehicle", [], "reg_no", ["\\capture\\query", "stock", "registration_number"]],
+    ["mutall_ranix", "vehicle", [], "category", ["\\capture\\query", "stock", "category"]],
+    ["mutall_ranix", "stock", [], "session", ["\\capture\\query", "stock", "daytime"]],
+    ["mutall_ranix", "stock", [], "datetime", ["\\capture\\query", "stock", "datetime"]],
+    ["mutall_ranix", "operator", [], "email", ["\\capture\\query", "stock", "operator"]],
     ["mutall_ranix", "organization", [], "id", "mutall_data"]
 ]
     

@@ -13,7 +13,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/schema/v/code/schema.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'/schema/v/code/questionnaire.php';
 //
 //Get the Kentionary data (in questionnaire format) to export
-$text = file_get_contents("stock.json");
+$text = file_get_contents("tenant.json");
 //
 //Convert the json to the Iquestionnaire php structure
 $Iquestionnaire = json_decode($text);

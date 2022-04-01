@@ -2,84 +2,99 @@
 
     <head>
         <title>Send message</title>
-        <link id="theme_css" rel="stylesheet" href="../../../outlook/v/code/general.css"/>
+        <style>
+            /*Make the font size good enough for projection*/
+            * {
+                font-size: 20px;
+                line-height: 1.4;
+            }
+            /* To display the labels in a block format rather than inline */
+            label {
+                display: block;
+
+            }
+            body{
+                /* border: 1px solid grey; */
+                width: 50%;
+                padding: 2%;
+            }
+            .media{
+                margin-left: 4%;
+            }
+
+        </style>
         
     </head>
 
     <body>
-        <div>
-            <label for="languages">Choose a Language:
+        <label for="languages">Choose a Language:
 
-                <select name="languages" id="languages">
-
-                    <option value="kikuyu">Kikuyu</option>
-                    <option value="maasai">Maasai</option>
-                    <option value="luo">Luo</option>
-                </select></label>
-            <!--
-              Where to type the message. -->
+            <select name="languages" id="languages">
+                <option value="--">---</option>
+                <option value="kikuyu">Kikuyu</option>
+                <option value="maasai">Maasai</option>
+                <option value="luo">Luo</option>
+            </select>
+        </label>
+        <!--
+          Where to type the message. -->
+        <label>
+            Enter Message <br />
+            <textarea id="msg" rows="5" cols="25"></textarea>
+        </label>
+        <!--
+          Private message. -->
+        <fieldset>
+            <legend>Is this message public?</legend>
             <label>
-                Enter Message <br />
-                <textarea id="msg" rows="5" cols="25"></textarea>
+                <input type="radio" name="visibility" onclick="Main.show_panel('private', false)"/>Yes
             </label>
-            <!--
-              Private message. -->
-            <fieldset>
-                <legend>Is this message public?</legend>
+            <label>
+                <input type="radio" name="visibility" onclick="Main.show_panel('private', true)" />No
+            </label>
+            <div id="private" hidden>
+                <div class="media">
+                    Select Recepient
+                    <select name="recipient" id="recipient">
+                    </select>
+                </div>
+            </div>
+
+
+            <fieldset><legend>Is this message related to an event?</legend>
+
                 <label>
-                    <input type="radio" name="visibility"/>Yes
+                    <input type="radio" name="visibility"  onclick="Main.show_panel('event', true)"  />Yes
                 </label>
-                <label>
-                    <input type="radio" name="visibility"/>No
-                </label>
-                <div id="private" hidden>
+                <div id="event" hidden>
                     <div class="media">
-                        Select Recepient
-                        <select name="recipient" id="recipient">
+                        Select event
+                        <select name="event">
+                            <option value="---">---</option>
+                            <option value="hiking">Hiking</option>
+                            <option value="Wedding">Wedding</option>
+                            <option value="funeral">Funeral</option>
                         </select>
                     </div>
                 </div>
 
+                <input type="radio" name="visibility" onclick="Main.show_panel('event', false)"/>No
             </fieldset>
-            <fieldset><legend>Is this message related to an event?</legend>
-
-                <label>
-                    <input 
-                        type="radio" 
-                        name="visible" 
-                        onclick="app.current.show_panel('event', true)"
-                    />
-                    Yes
-                </label>
-                <div id="event" hidden>
-                    Select event
-                    <select name="event">
-                        <option value="---">---</option>
-                        <option value="hiking">Hiking</option>
-                        <option value="Wedding">Wedding</option>
-                        <option value="funeral">Funeral</option>
-                    </select>
-                    
-                </div>
-                <label>
-                    <input 
-                        type="radio"
-                        name="visible" 
-                        onclick="app.current.show_panel('event', false)"
-                    />
-                    No
-                </label>
-            </fieldset>
+            <div id="members"></div>
 
             <!--
-              Display new words here.-->
-            <div id="untranslated"></div>
+              Public message. -->
 
-            <button id="go">Send</button>
-            <button id="cancel">Cancel</button>
+        </fieldset>
 
+        <!--
+          Display new words here.-->
+        <div id="untranslated"></div>
 
-        </div>
+        <button id="go">Send</button>
+        <button id="cancel">Cancel</button>
+        <button id="alert">Alert</button>
+
     </body>
 
 </html>

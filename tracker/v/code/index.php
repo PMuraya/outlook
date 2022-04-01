@@ -76,14 +76,14 @@ $config = new config();
       </div>
       <div id="services">Services
       </div>
-      <div id="content" overflow-y="scroll">
+      <div id="content">
       </div>
       <div id="welcome">
           Please <button onclick="app.current.login()">login</button> to access 
           various services
       </div>
-      <div id="event" overflow-y="scroll">Event</div>
-      <div id="message" overflow-y="scroll">Message</div>
+      <div id="event">Event</div>
+      <div id="message">Message</div>
       <div class="footer">
           <div id="developer">
               <img src="../images/kaniu.jpg" alt="developer's image" class="img_dev">
