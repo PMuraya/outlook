@@ -17,7 +17,7 @@ export class msg extends outlook.baby<Imsg> {
     //
     //In future, check if a file json file containing Iquestionnaire is selected.
     //For now, do nothing
-    check(): boolean { 
+    async check(): Promise<boolean> { 
         //
         //Get the message text.
         const text = <HTMLTextAreaElement>this.get_element('msg');

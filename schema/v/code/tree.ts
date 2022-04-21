@@ -3,13 +3,13 @@
 import * as library from "./library.js";
 // 
 //Resolve the popup class used by the browser popup window 
-import * as outlook from "outlook/v/code/outlook.js";
+import * as outlook from "../../../outlook/v/code/outlook.js";
 // 
 //Export all the classes in this module 
 export {node, branch, leaf };
 //
 //Modelling branches and leaves as nodes
-abstract class node {
+abstract class node{
     //
     //The parent of this node, which must be a branch or null
     parent: branch | null;
@@ -37,7 +37,7 @@ abstract class node {
         //
         //The full name of the parent is either its path or the 
         //root folder  
-        const parent_path = this.parent === null ? "/" : this.parent.path;
+        const parent_path = this.parent === null ? "" : this.parent.path;
         // 
         //Set the full name of this node.
         this.path = parent_path + "/"+ this.name; 
@@ -47,7 +47,6 @@ abstract class node {
     }
 
     abstract get_html(): string;
-    
 
     //
     //Create a node, given the static version.
@@ -60,15 +59,13 @@ abstract class node {
             return new branch(Inode, parent);
         }
         //
-        //Destructure the node to reveal the name, popultaion etc
-        //
-        //Return a leaf
+        //The node must be a leaf, create it
         return new leaf(Inode, parent);
     }
     //
     //Highlights the selected node on the navigation panel and updates the content
     // panel (depending on the node type)
-    static select(elem: Element) {
+    select(elem: Element) {
         //
         //0. Ensure the selection was done from the navigation panel
         //
@@ -92,7 +89,6 @@ abstract class node {
         //2. Update the content panel, dependig on the node type.
         this.show_content_panel()
     }
-
 
 }
 
@@ -126,24 +122,23 @@ abstract class node {
     //
     //Toggling is about opening the branch children (if they are closed) or closing
     //them if they are open.
-    static toggle(name:string) {
-        //
+    toggle(name:string) {
         //
         //Get the children node.
         const children_node:HTMLElement =this.get_child_node(name); 
         //
-        //Esatblish if the children node is open
+        //Establish if the children node is open
         const children_is_open:boolean = !children_node.hidden;
         //
-        //Test if the childre brnch is open
+        //Test if the children branch is open..
         if (children_is_open){
             //
-            //Close them
+            //...close the branch
             //
             //Hide the children node
             children_node.hidden = true;
         }else{
-            //Open them
+            //The children branch is closed. Open it.
             //
             //Unhide the children node
             children_node.hidden = false;
@@ -151,9 +146,10 @@ abstract class node {
         
     }
 
-    //Returns the chil html elemen of this node
-    static get_child_node(name:string):HTMLElement{
+    //Returns the named child html element of this branch
+    get_child_node(name:string):HTMLElement{
         //
+        ???????
         const parent = document.querySelector(name);
         //
         if (parent===null) throw new Error(`Node named ${name} cannot be found`);
@@ -168,7 +164,6 @@ abstract class node {
     //Returns the html of branch
     get_html() {
         //
-        //leaf html
         const branch_html = `
 
                 <div id="${this.path}" class="folder">
@@ -189,7 +184,14 @@ abstract class node {
         return branch_html;
     }
     //
-    //Get the html of the children as a strin representation for display in a dom
+    //Convert this branch to a html element
+    get_element():HTMLElement{
+        //
+        const Branch = this.
+    }
+    
+    //
+    //Get the html of the children as a string representation for display in a dom
     get_children_html() {
         //
         //begin with an empty string for the children

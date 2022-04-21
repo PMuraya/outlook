@@ -42,7 +42,7 @@ try{
     include_once  $path.'questionnaire.php';
     //
     //The browser class used for exploring server files is found here
-    include_once  $path.'tree.php';
+    //include_once  $path.'tree.php';
     //
     //Methods for activating products are found in the app class
     include_once  $path.'app.php';

@@ -40,7 +40,7 @@ class selector extends view{
         $this->source= $dbase->entities[$ename];
         //
         //Prepare the view constructor variables $columns and $join; they are
-        //critial for converting a selector to an sql string.
+        //critical for converting a selector to an sql string.
         //
         //1. Start with the join, as the columns can be derived from it.
         //
@@ -51,7 +51,7 @@ class selector extends view{
         //selector.
         $network = new identifier($this->source);
         //
-        //Create a new join from the pahs of the identifier network  
+        //Create a new join from the paths of the identifier network  
         $join = new join($network->paths);
         //
         //2. Derive the fields of selector. They are 2: the primary key 

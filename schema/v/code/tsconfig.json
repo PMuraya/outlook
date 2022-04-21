@@ -70,6 +70,6 @@
     "server.ts"
   ],
   "exclude": [
-    "ts","save.ts", "tree.ts", "temp"
+    "ts","save.ts", "temp"
   ]
 }
