@@ -20,8 +20,8 @@ namespace {
 
     /**
     *This class extends the earlier defined record in order to export
-    *large amounts of data large typically generated from sources other 
-    *than direct human inputs -- that's a future thought)
+    *large amounts of data typically generated from sources other 
+    *than direct human inputs
     */
 class questionnaire extends schema {
     //
@@ -54,7 +54,7 @@ class questionnaire extends schema {
         $this->artefacts = new \Ds\Map();
         $this->tables = new \Ds\Map();
         //
-        //We don't have a special way of identifying a qustionnaire because 
+        //We don't have a special way of identifying a questionnaire because 
         //there is only one in the system -- unlike databases, entities, and 
         //other shema objects
         parent::__construct('_');
@@ -62,8 +62,8 @@ class questionnaire extends schema {
         //Set this questionnaire as the current one to allow global access
         self::$current = $this;
         //
-        //Initialize the current )and only) barrel to be usd for savebg
-        //milk tables
+        //Initialize the current (and only) barrel to be used for supportting to
+        //save milk tables
         capture\barrel::$current = new \capture\barrel();
     }
 
@@ -100,7 +100,7 @@ class questionnaire extends schema {
         //
         //Open the text file stream for logging table-dependent errors
         $this->error_file = $error_file;
-        \questionnaire::$current->error_stream = fopen($error_file, "w");
+        $this->error_stream = fopen($error_file, "w");
         //
         //Compile the inputs (used to create this questionnaire) to produce 
         //active milk (rather than database) tables and artefacts
@@ -163,7 +163,7 @@ class questionnaire extends schema {
         $log->close();
         //
         //Close the error log file
-        fclose(\questionnaire::$current->error_stream);
+        fclose($this->error_stream);
         //
         //Compile the processed milk, Imala, from and runtime results
         $result = [
@@ -309,7 +309,7 @@ class questionnaire extends schema {
             $msg = "Syntax errors<br/>"
                .implode("<br/>",
                     array_map(
-                        fn($error)=>$error->to_str(), 
+                        fn($error)=>"$error", 
                         $result['errors']
                     )     
                 );
@@ -333,24 +333,28 @@ class questionnaire extends schema {
             $result['tables'], 
             fn($table)=>$table['answer'] instanceof myerror);
         //
-        //Map the erroneous tables to their corresponding summaries
-        if (count($tables)>0)
-            $msg .= "Table-dependent artefacts<br/>"
-                .implode(
-                    "<br/><br/>",
-                    array_map(
-                        fn($table)=>$this->summarise_labels("Summary for table ".$table['name'], $table['labels']),
-                        $tables
-                    )     
-                );
+        //Start reporting of table-dependent errors -- if necessary
+        if (count($tables)) $msg.= "Table-dependent artefacts<br/>";
         //
-        //Add a pointer to the error log, if necessary
-        if (self::$log_errors>0)
-            $msg.="There are "
-                .self::$log_errors
+        //Loop over all the erroneous tables to output the errors
+        foreach($tables as $table){
+            //
+            //Name of the table
+            $msg.="Table:".$table['tname']."<br/>";
+            //
+            //Ouput the header errors, if any
+            if (!is_null($table['header_errors']))
+                $msg.= $this->summarise_labels("Header errors", $table['header_errors']);
+            //
+            //Output the body errors, if any 
+           if ($table['body_errors']>0){
+               $msg.="There are "
+                .$table['body_errors']
                 ." table body errors<br/>"
                 ."<a href='".$this->error_file."'"
                 .">Open this link to see them</a>";
+            } 
+        }
         //
         //Return the error message
         return $msg==""?"Ok":$msg;
@@ -383,7 +387,7 @@ class questionnaire extends schema {
                             //Compile the message, formated as, e.g., 
                             //chama.member["1"].name: Data truncated
                             return "$dbname.$ename". json_encode($alias)
-                                .".$cname: .$ans.<br/>";
+                                .".$cname: $ans<br/>";
                          }, 
                         $flabels
                     )     
@@ -418,29 +422,37 @@ class questionnaire extends schema {
         return $labels;
     }
 
-    //Export the table dependant artefacts. The way the errors are reported is 
-    //different from how it is done in the table independent case. The errors
+    //Export the table-dependant artefacts. The way the errors are reported is 
+    //different from how it is done in the table-independent case. The errors
     //are reported as an array of:- 
     //tname: the table whose errors are being reported
-    //report:A rich html error message thst should helpful for debugging purpose
-    private function export_td_artefacts(): array/* <{tname, report}> */ {
+    //answer:Summary of saving the table, based on rows loaded
+    //labels:Laout labels for the first row saved
+    private function export_td_artefacts(): array/* <{tname, answer, header_errors,body_errors}> */ {
         //
         //Prepare to return the result
-        $results/* :Array<{tname, answer, rows}> */ = [];
+        $results = [];
         //
         //This process (unlike the table independent version) is driven by 
         //the collection of (milk) tables.
         foreach ($this->tables as $table) {
             //
-            //Export the tables data. NB. schema::save() requires a row of data; 
+            //Export the table's data. NB. schema::save() requires a row of data; 
             //this is irrelevant for saving a table so pass a null value.
             $ans = $table->save(null);
             //
             //Push the save result to the array
             $results[]=[
                 "tname"=>$table->name,
+                //
+                //The overall result of saving a table, i.e., myerror or scalar 
                 "answer"=>$ans,
-                "rows"=>$table->rows
+                //
+                //Header errors, i.e., array of labels
+                "header_errors"=>$table->header_errors,
+                //
+                //Body eerrors, i.e., error count
+                "body_errors"=>$table->body_errors
             ];
         }
         //
@@ -736,11 +748,11 @@ namespace capture {
         public \table $source;
         //
         //The (milk) table that this artefact depends on. There may be none
-        public /* string|null  $tname;
-          //
-          //The statement that update a record. There will be 2 versions for
-          //updating the record based on cross- and non-crosss member columns.
-          public array /* <update> */ $update;
+        public /* string|null*/  $tname;
+        //
+        //The statement that update a record. There will be 2 versions for
+        //updating the record based on cross- and non-crosss member columns.
+        public array /* <update> */ $update;
         //
         //Set te following flag to true when saving an artefact based on cross 
         //member columns; otherwise it is false.
@@ -748,7 +760,9 @@ namespace capture {
         //
         //The insert statement for creatting new records
         public insert $insert;
-
+        //
+        //The result of saving an artefact
+        public /*scalar|myerror*/$answer;
         //
         public function __construct(
                 //
@@ -804,17 +818,21 @@ namespace capture {
         }
 
         //Set the milk table name of this artefact, so that we can decide later
-        //if this artefact should be exported table dependently or indepently
+        //if this artefact should be exported table dependently or independently
         public function set_tname(): void {
             //
             //Don't waste time if the artefact's table's name is already set
             if (isset($this->tname))
                 return;
             //
-            //Collect the table names that match expressions for columns
-            //of this artefact, starting with an empty list
-            $dirty_tnames = [];
-            $this->collect_tname($dirty_tnames);
+            //Split the columns of of this artefact into sub-expressions
+            $exps = iterator_to_array($this->yield_exps());
+            //
+            //Select those lookup expressions
+            $lookups = array_filter($exps, fn($exp)=>$exp instanceof lookup);
+            //
+            //Get the (dirty) table names of each lookup
+            $dirty_tnames = array_map(fn($lookup)=>$lookup->tname, $lookups);
             //
             //Remove duplicates
             $tnames = array_unique($dirty_tnames);
@@ -858,8 +876,8 @@ namespace capture {
         }
 
         //
-        //Collect the milk table names assocociated with this artefact
-        function collect_tname(array &$tnames): void {
+        //BCollect the milk table names associated with this artefact
+        function yield_exps(): \Generator{
             //
             //Loop through all the columns of this artefact to yield 
             //tnames based on their expressions
@@ -867,15 +885,15 @@ namespace capture {
                 //
                 //For attribute columns, the expression must be set
                 if (
-                        $column->source instanceof \attribute && isset($column->exp)
+                    $column->source instanceof \attribute && isset($column->exp)
                 )
-                    $column->exp->collect_tname($tnames);
+                    yield from $column->exp->yield_exps();
                 //
                 //For foreign keys columns, the nearest artefact must be set
                 elseif (
-                        $column->source instanceof \foreign && isset($column->nearest) && $column->nearest instanceof artefact
+                    $column->source instanceof \foreign && isset($column->nearest) && $column->nearest instanceof artefact
                 )
-                    $column->nearest->collect_tname($tnames);
+                    yield from $column->nearest->yield_exps();
             }
         }
 
@@ -938,8 +956,8 @@ namespace capture {
                 $col->save($row);
             }
             //
-            //Return the answer associated with the primary key
-            return $this->pk()->answer;
+            //Save and return the answer associated with the primary key
+            return ($this->answer=$this->pk()->answer);
         }
         
         //Compile the result of saving an artefact as an array of labels, 
@@ -1120,7 +1138,7 @@ namespace capture {
                 //Formulate the complete error message
                 $exp = new myerror(
                     "No valid index found for table '{$this->name}'"
-                    . " because of the following:-\n"
+                    . " because of the following:-<br/>   "
                     . $msg
                 );
                 //
@@ -1553,9 +1571,19 @@ namespace capture {
         //The table name used in specifying lookup expressions
         public string $name;
         //
+        //Artefacts that depend on this table
+        public array $artefacts;
+        //
         //A sample of 3 rows used for logging the status of saving a barrel, 
-        //rather than logging the entire table (which might tbe too big)
-        public array $rows=[];
+        //rather than logging the entire table (which might tbe too big). That
+        //was the initial approach. The current one is to log the label layouts 
+        //for the first row only -- for debugging pusposes. They are referred to
+        //has header errors
+        public ?array /*<label>*/ $header_errors=null;
+        //
+        //In contrast to header errors, body errors is a number that indicated
+        //the numbers of e=rows that did not load
+        public int $body_errors=0;
         //
         //The following functions will need to be implemented
         //
@@ -1570,11 +1598,8 @@ namespace capture {
         //stream
         abstract function read(): \Generator/* array<basic_value>|false */;
         //
-        //The current row Index of the table's body
-        public int $row_index;
-        //
-        //Initialize the collection of table-based errors.
-        public \Ds\Map $map/* :map<[tname, msg], count> */;
+        //The current row Index of the table's body defaults to 0
+        public int $row_index=0;
         //
         //The row number, starting from 0, where the table's body starts.        
         public int $body_start;
@@ -1626,7 +1651,7 @@ namespace capture {
         function write(/* null|row */$row): ans {
             //
             //Select all the artetacts that depend on this table
-            $artefacts = array_filter(
+            $this->artefacts = array_filter(
                 //
                 //Use the current pool of artefacts
                 \questionnaire::$current->artefacts->values()->toArray(),
@@ -1640,7 +1665,7 @@ namespace capture {
             //
             //For each table row, set the header expressions. (Rememeber to track 
             //the row counter in case it is used for formulating expressions)
-            $ans = $this->write_body($artefacts);
+            $ans = $this->write_body();
             //
             //You must return answer
             return $ans;
@@ -1651,45 +1676,37 @@ namespace capture {
         //abstract function is_clean(array $Ibarrel): bool;
 
         //Export the body of a table, given the artefacts that depend on it. 
-        //The result is either a scalar denoting success or an error the helpful
-        //details
-        private function write_body(array $artefacts):ans {
+        //The result is either a scalar denoting success or an error with helpful
+        //debugging details
+        private function write_body():ans {
             //
             //Its a sign of an error if there are no artefacts to write
-            if (count($artefacts) == 0)
+            if (count($this->artefacts) == 0)
                 throw new \Exception("No artefacts found to save for table '$this->name'");
             //
             //Start counting from row number 0
-            $this->row_index = 0;
+            $row_index = 0;
             //
             //Get the current barrel. Remember that by design, only one re-usable
             //barrel is used for writing the data, to conserve memory (for large 
-            //tables). Why is barrel static?
+            //tables). Why is barrel static? So that one barrel is used for 
+            //multiple tables.
             $barrel = barrel::$current;
             //
-            //Attach the current table name to the barrel
-            $barrel->tname = $this->name;
-            //
-            //Attach the table dependant artefacts to the barrel
-            $barrel->artefacts = $artefacts;
-            //
-            //Start with a table error log count of 0
-            $errors = 0;
+            //Use the current table to open the barrel
+            $barrel->open($this);
             //
             //Loop through all the body rows to export them one by one.
             foreach ($this->read() as $Ibarrel) {
                 //
                 //If the body start is set to something greater than 0, then
                 //respect it, by skipping this iteration if necessary.
-                if ($this->body_start > 0 && $this->row_index < $this->body_start) {
+                if ($this->body_start > 0 && $row_index < $this->body_start) {
                     //
                     //Update the row counter
-                    $this->row_index++;
+                    $row_index++;
                     continue;
                 }
-                //
-                //Set the barrel's row index counter
-                $barrel->row_index = $this->row_index;
                 //
                 //Check whether the row of data, Ibarrel, is clean or not. Empty
                 //rows are said to be dirty.
@@ -1697,62 +1714,73 @@ namespace capture {
                 if (!$this->is_clean($Ibarrel)){
                     //
                     //Update the row counter. NB. Even dirty rows are counted
-                    $this->row_index++;
+                    $row_index++;
                     //
                     continue;
                 }    
                 //
                 //Reset/empty the non-foreign key answers of every artefact 
                 //being saved, ready for the next iteration
-                foreach ($artefacts as $artefact) {
-                    $artefact->reset_answers();
-                }
-                //
-                //Save the values to be accessed during evaluations of 
-                //lookup functions
-                $barrel->Ibarrel = $Ibarrel;
+                foreach ($this->artefacts as $artefact) $artefact->reset_answers();
                 //
                 //Formulate the row object 
                 $row = [
-                    'row_index' => $this->row_index,
+                    'row_index' => $row_index,
                     'tname' => $this->name
                 ];
                 //
+                //Load the barel with data
+                $barrel->load($row, $Ibarrel);
+                //
                 //Update the barrel's partial name. The partial name is 
                 //typically for fomulating xml tags during data logging.
-                $barrel->partial_name = "r$this->row_index";
+                $barrel->partial_name = "r$row_index";
                 //
-                //Log the barrel as you carry out the save. Log any pdo errors
-                try {
-                    $barrel->save($row);
-                    //
-                    //Sample this row -- upto a maximum of 3
-                    if (count($this->rows)<3) 
-                        $this->rows[]=$barrel->compile_result();
-                            
-                } catch (\PDOException $ex) {
-                    $msg = $ex->getMessage(). " at row " 
-                        . $this->row_index 
-                        . " of table $this->name<br>";
+                //Save the barrel to the database
+                $ans = $barrel->save($row);
+                //
+                //Update the tables row counter
+                $this->row_index++;
+                //
+                //If the answer is an error, log it to the error stream and decide
+                //whether to continue the loading or to stop.
+                if ($ans instanceof myerror){
                     //
                     //Log the error message in an external text file
-                    fwrite(\questionnaire::$current->stream, $msg);
+                    fwrite(\questionnaire::$current->error_stream, "$ans");
                     //
                     //Keep track of the log error count for this table
-                    $errors++;
+                    $this->body_errors++;
+                    //
+                    //If this is the first row, then, chances are that all the
+                    //other rows have the same error. Stop the process, so that
+                    //the user can attend to the underlying issues
+                    if ($this->body_errors===1) break;
                 }
                 //
                 //Increase the row counter
-                $this->row_index++;
+                $row_index++;
+                //
+                //Unload the barrel, ready for the next row
+                $barrel->unload();
+                
             }
-            //Close the body
+            //Close the table to windup the export process's
             $this->close();
             //
-            //Keep track of questionnaire level error log count
-            \questionnaire::$log_errors+=$errors;
+            //Close the barrel to get ready for another table
+            $barrel->close();
             //
-            //Return this table's error count as a scalar
-            return new scalar("$errors log errors");
+            //Keep track of questionnaire level error log count
+            \questionnaire::$log_errors+=$this->body_errors;
+            //
+            //Compile the table-level error message
+            $result = $this->body_errors>0
+                ? new myerror("$this->body_errors log errors found")
+                : new scalar("ok");
+            //
+            //Return the result
+            return $result;
         }
 
         //Set the header property, if necessary. It is not necessary if the
@@ -2204,29 +2232,35 @@ namespace capture {
     //support logging of individual table rows without having to create multiple 
     //copies of this instance in order to save memory for large data loads.  
     class barrel extends \schema {
-
-        //
-        //The artfacts being saved
-        public array $artefacts;
         //
         //The shared barrel used for exporting table rows; it is initialized
-        //when a questionnaire is created. Why is this not a property of a table? 
+        //when a questionnaire is created. 
         static barrel $current;
-        //
-        //The last row of values fetched
-        public array $Ibarrel;
-        //
-        //The table being saved
-        public string $tname;
-        //
-        //The row being saved
-        public int $row_index;
-
-        //
-        function __construct() {
+                function __construct() {
+            //
+            //The barrels name is used for xml logging purposes
             parent::__construct('barrel');
         }
-
+        
+        //Open a barrel associates it with a new table
+        function open(table $table):void{
+            $this->table=$table;
+        }
+        //
+        //Closing a barel removes the table reference
+        function close():void{
+            unset($this->table);
+        }
+        //
+        //Load data to this barel
+        function load($row, array $Ibarrel):void{
+            $this->Ibarrel = $Ibarrel;
+        }
+        
+        //Unload the barel
+        function unload():void{
+            unset($this->Ibarrel);
+        }
         //
         //Write the barrel in 2 phases. In phase 1, the artefact is saved
         //using structural columns; in the next phase, cross members are used to
@@ -2234,13 +2268,50 @@ namespace capture {
         function write(/* row */ $row): ans {
             //
             //Get the table-dependent artefacts being exported
-            $artefacts = $this->artefacts;
+            $artefacts = $this->table->artefacts;
             //
-            //Save them using the given table row
-            \questionnaire::$current->export_artefacts($artefacts, $row);
+            //Save them using the given table row, returning the label layouts
+            //for this barel
+            $labels = \questionnaire::$current->export_artefacts($artefacts, $row);
             //
-            //You must return answer; go for a string scalar
-            return new scalar('check');
+            //Get the artefacts that failed to export
+            $errors = array_filter(
+                $artefacts, 
+                fn($artefact)=>$artefact->answer instanceof myerror
+            );
+            //
+            //Prepare to return the barrel result based on the error count
+            //
+            //Count the errors        
+            $count = count($errors);
+            //
+            //If the count is greater than 0, then return a helpful error message
+            if  ($count>0){
+                //
+                //For debugging purposes, and being mindful of large data loads, save
+                //teh labels for the fisrt row (of the underlying table) only. We
+                //refer to them as header errors.
+                if ($this->table->row_index==0) 
+                    $this->table->header_errors = $labels; 
+                //
+                //Compile the helpful message, from all the erroroneous artfects
+                $msg = join('<br/>', array_map(
+                    fn($error)=>
+                        //
+                        //Include the source of the error
+                        "Table '".$row['tname']."', Row:".$row['row_index'].": $error->answer", 
+                    $errors)
+                );
+                //        
+                $result =new myerror($msg) ;
+            }
+            //
+            //...otherwise return a scalar to show that everything is ok.
+            else{
+                $result = new scalar("ok");
+            }
+            //
+            return $result;
         }
         
         //Compile the results of this barrel (for reporting purposes) as an 
@@ -2254,7 +2325,7 @@ namespace capture {
                         //
                         //Modelling of capture\myerror and \myerreor is not
                         //consistent. One would expect that capture\error extends
-                        //\mysrror, but it does not. Why? Because capture\error 
+                        //\myerror, but it does not. Why? Because capture\error 
                         //extends an capture\expression. This needs a re-think.
                         //For now....
                         $artefact->pk()->answer instanceof myerror
@@ -2319,8 +2390,8 @@ namespace capture {
             }
         }
 
-        //collect table names that this expression depends. 
-        abstract function collect_tname(array &$tnames): void;
+        //Split this expression into subexpression. 
+        abstract function yield_exps(): \Generator /*<expression>*/;
 
         //
         //Check this expression for integrity errors
@@ -2358,8 +2429,8 @@ namespace capture {
         }
 
         //A scalar does not yield any tname
-        function collect_tname(array &$tnames): void {
-            
+        function yield_exps(): \Generator {
+            yield $this;
         }
 
         //A scalar expression always passe integrity checks always
@@ -2390,9 +2461,9 @@ namespace capture {
             parent::__construct();
         }
 
-        //A lookup expression yields the exprsession's table name
-        function collect_tname(array &$tnames): void {
-            $tnames[] = $this->tname;
+        //A lookup expression yields itself
+        function yield_exps(): \Generator{
+            yield $this;
         }
 
         //Simplify a lookup function by looking it up its values in the last fetched
@@ -2448,7 +2519,7 @@ namespace capture {
             $barrel = barrel::$current;
             //
             //Ensure that the barrel is associated with this table
-            if ($barrel->tname !== $tname)
+            if ($barrel->table->name !== $tname)
                 throw new \Exception(
                         "The curent barrel is not assciated with table '$tname'"
                 );
@@ -2559,12 +2630,12 @@ namespace capture {
         }
 
         //
-        //The concat expression yields as many tables as its arguments
-        function collect_tname(array &$tnames): void {
+        //The concat expression yields as many sub-expressions as its arguments
+        function yield_exps(): \Generator{
             //
             foreach ($this->args as $arg) {
                 //
-                $arg->collect_tname($tnames);
+                yield from $arg->yield_exps();
             }
         }
 
@@ -2627,9 +2698,9 @@ namespace capture {
         }
 
         //
-        //An error does not yield any tname
-        function collect_tname(array &$tnames): void {
-            
+        //An error yields itself
+        function yield_exps(): \Generator{
+            return $this;
         }
 
         //
@@ -2641,7 +2712,7 @@ namespace capture {
 
         //The string representation of an error
         function __toString(): string {
-            return "Error. $this->msg";
+            return "$this->msg";
         }
 
     }
@@ -3314,17 +3385,17 @@ namespace capture {
 
 //
 //Models the index of an entity (needed for unique identification of database 
-//entries) as a schema object. That means that it is capable of writing to a 
-//database
+//records) as a schema object. That means that it is capable of writing to a 
+//database and tracking results in an xml document.
     class index extends \schema {
         //
         //The index name
         public string $name;
         //
-        //The artefact that is the base for this index
+        //The artefact that is the base/home for this index
         public artefact $artefact;
         //
-        //The columns of this index
+        //The (unique) columns that define this index
         public array /* <capture\column> */$columns;
 
         function __construct(
@@ -3338,14 +3409,15 @@ namespace capture {
             $this->name = $name;
             $this->artefact = $artefact;
             //
-            //Compile the partial name of this index
+            //Compile the partial name of this index; it is used for xml 
+            //reporting.
             $partial_name = "{$artefact->source->name}.$name";
             parent::__construct($partial_name);
             //
-            //Map the incoming cnames to columns of this artefact
+            //Map the matching index column names to those of the current artefact
             $this->columns = array_map(
-                    fn($cname) => $artefact->columns[$cname],
-                    $artefact->source->indices[$name]
+                fn($cname) => $artefact->columns[$cname],
+                $artefact->source->indices[$name]
             );
         }
 
@@ -3360,7 +3432,7 @@ namespace capture {
         }
 
         //Define the entities of this index as a function. This cannot be defined
-        //as a propertu because of recurssion during serialization.
+        //as a property because of recursion during serialization.
         function entity() {
             //
             //Open the database of the this index
@@ -3414,7 +3486,7 @@ namespace capture {
                 //
                 //At least one indexing column is erronoeus. The index is unusable.
                 return new myerror(
-                        "Unusable index: These columns, $col_str, are invalid"
+                        "Unusable index: These columns, $col_str, are missing or invalid"
                 );
             }
             //Execute the select statement for this index; the resulting expression

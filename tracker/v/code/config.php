@@ -14,11 +14,11 @@ class config extends \config{
     public string $id =__NAMESPACE__;
     // 
     //The name of the application's database.
-    public string $app_db = "mutall_ranix"; 
+    public string $app_db = "rentize"; 
     //
     //Subject comprises of the entity name to show in the home page
     //plus the database it comes from.
-    public string $subject_ename="vehicle";
+    public string $subject_ename="tenant";
     public array $subject;
      //
     //The full trademark name of the application

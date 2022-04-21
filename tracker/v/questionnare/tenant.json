@@ -1,19 +1,42 @@
-[  {
+[  
+    ["rentize", "property", [], "uid", "mutall_rental" ],
+    ["rentize", "property", [], "name", "Mutall Investment Co. Ltd" ],
+    ["rentize", "landlord", ["landlord"], "name", "mutall"],
+   
+    ["mutall_users", "business", [], "id", "mutall_rental"],
+    ["mutall_users", "business", [], "name", "Mutall Investment Co. Ltd"],
+    ["mutall_users","user", ["landlord"],"name", "mutall"],
+    
+    
+    {
         "class_name": "capture\\query",
         "args": [
             "client",
-            "select name, title, quarterly, contact, phone, address, email",
+            "select  title, name, quarterly, contact, phone, address, email from client" ,
             "mutallco_rental"
         ]
    },
+   ["mutall_users","user", ["tenant"],"name", ["\\capture\\lookup","client","name"]],
+   ["mutall_users","user", ["tenant"],"title", ["\\capture\\lookup","client","title"]],
+   ["mutall_users","user", ["tenant"],"address", ["\\capture\\lookup","client","address"]],
+   ["mutall_users","user", ["tenant"],"email", ["\\capture\\lookup","client","email"]],
+  
+   ["rentize","tenant", ["tenant"],"quarterly", ["\\capture\\lookup","client","quarterly"]],
+   ["rentize","tenant", ["tenant"],"contact", ["\\capture\\lookup","client","contact"]],
+   ["rentize","tenant", ["tenant"],"name", ["\\capture\\lookup","client","name"]],
    
-   ["mutall_users","user", [],"name", ["\\capture\\lookup","client","name"]],
-   ["mutall_users","user", [],"title", ["\\capture\\lookup","client","title"]],
-   ["rentize","tenant", [],"name", ["\\capture\\lookup","client","quarterly"]],
-   ["rentize","tenant", [],"contact", ["\\capture\\lookup","client","contact"]],
-   ["mutall_users","mobile", [],"num", ["\\capture\\lookup","client","phone"]],
-   ["mutall_users","user", [],"address", ["\\capture\\lookup","client","address"]],
-   ["mutall_users","user", [],"email", ["\\capture\\lookup","client","email"]],
-   ["rentize","tenant", [],"email", ["\\capture\\lookup","client","email"]]
+   
+   
+   {
+        "class_name": "capture\\query",
+        "args": [
+            "phone",
+            "select  name, phone from client where not(phone is null)" ,
+            "mutallco_rental"
+        ]
+   },
+   ["mutall_users","user", ["phone"],"name", ["\\capture\\lookup","phone","name"]],
+   ["mutall_users","mobile",["phone"],"num", ["\\capture\\lookup","phone","phone"]]
+   
 ]
 

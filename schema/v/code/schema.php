@@ -256,7 +256,6 @@ class mutall {
 //is that it represents a package whose contents can "saved", resulting in 
 //a basic expression.
 class schema extends mutall {
-
     //
     //This partial name of a schema objected is its name plus the database 
     //source it needed for formulating xml tags, indexing joints, etc.
@@ -271,6 +270,10 @@ class schema extends mutall {
     //second one is activated. When a schema object is activated, the resulting 
     //errors are manaed by ths property
     public array /* error[] */$errors = [];
+    //
+    //When a shema object is written to a database, the result can be accessed
+    //from here
+    public /*answer*/ $answer;
 
     //The partial name is used for identifying this object in the
     //context of generating xml logs
@@ -317,6 +320,9 @@ class schema extends mutall {
         //of the fact that the writing may fail with an exception
         $ans = $this->write($row);
         //
+        //Save this answer for future reference.
+        $this->answer = $ans;
+        //
         //Log the result if loggig mode is on.
         if ($log){
             //
@@ -330,19 +336,12 @@ class schema extends mutall {
         return $ans;
     }
     
-    //Determines if logging is necessary or not
+    //Determines if logging is necessary or not. By default, logging is 
+    //necessary. In the case of a beral, we should control logging, to
+    //avoid cluterring the log file with repetitive errors
     function logging_is_necessary($row){
         //
-        //Logging is necessary when exporting table indepedennt milk (data)
-        if (is_null($row)) return true;
-        //
-        //Logging is also necessary if we have not logged in a total of 3 rows 
-        //for the current table, to avoid overcrowding the log file with
-        //repetetive errors
-        if ($row['row_index']<=3) return true;
-        //
-        //Otherwise no logging is 
-        return false;
+        return true;
     }
     
     //

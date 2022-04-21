@@ -1,32 +1,56 @@
 <?php
-
 //
 abstract class node extends mutall {
     //
-    //Short version of the fullname
+    //Short version of the node's name
     public $name;
     //
-    //The full 
-    public $full_name;
+    //The parent node of this node
+    public branch $parent;
     //
-    //The creation date.
-    public $creation_date;
-    //
-    //The modification date.
-    public $modification_date;
-    //
+    //The full name of a node is compiled from its short version and that of the 
+    //parent
+    public function full_name():string{
+        //
+        //If the parent is not set, it has no fill name
+        $fullname = is_null($this->parent) ? "":$this->parent->full_name;
+        //
+        //Return full name of a node
+        return "$fullname/$this->name";
+    }
     //
     function __construct(
-            string $name,
-            string $full_path
-            
+        string $name,
+        branch $parent=null
     ) {
         //
-        //Get the name of this folder which is the last 
-        $this->name=$basename;
-        //
-        //Save the fullname 
-        $this->full_name = $path;
+        $this->name=$name;
+        $this->parent = $parent;
+    }
+}
+
+class branch extends node{
+    //
+    //A branch has children. When they are set, it is a rich branch; otherwise
+    //it is a poor branch.
+    public array/*<node>*/ $children;
+}
+
+//A leaf (by design) has no children
+class leaf extends node{
+    //
+    //
+}
+
+
+interface path{
+    //
+    //The creation date.
+    function get_creation_date(): DateTime;
+    //
+    //The modification date.
+    function get_modification_date(): DateTime;
+    
         //
         //This is the creation date
         $this->creation_date = filectime($this->full_name);
@@ -36,8 +60,24 @@ abstract class node extends mutall {
         //
         //Get the size of this folder 
         $this->size= filesize($this->full_name);
+    
+} 
+
+class folder extends node{
+    //
+    //
+    function __construct(
+        string $name,
+        string $full_name,           
+        ?folder $parent
+    ) {
+        //
+        parent::__construct($name, $full_name, $parent);
+        //
+        $this->children = null;
     }
-    //Form a complete node structure using the initial path and return 
+    
+     //Form a complete node structure using the initial path and return 
     //the node.
     static function export(
         //
@@ -80,20 +120,6 @@ abstract class node extends mutall {
         return $node;
      
         
-    }
-}
-class folder extends node{
-    //
-    //
-    function __construct(
-        string $name,
-        string $full_name,           
-        ?folder $parent
-    ) {
-        //
-        parent::__construct($name, $full_name, $parent);
-        //
-        $this->children = null;
     }
 }
 //

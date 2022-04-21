@@ -23,6 +23,6 @@ $Iquestionnaire = json_decode($text);
 $q = new \questionnaire($Iquestionnaire);
 //
 //Export the questionnaire data and log the progress to the given xml file
-$result = $q->load_common(__DIR__."\\log.xml");
+$html = $q->load_common(__DIR__."\\log.xml");
 //
-echo json_encode($result);
+echo $html;
