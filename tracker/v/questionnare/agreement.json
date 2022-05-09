@@ -1,0 +1,19 @@
+[ {
+        "class_name": "capture\\query",
+        "args": [
+            "agreement",
+            "select client.name as client_name,room.uid as room_uid, agreement.amount,agreement.start_date,agreement.duration,agreement.review,agreement.terminated,agreement.valid,agreement.comment from agreement inner join client on agreement = client.client inner join room on agreement = room.room",
+            "mutallco_rental"
+        ]
+   },
+   ["rentize","agreement", [],"start_date", ["\\capture\\lookup","agreement","start_date"]],
+   ["rentize","agreement", [],"end_date", ["\\capture\\lookup","agreement","terminated"]],
+   ["rentize","agreement", [],"review", ["\\capture\\lookup","agreement","review"]],
+   ["rentize","agreement", [],"amount", ["\\capture\\lookup","agreement","amount"]],
+   ["rentize","agreement", [],"is_valid", ["\\capture\\lookup","agreement","valid"]],
+   ["rentize","agreement", [],"duration", ["\\capture\\lookup","agreement","duration"]],
+   ["rentize","agreement", [],"comment", ["\\capture\\lookup","agreement","comment"]],
+   
+   ["rentize","tenant", [], "name", ["\\capture\\lookup", "agreement", "client_name"]],
+   ["rentize","room", [], "uid", ["\\capture\\lookup", "agreement", "room_uid"]]
+]

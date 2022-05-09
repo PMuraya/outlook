@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Delivery form</title>
+    <link rel="stylesheet" href="general.css">
+    <style>
+        * {
+            border-radius: 5px;
+            margin: 20 2 10 2;
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <h3>Delivery Form</h3>
+    </center>
+    <!-- 
+              Use select to create a drop down list -->
+    <label>Merchant:
+                <select 
+                    data-dbname="mutall_users" 
+                    data-ename="account" 
+                    name="name" 
+                    type="text" 
+                    required 
+                    />
+                    <option>Maasai</option>
+                    <option>Destiny Supermarket</option>
+                    <option>RoofTop</option>
+                </select>
+            </label>
+    <!--
+            The reference number. -->
+    <label>
+                Reference number:
+                <input 
+                    data-dbname="mutall_users" 
+                    data-ename="je" 
+                    name="ref_num" 
+                    type="text"
+                    size="9" 
+                    required 
+                    />
+            </label>
+
+    <!--
+          The date the delivery was made. -->
+    <label> Delivery Date: 
+                <input 
+                data-dbname="mutall_users" 
+                data-ename="transaction" 
+                name="date" 
+                type="date" 
+                required
+                    />
+            </label>
+
+    <!--
+            Amount of the delivered items. -->
+    <label>Amount: 
+                <input 
+                    data-dbname="mutall_users" 
+                    data-ename="je" 
+                    name="amount" 
+                    type="text"
+                    maxlength="4"
+                    size="1"
+                    required 
+                    />
+            </label>
+
+    <!--
+              Save the details in the database.-->
+    <button id="go">Save</button>
+    <button id="cancel">Cancel</button>
+    <!--
+            The reporting element. -->
+    <fieldset id="report" hidden>
+        <legend>Report</legend>
+    </fieldset>
+
+</body>
+
+</html>

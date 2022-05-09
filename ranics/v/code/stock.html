@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>stock</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+        Link to the css file. -->
+    <link rel="stylesheet" href="ranics.css" />
+</head>
+
+<body>
+    <div id="stock">
+        <form class="frame" action="" method="post">
+            <h3>Vehicle Stock</h3>
+            <label>Car Registration Number:
+                <input 
+                    data-ename="stock"
+                    id="reg_no"
+                    name="reg_no"
+                    type="text" 
+                    style="text-transform:uppercase"   
+                    maxlength="8"
+                    pattern="\w{3}\d{3}\w" 
+                    title="Use this format instead KBZ999Z" 
+                    required 
+                />
+            </label>
+            <fieldset>
+                <legend>Vehicle Category:</legend>
+                <label><input type="radio" name="category" value="Car" required />Car</label>
+                <label><input type="radio" name="category" value="Lorry" required />Lorry</label>
+                <label><input type="radio" name="category" value="Motorcycle" required />Motorcycle</label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Time of the Day:</legend>
+                <label><input type="radio" name="daytime" value="Morning" required />Morning</label>
+                <label><input type="radio" name="daytime" value="Mid-day" required />Mid-day</label>
+                <label><input type="radio" name="daytime" value="Evening" required />Evening</label>
+            </fieldset>
+            <input type="hidden" id="datetime" name="datetime" />
+
+            <input type='text' name="email" value="" hidden='true' />
+
+        </form>
+    </div>
+    <div id="report" class="error">
+
+    </div>
+    <button id="go">Go</button>
+    <button id="cancel">Cancel</button>
+</body>
+
+</html>

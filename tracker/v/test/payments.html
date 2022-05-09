@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Enter payment</title>
+    <link rel="stylesheet" href="general.css">
+    <style>
+        * {
+            border-radius: 10px;
+            margin: 15 2 10 2;
+        }
+        
+        body {
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="payee">
+        <center>
+            <h2>Enter payment</h2>
+        </center>
+    </div>
+    <fieldset id="paye">
+        <label>
+            Amount
+            <input type="number">
+        </label>
+        <label>
+            Date
+            <input type="date">
+        </label>
+        <label>
+            Client
+            <select 
+                name="tenant"
+            >
+            
+        </select>
+        </label>
+    </fieldset>
+    <fieldset>
+        <center>
+            <h3>Mode of Payment</h3>
+        </center>
+        <label>
+            Mpesa
+            <input type="radio" name="mode" value="mpesa" onclick="Main.show_panel(true)">
+        </label>
+        <label>
+            Cheque
+            <input type="radio" name="mode" value="cheque">
+        </label>
+        <label>
+            Bank Slip
+            <input type="radio" name="mode" value="Bank slip">
+        </label>
+    </fieldset>
+    <button id="go">Save</button>
+    <button id="cancel">Cancel</button>
+</body>
+
+</html>

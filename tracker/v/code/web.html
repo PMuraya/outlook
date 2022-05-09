@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutall data</title>
+    <link rel="stylesheet" href="web.css">
+</head>
+
+<body>
+    <div class="grid-wrapper">
+        <header>
+            mutall
+        </header>
+        <aside>
+            <h4>
+                Definers
+            </h4>
+            <div id="services"></div>
+        </aside>
+        <article>
+            <h1>
+                content
+            </h1>
+            <div id="content"></div>
+            <!-- <p>
+                TYPES: BEGIN OF ty_data, dealer_code TYPE kunnr, plant TYPE werks,* text TYPE sgtxt, dr_cr_indicator(2) TYPE c, labr_value TYPE dmbtr, claim_mnth(2) TYPE c, claim_yr(4) TYPE c, cr_note_no(6) TYPE n, END OF ty_data. DATA : wa_data TYPE ty_data, it_data
+                TYPE TABLE OF ty_data. DATA : wa_bapi_data TYPE ty_data, it_bapi_data TYPE TABLE OF ty_data. TYPES: BEGIN OF ty_final, claim_mnth(2) TYPE c, claim_yr(4) TYPE c, plant TYPE werks labr_value TYPE dmbtr, cr_note_no(6) TYPE n, END OF ty_final.
+                ***********fetch indexkey table declarion DATA : exp_data TYPE STANDARD TABLE OF ty_data, indxkey LIKE mcdx–srtfd, wa_indx TYPE mcdx. DATA:it_final TYPE STANDARD TABLE OF ty_final, wa_final TYPE ty_final. DATA: gs_layout TYPE slis_layout_alv,
+                gt_fieldcat TYPE slis_t_fieldcat_alv, gt_events TYPE slis_t_event, g_repid LIKE sy–repid, ls_fieldcat TYPE slis_fieldcat_alv, w_alv_print TYPE slis_print_alv.DATA: str. ******************************************************************
+                SELECTION-SCREEN ******************************************************************SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text–001.SELECTION-SCREEN SKIP 2.PARAMETER p_file TYPE ibipparms–path OBLIGATORY.SELECTION-SCREEN SKIP
+                2.SELECTION-SCREEN END OF BLOCK b1. ****************************************************************** AT SELECTION-SCREEN ******************************************************************AT SELECTION-SCREEN ON VALUE-REQUEST FOR p_file.
+                PERFORM file_browse. PERFORM file_upload. ” Files into internal table. AT SELECTION-SCREEN OUTPUT. DATA: exclude LIKE rsexfcode OCCURS 0 WITH HEADER LINE, ls_submit_info TYPE rssubinfo. ******************************************************************
+                START-OF-SELECTION ******************************************************************START-OF-SELECTION. PERFORM process_data. IF it_final[] IS NOT INITIAL. PERFORM alv_display. PERFORM alv_display_fm. ENDIF. *&———————————————————————**&
+                Form FILE_BROWSE*&———————————————————————** text*———————————————————————-** –> p1 text*
+                <– p2 text*———————————————————————-*FORM file_browse . CLEAR p_file. CALL FUNCTION ‘F4_FILENAME’ IMPORTING file_name=p _file. ENDFORM. ” FILE_BROWSE*&———————————————————————**& Form FILE_UPLOAD*&———————————————————————** text*———————————————————————-**
+                    –> p1 text*
+                    <– p2 text*———————————————————————-*FORM file_upload . DATA ip_file TYPE string. CLEAR ip_file. REFRESH it_data. ip_file=p _file. CALL FUNCTION ‘GUI_UPLOAD’ EXPORTING filename=i p_file has_field_separator=‘ X’ TABLES data_tab=i t_data EXCEPTIONS file_open_error=1
+                        file_read_error=2 no_batch=3 gui_refuse_filetransfer=4 invalid_type=5 no_authority=6 unknown_error=7 bad_data_format=8 header_not_allowed=9 separator_not_allowed=1 0 header_too_long=1 1 unknown_dp_error=1 2 access_denied=1 3 dp_out_of_memory=1
+                        4 disk_full=1 5 dp_timeout=1 6 OTHERS=1 7. IF sy–subrc <> 0.* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO* WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4. ENDIF. REFRESH: exp_data. exp_data = it_data.*Index key is group of Report & UserId. CONCATENATE sy–repid sy–uname INTO indxkey . EXPORT
+                        exp_data FROM exp_data TO DATABASE mcdx(zb) FROM wa_indx ID indxkey. ENDFORM. “file_upload*&———————————————————————**& Form PROCESS_DATA*&———————————————————————** text*———————————————————————-*FORM process_data . IF sy–batch EQ
+                        ‘X’. REFRESH it_data. CONCATENATE sy–repid sy–uname INTO indxkey . IMPORT exp_data = exp_data FROM DATABASE mcdx(zb) ID indxkey. it_data = exp_data. ENDIF. IF it_data IS NOT INITIAL. LOOP AT it_data INTO wa_data. wa_final–claim_mnth
+                        = wa_data–claim_mnth. wa_final–claim_yr = wa_data–claim_yr. wa_final–plant = wa_data–plant. wa_final–labr_value = wa_data–labr_value. wa_final–cr_note_no = wa_data–cr_note_no. APPEND wa_final to it_final. ENDLOOP. ELSE. MESSAGE:‘No
+                        entry found’ TYPE ‘E’. ENDIF.ENDFORM. ” FILE_UPLOAD*&———————————————————————**& Form ALV_DISPLAY*&———————————————————————** text*———————————————————————-** –> p1 text*
+                        <– p2 text*———————————————————————-*FORM alv_display . ” ankita DATA: col_pos TYPE i. col_pos=0 . ls_fieldcat–fieldname=‘ CLAIM_MNTH’. ls_fieldcat–tabname=‘ IT_FINAL’. ls_fieldcat–seltext_l=‘ Credit month’. ls_fieldcat–col_pos=c ol_pos. APPEND ls_fieldcat
+                            TO gt_fieldcat. CLEAR ls_fieldcat. col_pos=c ol_pos + 1. ls_fieldcat–fieldname=‘ CLAIM_YR’. ls_fieldcat–tabname=‘ IT_FINAL’. ls_fieldcat–seltext_l=‘ Credit year’. ls_fieldcat–col_pos=c ol_pos. APPEND ls_fieldcat TO gt_fieldcat.
+                            CLEAR ls_fieldcat. col_pos=c ol_pos + 1. ls_fieldcat–fieldname=‘ PLANT’. ls_fieldcat–tabname=‘ IT_FINAL’. ls_fieldcat–seltext_l=‘ Plant’. ls_fieldcat–col_pos=c ol_pos. APPEND ls_fieldcat TO gt_fieldcat. CLEAR ls_fieldcat. ls_fieldcat–fieldname=‘
+                            CR_NOTE_NO’. ls_fieldcat–tabname=‘ IT_FINAL’. ls_fieldcat–seltext_l=‘ credit Not NO’. ls_fieldcat–col_pos=c ol_pos. APPEND ls_fieldcat TO gt_fieldcat. CLEAR ls_fieldcat. ENDFORM. ” ALV_DISPLAY*&———————————————————————**& Form ALV_DISPLAY_FM*&———————————————————————**
+                            text*———————————————————————-** –> p1 text*
+                            <– p2 text*———————————————————————-*FORM alv_display_fm . ” ankita g_repid=s y–repid. CALL FUNCTION ‘REUSE_ALV_GRID_DISPLAY’ EXPORTING i_callback_program=g _repid it_fieldcat=g t_fieldcat[] i_save=‘ X’ TABLES t_outtab=i t_final[] EXCEPTIONS program_error=1
+                                OTHERS=2 . IF sy–subrc <> 0.* MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO* WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4. ENDIF. ENDFORM. ” ALV_DISPLAY_FM
+            </p> -->
+            <div flex-wrapper>
+                <span class="img"><img src="pics/-789847033.jpg" alt="" width="250px"></span>
+                <span class="img"><img src="pics/-789847033.jpg" alt="" width="250px"></span>
+                <span class="img"><img src="pics/-789847033.jpg" alt="" width="250px"></span>
+            </div>
+        </article>
+        <footer>
+            <center> Mutall data @2022</center>
+        </footer>
+    </div>
+</body>
+
+
+</html>

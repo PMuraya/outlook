@@ -1,0 +1,13 @@
+[ {
+        "class_name": "capture\\query",
+        "args": [
+            "wmeter",
+            "select name, is_supply, comment, serial_no from wmeter",
+            "mutallco_rental"
+        ]
+   },
+   ["rentize","wmeter", [],"name", ["\\capture\\lookup","wmeter","name"]],
+   ["rentize","wmeter", [],"comment", ["\\capture\\lookup","wmeter","comment"]],
+   ["rentize","wmeter", [],"serial_no", ["\\capture\\lookup","wmeter","serial_no"]],
+   ["rentize","wmeter", [],"is_supply", ["\\capture\\lookup","wmeter","is_supply"]]
+]

@@ -13,7 +13,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/schema/v/code/schema.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'/schema/v/code/questionnaire.php';
 //
 //Get the Kentionary data (in questionnaire format) to export
-$text = file_get_contents("tenant.json");
+$text = file_get_contents("ereading.json");
 //
 //Convert the json to the Iquestionnaire php structure
 $Iquestionnaire = json_decode($text);
@@ -23,6 +23,6 @@ $Iquestionnaire = json_decode($text);
 $q = new \questionnaire($Iquestionnaire);
 //
 //Export the questionnaire data and log the progress to the given xml file
-$html = $q->load_common(__DIR__."\\log.xml");
+$result = $q->load_common(__DIR__."\\log.xml");
 //
-echo $html;
+echo json_encode($result);

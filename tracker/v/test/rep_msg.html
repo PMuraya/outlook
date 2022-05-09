@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <title>Reply Message</title>
+    <link rel="stylesheet" href="general.css">
+</head>
+
+<body>
+    <h3>Reply Message</h3>
+    <label>
+            <!-- By default the lang is the same as that of the original message -->
+            Select language:
+            <select>
+                <option>Kikuyu</option>
+                <option>Maasai</option>
+                <option>Swahili</option>
+            </select>
+        </label>
+    <label>
+            Original message:
+            <textarea id="prev_message" disabled>
+                Reply of message goes here
+            </textarea>
+        </label>
+    <textarea id="message" placeholder="Enter message"></textarea>
+
+    <!-- Contribution section 
+         This question would be asked if the message pointed to a contribution. -->
+    <fieldset id="contribution">
+        <legend>Do you want to contribute?</legend>
+        <label>
+                <input
+                    data-dbname="mutall_users"
+                    data-ename="message"
+                    name="contribution"
+                    value="yes"
+                    type="radio"  
+                    onclick="Main.show_panel('amount', true)"/>
+                <span>Yes</span>
+            </label>
+        <div class="amount" id="amount" hidden>
+            <label>
+                    <span>Amount:</span>
+                    <input type="number"/>
+                </label>
+        </div>
+        <label>
+                <input
+                    data-dbname="mutall_users"
+                    data-ename="message"
+                    name="contribution"
+                    value="no"
+                    type="radio"
+                    onclick="Main.show_panel('amount', false)"/>
+                <span>No</span>
+            </label>
+    </fieldset>
+    <button id="go">Reply</button>
+    <button id="cancel">Cancel</button>
+</body>
+
+</html>

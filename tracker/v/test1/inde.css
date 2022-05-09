@@ -1,0 +1,21 @@
+ /*Make the font size good enough for projection*/
+ * {
+    font-size: 30px;
+    line-height: 1.4;
+}
+
+/* To display the labels in a block format rather than inline */
+label {
+    display: block;
+
+}
+
+/* Reduce the size of the template */
+body {
+    width: 50%;
+    padding: 2%;
+}
+
+.media {
+    margin-left: 4%;
+}

@@ -1,50 +1,79 @@
 //
-//
-//Resolves reference to the asset.products data type
+//Resolves references to the asset.products data type.
+import * as mod from '../../../outlook/v/code/module.js';
 import * as outlook from '../../../outlook/v/code/outlook.js';
+import { layout } from '../../../schema/v/code/questionnaire.js';
 //
 //Import schema.
 import * as schema from "../../../schema/v/code/schema.js";
 //
-export type Imsg = {msg: string};
+import main from './main.js';
 //
-//Use a pop-up to create a new message.
-export class msg extends outlook.baby<Imsg> {
+export type Imsg = {msg:string};
+//
+//use popup to create a new message
+export class new_msg 
+    extends outlook.baby<true>
+    implements mod.message, mod.questionnaire, mod.journal, mod.cron_job
+ {
     //
-    constructor(base:outlook.page) {
-        super(base, "new_msg.html");
+    declare public mother:main;
+    //
+    constructor(mother: main) {
+        super(mother, "new_msg.html");
     }
     //
-    //In future, check if a file json file containing Iquestionnaire is selected.
-    //For now, do nothing
-    async check(): Promise<boolean> { 
+    get_sender(): string {
+        throw new Error('Method not implemented.');
+    }
+    get_body(): string {
+        throw new Error('Method not implemented.');
+    }
+    get_layout(): layout[] {
+        throw new Error('Method not implemented.');
+    }
+    get_business_id(): string {
+        throw new Error('Method not implemented.');
+    }
+    get_je(): { ref_num: string; purpose: string; date: string; amount: number; } {
+        throw new Error('Method not implemented.');
+    }
+    get_debit(): string {
+        throw new Error('Method not implemented.');
+    }
+    get_credit(): string {
+        throw new Error('Method not implemented.');
+    }
+    //
+    //In future, check if a file json containing iquestionare is selected
+    //
+   async check(): Promise<boolean> {
         //
-        //Get the message text.
-        const text = <HTMLTextAreaElement>this.get_element('msg');
+        //1. Collect and check the data that the user has entered.
         //
-        if (text.value===''){
-            //
-            this.win.alert(`Please enter message`);
-            //
-            return false;
-        }
+        //2. Save the data to the database.
+        const save = await this.mother.writer.save(this);
         //
-        //Compile the message.
-        this.result = <Imsg>{msg: text.value};
+        //3. Send the appropriate message to the user(s).
+        const send = await this.mother.messenger.send(this);
+        //
+        //4. Update the journal entry(je) 
+        const post = await this.mother.accountant.post(this);
+        //
+        //5. Schedule tasks if available.
+        const exec = await this.mother.scheduler.exec(this);
         //
         return true;
     }
     //
     //Collect the message and media of communication specified by the user.
-    async get_result(): Promise<Imsg> {
+    async get_result(): Promise<true> {
         //
-        return this.result!;
+        return true;
     }
-    
-    async show_panels(){
-        const myalert = this.get_element('alert');
-        myalert.onclick = ()=>this.win.alert('Aler!');
+    //
+    async show_panels(): Promise<void> {
+        //
+        
     }
-    
-    
 }

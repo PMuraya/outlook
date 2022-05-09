@@ -1,0 +1,16 @@
+[ {
+        "class_name": "capture\\query",
+        "args": [
+            "econnection",
+            "select emeter.num as emeter_num, room.uid as emeter_uid, econnection.end_date, econnection.rate, econnection.share, econnection.start_date, econnection.start_reading from econnection inner join emeter on econnection = emeter.emeter inner join room on econnection = room.room",
+            "mutallco_rental"
+        ]
+   },
+   ["rentize","econnection", [],"end_date", ["\\capture\\lookup","econnection","end_date"]],
+   ["rentize","econnection", [],"rate", ["\\capture\\lookup","econnection","rate"]],
+   ["rentize","econnection", [],"start_date", ["\\capture\\lookup","econnection","start_date"]],
+   ["rentize","econnection", [],"start_reading", ["\\capture\\lookup","econnection","start_reading"]],
+   
+   ["rentize","emeter", [],"num", ["\\capture\\lookup","econnection","emeter_num"]],
+   ["rentize","room", [],"uid", ["\\capture\\lookup","econnection","emeter_uid"]]
+]

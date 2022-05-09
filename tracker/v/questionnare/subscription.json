@@ -1,0 +1,12 @@
+[ {
+        "class_name": "capture\\query",
+        "args": [
+            "subscription",
+            "select client.name as client_name, service.name as service_name, subscription.amount  from subscription inner join client on subscription = client.client inner join service on subscription = service.service",
+            "mutallco_rental"
+        ]
+   },
+   ["rentize","tenant", [],"name", ["\\capture\\lookup","subscription","client_name"]],
+   ["rentize","service", [],"name", ["\\capture\\lookup","subscription","service_name"]],
+   ["rentize","subscription", [],"amount", ["\\capture\\lookup","subscription","amount"]]
+]

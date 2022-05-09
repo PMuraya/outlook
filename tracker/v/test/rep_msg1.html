@@ -1,0 +1,50 @@
+<html>
+
+<head>
+    <title>Reply message</title>
+    <link rel="stylesheet" href="general.css">
+    <style>
+        * {
+            border-radius: 5px;
+            padding: 5 2 10 2;
+            overflow: hidden;
+        }
+        /* Style the label element. */
+        
+        label {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <center>
+            <h2>Reply Message</h2>
+        </center>
+    </div>
+    <div>
+        <label>Lang
+                <select id="language">
+                    <option value="Masai">Masai</option>
+                    <option value="Luhya">Luhya</option>
+                    <option value="Kamba">Kamba</option>
+                </select>
+            </label>
+        <!--
+              Where to type the message. -->
+        <label>
+                Enter Message <br />
+                <textarea id="msg" rows="5" cols="25"></textarea>
+            </label>
+        <!--
+              Display new words here.-->
+        <div id="untranslated"></div>
+
+        <button id="go">Reply</button>
+        <button id="cancel">Cancel</button>
+
+    </div>
+</body>
+
+</html>

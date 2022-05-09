@@ -1,0 +1,93 @@
+/*
+Show every label on its new line; by default the bottom margin is 2% of the
+computer scereen width*/
+
+label {
+    display: block;
+    margin-bottom: 2%
+}
+
+
+/*If the phone width is 400 pixes or smaller, then the bottom margin will be
+use botommargin of 7% of the device height, thus leaving room below for the
+number pad*/
+
+@media screen and (max-width: 400px) {
+    label {
+        margin-bottom: 7%
+    }
+}
+
+
+/*
+Color coding for positive, null and negative values*/
+
+.error {
+    background-color: red;
+    color: white;
+}
+
+.null {
+    background-color: white;
+    color: black;
+}
+
+.ok {
+    background-color: green;
+    color: white;
+}
+
+header {
+    height: 25%;
+    background-color: yellow;
+    display: flex
+}
+
+footer {
+    height: 7%;
+    background-color: greenyellow;
+}
+
+article {
+    height: 73%;
+    background-color: aliceblue;
+    overflow: scroll;
+}
+
+send {
+    height: 7%;
+}
+
+.active {
+    background: aquamarine;
+}
+
+tr.hidden {
+    display: none;
+}
+
+tr.active+tr.hidden {
+    display: table-row;
+}
+
+@media(max-width: 768px) {
+    table {
+        text-align: center;
+        font-size: 10px;
+        width: 100%;
+    }
+}
+
+@media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
+    table {
+        text-align: left;
+        font-size: 10px;
+        width: 100%;
+    }
+}
+
+@media(max-width: 640px) {
+    tr.active+tr.hidden {
+        display: inline-table;
+    }
+}

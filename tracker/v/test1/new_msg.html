@@ -1,0 +1,79 @@
+<html>
+
+<head>
+  <title>Send message</title>
+  <link rel="stylesheet" href="index.css">
+  
+</head>
+
+<body onload="untranslated()">
+  <script src="index.js"></script>
+  <div>
+    <label for="languages">Choose a Language:
+
+    <select name="languages" id="languages">
+      
+      <option value="kikuyu">Kikuyu</option>
+      <option value="maasai">Maasai</option>
+      <option value="luo">Luo</option>
+    </select></label>
+    <!--
+      Where to type the message. -->
+    <label>
+      Enter Message <br />
+      <textarea id="msg" rows="5" cols="25"></textarea>
+    </label>
+    <!--
+      Private message. -->
+    <fieldset>
+      <legend>Is this message targeting an individual?</legend>
+      <label>
+        <input type="radio" name="visibility"  onclick="show(true, 'private')" />Yes
+      </label>
+      <div id="private" hidden>
+        <div class="media">
+          Select Recepient
+          <select name="recipient" id="recipient">
+          </select>
+        </div>
+      </div>
+      <label>
+        <input type="radio" name="visibility" onclick="show(false, 'private')" />No
+      </label>
+      
+
+    </fieldset>
+    <fieldset><legend>Is this message related to an event?</legend>
+      
+      <label>
+        <input type="radio" name="visible"  onclick="show(true, 'event')"  />Yes
+      </label>
+      <div id="event" hidden>
+        <div class="media">
+          Select event
+          <select name="event" id="event">
+            <option value="---">---</option>
+            <option value="hiking">Hiking</option>
+            <option value="Wedding">Wedding</option>
+            <option value="funeral">Funeral</option>
+          </select>
+        
+      </div>
+    </div>
+     
+        <input type="radio" name="visible"onclick="show(false, 'event')" />No
+      </label>
+    </fieldset>
+
+    <!--
+      Display new words here.-->
+    <div id="untranslated"></div>
+   
+      <button id="go">Send</button>
+      <button id="cancel">Cancel</button>
+    
+  
+  </div>
+</body>
+
+</html>

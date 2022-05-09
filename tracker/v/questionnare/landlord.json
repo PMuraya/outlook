@@ -1,0 +1,12 @@
+[ {
+        "class_name": "capture\\query",
+        "args": [
+            "landlord",
+            "select name, username, paybill, title   from landlord",
+            "mutallco_rental"
+        ]
+   },
+   ["rentize", "landlord", [], "name", ["\\capture\\lookup","landlord","name"]],
+   ["rentize", "landlord", [], "username", ["\\capture\\lookup","landlord","username"]],
+   ["rentize", "landlord", [], "title", ["\\capture]]lookup", "landlord", "title"]]
+]
