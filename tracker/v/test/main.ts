@@ -213,7 +213,11 @@ class reply_message
     }
     //
     //Collect all the label layouts from the messaging reply dialogue box.
+<<<<<<< Updated upstream
     get_layout(): Array<quest.label> {
+=======
+    get_layouts(): Array<quest.label> {
+>>>>>>> Stashed changes
         //
         //The database name.
         const dbname = "mutall_users";
@@ -455,7 +459,11 @@ class water
     }
     //
     //
+<<<<<<< Updated upstream
     get_layout(): Array<quest.layout> {
+=======
+    get_layouts(): Array<quest.layout> {
+>>>>>>> Stashed changes
         //
          //The database name.
          const dbname = "rentize";
@@ -544,7 +552,11 @@ class definer
     }
     //
     //
+<<<<<<< Updated upstream
     get_layout(): Array<quest.layout> {
+=======
+    get_layouts(): Array<quest.layout> {
+>>>>>>> Stashed changes
         throw new Error('Method not implemented.');
     }
     //

@@ -29,7 +29,11 @@ export class new_msg
     get_body(): string {
         throw new Error('Method not implemented.');
     }
+<<<<<<< Updated upstream
     get_layout(): layout[] {
+=======
+    get_layouts(): layout[] {
+>>>>>>> Stashed changes
         throw new Error('Method not implemented.');
     }
     get_business_id(): string {
