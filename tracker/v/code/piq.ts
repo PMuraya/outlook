@@ -78,17 +78,10 @@ export class register_intern
     //
     //Implement the method required by the questionnaire interface.
     //It returns all the layouts derived from the registration of an intern.
-<<<<<<< Updated upstream
-    get_layout(): Array<quest.layout> {
-        //
-        //1.Retrieve all label layouts (from the registration form) that are outside a table.
-        const inputs: Array<quest.layout> = this.get_label_layouts();
-=======
     get_layouts(): Array<quest.layout> {
         //
         //1.Retrieve all label layouts (from the registration form) that are outside a table.
         const inputs: Array<quest.layout> = this.get_simple_inputs();
->>>>>>> Stashed changes
         //
         //2.Retrieve all table based layouts from the registration form.
         const tables: Array<quest.layout> = this.get_table_layouts();
@@ -98,11 +91,6 @@ export class register_intern
     }
     //
     //Retrieves all the label based layouts from the registration form.
-<<<<<<< Updated upstream
-    get_label_layouts(): quest.layout[] {
-        throw new schema.mutall_error('Method not implemented. check with peter');
-    }
-=======
         get_simple_inputs(): Array<quest.layout> {
         //Start with an empty layout
         const layouts: Array<quest.layout> = [];
@@ -127,7 +115,6 @@ export class register_intern
         return layouts;
     }
     
->>>>>>> Stashed changes
     //
     //Retrieve all table based layouts from the registration form.
     get_table_layouts(): Array<quest.layout> {
@@ -168,11 +155,7 @@ export class register_intern
         //2.1 Get the table name. It is the id of the table element
         const tname = element.id;
         //
-<<<<<<< Updated upstream
-        //2.2 Get the column names of the table. They are will as many 
-=======
         //2.2 Get the column names of the table. They will be as many 
->>>>>>> Stashed changes
         //columns as there are th elements.
         const cnames: Array<string> = this.get_column_names(element);
         //
@@ -188,13 +171,6 @@ export class register_intern
     //get the column names.
     get_column_names(element: HTMLTableElement):Array<string> {
         //
-<<<<<<< Updated upstream
-        //1. Get all the table columns.
-        const cname: string = this.get_element("th");
-        //
-        //
-        return cname;
-=======
         //1. Get all the table columns as a collection of TableCellElement.
         const elements = document.querySelectorAll("th");
         //
@@ -215,17 +191,12 @@ export class register_intern
         });
         //
         return names;
->>>>>>> Stashed changes
     }
     //
     //get the body value.
     get_body_value(element: HTMLTableElement):Array<Array<string>> {
-<<<<<<< Updated upstream
-        throw new Error('Method not implemented.');
-=======
         //
         //1. Get the input values of the table fields.
->>>>>>> Stashed changes
     }
     //
     //check the entered data and if correct return true else return false.
@@ -250,31 +221,8 @@ export class register_intern
         return save && post && send;
     }
     //
-<<<<<<< Updated upstream
-    // get_layouts(): Array<quest.layout> {
-    //     //1. Collect all the labels associated with the simple inputs
-    //     const inputs: Array<quest.layout> = this.get_simple_inputs();
-    //     //
-    //     //2. Collect all the labels associated with tables in the questionnaire
-    //     const tables: Array<quest.layout> = this.get_table_input();
-    //     //
-    //     //3. Combine 1 and 2 into a simple array and return it.
-    //     return [...inputs, ...tables];
-    // }
-    // get_simple_inputs(): quest.layout[] {
-    //     throw new schema.mutall_error('Method not implemented.');
-    // }
-    // get_table_inputs(): quest.layout[] {
-    //     throw new schema.mutall_error('Method not implemented.');
-    // }
-    // //
-    // async get_result(): Promise<true> {
-    //     //
-    //     return true;
-    // }
-=======
+    // 
     get_label(arg0: HTMLInputElement) {
         throw new Error('Method not implemented.');
     }
->>>>>>> Stashed changes
 }
