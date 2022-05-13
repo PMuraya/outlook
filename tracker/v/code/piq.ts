@@ -81,7 +81,7 @@ export class register_intern
     get_layouts(): Array<quest.layout> {
         //
         //1.Retrieve all label layouts (from the registration form) that are outside a table.
-        const inputs: Array<quest.layout> = this.get_simple_inputs();
+        const inputs: Array<quest.layout> = this.get_label_layouts();
         //
         //2.Retrieve all table based layouts from the registration form.
         const tables: Array<quest.layout> = this.get_table_layouts();
@@ -91,30 +91,9 @@ export class register_intern
     }
     //
     //Retrieves all the label based layouts from the registration form.
-        get_simple_inputs(): Array<quest.layout> {
-        //Start with an empty layout
-        const layouts: Array<quest.layout> = [];
-    //     //
-    //     //1.Consider inputs of type text
-    //     //1.1 Get all the inputs of type text, radio,checkbox, date,and selector.
-    //     const inputs = Array.from(document.querySelectorAll(
-    //                         'input[type="text"],\n\
-    //                         input[type="radio"]:checked,\n\
-    //                         input[type="checkbox"]:checked,\n\
-    //                         input[type="date"],\n\
-    //                         option'
-    //     ));
-    //     //
-    //     //1.2 Convert them to labels(see the structure of a label in questionnaire.ts)
-    //     const labels = inputs.map(input => this.get_label(<HTMLInputElement> input).value);
-    //     //
-    //     //1.3 Add them to the layout collection
-    //     layouts.concat(labels);
-    //     //
-    //     //Return the final output
-        return layouts;
+    get_label_layouts(): quest.layout[] {
+        throw new schema.mutall_error('Method not implemented. check with peter');
     }
-    
     //
     //Retrieve all table based layouts from the registration form.
     get_table_layouts(): Array<quest.layout> {
@@ -155,7 +134,7 @@ export class register_intern
         //2.1 Get the table name. It is the id of the table element
         const tname = element.id;
         //
-        //2.2 Get the column names of the table. They will be as many 
+        //2.2 Get the column names of the table. They are will as many 
         //columns as there are th elements.
         const cnames: Array<string> = this.get_column_names(element);
         //
@@ -171,32 +150,33 @@ export class register_intern
     //get the column names.
     get_column_names(element: HTMLTableElement):Array<string> {
         //
-        //1. Get all the table columns as a collection of TableCellElement.
-        const elements = document.querySelectorAll("th");
+        //1. Get all the table columns.
+        const cname: NodeListOf<HTMLTableCellElement> = document.querySelectorAll("th");
         //
-        if (elements === null) throw new schema.mutall_error("There are no columns in this table");
+        console.log(cname);
         //
-        //convert the collection to an array.
-        const cells =Array.from(elements);
-        //
-        //Map the array of table cell elements to column names.
-        const names = cells.map(cell => {
-            //
-            //Get the name from the cname datalist.
-            const name= cell.dataset.name;
-            //
-            if (name === undefined) throw new schema.mutall_error(`No column name found for this table`)
-            //
-            return name;
-        });
-        //
-        return names;
+        //2. Convert the column fields  to column names
+        // const names = 
+        // const names: Array<string> =
+        //     //
+        //     //Convert the node list of elements to a normal array
+        //     Array.from(cname)
+        //         //
+        //         //Map every element to a table layout
+        //         .map(() => names );
+        // //
+        // //3. Return the result.
+        // return cname;
     }
     //
     //get the body value.
     get_body_value(element: HTMLTableElement):Array<Array<string>> {
         //
         //1. Get the input values of the table fields.
+        const values = this.document.querySelector("tbody");
+        //
+        //
+        // value. = this.document.querySelectorAll("td");
     }
     //
     //check the entered data and if correct return true else return false.
@@ -221,8 +201,25 @@ export class register_intern
         return save && post && send;
     }
     //
-    // 
-    get_label(arg0: HTMLInputElement) {
-        throw new Error('Method not implemented.');
-    }
+    // get_layouts(): Array<quest.layout> {
+    //     //1. Collect all the labels associated with the simple inputs
+    //     const inputs: Array<quest.layout> = this.get_simple_inputs();
+    //     //
+    //     //2. Collect all the labels associated with tables in the questionnaire
+    //     const tables: Array<quest.layout> = this.get_table_input();
+    //     //
+    //     //3. Combine 1 and 2 into a simple array and return it.
+    //     return [...inputs, ...tables];
+    // }
+    // get_simple_inputs(): quest.layout[] {
+    //     throw new schema.mutall_error('Method not implemented.');
+    // }
+    // get_table_inputs(): quest.layout[] {
+    //     throw new schema.mutall_error('Method not implemented.');
+    // }
+    // //
+    // async get_result(): Promise<true> {
+    //     //
+    //     return true;
+    // }
 }

@@ -341,6 +341,7 @@ export default class main extends app.app {
 }
 
 class definer extends outlook.baby<Idef>{
+   //
     static innerHTML: HTMLElement;
     //
     //
@@ -352,6 +353,9 @@ class definer extends outlook.baby<Idef>{
     //For now, do nothing
    async check(): Promise<boolean>{return true;}
     //
+    show_panels(): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
     //
     async get_result(): Promise<Idef> {
         //

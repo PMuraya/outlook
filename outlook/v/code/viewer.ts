@@ -51,6 +51,11 @@ import * as schema from "../../../schema/v/code/schema.js"
          //Do not leave this page just yet
          return false;
      }
+     //
+     //
+    show_panels(): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
  }
  //
  //For now, the test data is booean, denoting either good or bac
@@ -79,4 +84,9 @@ type test_result = "ok" | schema.mutall_error;
      async get_result(){
          return this.result!;
      }
+    //
+    //
+    show_panels(): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
  }

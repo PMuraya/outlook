@@ -1,7 +1,30 @@
 //Resolve the iquestionnaire
 import * as quest from '../../../schema/v/code/questionnaire.js';
 //
+import * as outlook from '../../../outlook/v/code/outlook.js'
+//
 import * as server from '../../../schema/v/code/server.js'
+//
+//A class to be implemented when creating a new class to avoid repetition.
+//Once the class is called, one does not need to do anything else.
+export abstract class terminal extends outlook.baby<true>{
+    constructor(
+        //
+        //The mother view to the application.
+        mother: outlook.page,
+        //
+        //The html page to load
+        html: string
+    ) {
+        super(mother, html)
+    }
+    //
+    //This method does nothing other than satisfying the contractual
+    // obligation of a baby class.
+    async get_result(): Promise<true> {
+        return true;
+    }
+}
 //
 //This class is the home of all methods that are common to all our modules.
 //For instance, all modules should be able to report errors to the user.
@@ -172,9 +195,9 @@ class twilio extends messenger {
     //
     //TO send the user data from twilio, two parameters are needed, namely the recievers phone number
     // and the text message
-    async get_message(): Promise<message> {
-        return message;
-    }
+    //    async get_message(): Promise<message> {
+    //        return message;
+    //    }
     //
     //For reporting any error that occurs to aid in debugging.
     report_error(): void {
@@ -212,6 +235,12 @@ class whatsapp extends messenger implements message {
     constructor() {
         super();
     }
+    get_sender(): string {
+        throw new Error('Method not implemented.');
+    }
+    get_body(): string {
+        throw new Error('Method not implemented.');
+    }
     //
     //error reporting purposes
     report_error(): void {
@@ -244,9 +273,9 @@ class mailer extends messenger implements message {
         throw new Error('Method not implemented.');
     }
     //Get the email message
-    async get_message(): Promise<message> {
-        return message;
-    }
+    //    async get_message(): Promise<message> {
+    //        return message;
+    //    }
 }
 //
 //This interface is implemented by all classes that can write
@@ -270,14 +299,24 @@ export interface message {
 //
 export interface journal {
     //
-    //Get the id
+    //Use the currently logged in user to get business id.
+    //(What happens if a user is associated in more than one business?)
     get_business_id(): string;
     //
     //Get the journal attributes.
+    //Return a journal entry with the following structure:-
     get_je(): {
+        //
+        //The reference number of the transaction.
         ref_num: string,
+        //
+        //Tells whether the payment made is to be credited or debited
         purpose: string,
+        //
+        //when the transaction was carried out.
         date: string,
+        //
+        //the amount in the transaction
         amount: number
     }
     //

@@ -125,6 +125,10 @@ export class page extends popup<user> {
         //Return true if both the email and password are valid 
         return email_is_valid && password_is_valid;
     }
+    //
+    show_panels(): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
 }
 
   //

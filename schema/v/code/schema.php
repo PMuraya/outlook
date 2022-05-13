@@ -2735,7 +2735,7 @@ class foreign extends capture implements ilink{
             $this->ref->table_name == $this->entity->name
             //
             //in the same database    
-            && $this->ref->db_name == $this->entity->dbase->name;
+            && $this->ref->db_name == $this->entity->get_dbase()->name;
     }
 }
 
