@@ -218,7 +218,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>
+                    <td data-cname="name">
                         <input type="text" data-dbname="mutall_tracker" data-ename="certificate" data-cname="name" placeholder="E.g., Highschool/College" value="Degree">
                     </td>
                     <td>
@@ -304,48 +304,47 @@
 
     <fieldset>
         <legend>Previous Work Experience/History attachments?</legend>
-        <table>
-            <tr>
-                <th></th>
-                <th data-dbname="mutall_tracker" data-ename="attachment" name="company" type="text" maxlength="20">
+        <table id="attachment">
+            <thead>
+                <th data-dbname="mutall_tracker" data-ename="attachment" data-cname="company" type="text" maxlength="20">
                     Company</th>
-                <th data-dbname="mutall_tracker" data-ename="attachment" name="designation" type="text" maxlength="20">
+                <th data-dbname="mutall_tracker" data-ename="attachment" data-cname="designation" type="text" maxlength="20">
                     Designation</th>
-                <th data-dbname="mutall_tracker" data-ename="attachment" name="start_date" type="date" maxlength="20">
+                <th data-dbname="mutall_tracker" data-ename="attachment" data-cname="start_date" type="date" maxlength="20">
                     Start date</th>
-                <th data-dbname="mutall_tracker" data-ename="attachment" name="end_date" type="date" maxlength="20">
+                <th data-dbname="mutall_tracker" data-ename="attachment" data-cname="end_date" type="date" maxlength="20">
                     End date</th>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>
-                    <input type="text">
-                </td>
-                <td>
-                    <input type="text">
-                </td>
-                <td>
-                    <input type="date">
-                </td>
-                <td>
-                    <input type="date">
-                </td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>
-                    <input type="text">
-                </td>
-                <td>
-                    <input type="text">
-                </td>
-                <td>
-                    <input type="date">
-                </td>
-                <td>
-                    <input type="date">
-                </td>
-            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="text">
+                    </td>
+                    <td>
+                        <input type="text">
+                    </td>
+                    <td>
+                        <input type="date">
+                    </td>
+                    <td>
+                        <input type="date">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text">
+                    </td>
+                    <td>
+                        <input type="text">
+                    </td>
+                    <td>
+                        <input type="date">
+                    </td>
+                    <td>
+                        <input type="date">
+                    </td>
+                </tr>
+            </tbody>
         </table>
         <button type="button">Add New Row</button>
     </fieldset>

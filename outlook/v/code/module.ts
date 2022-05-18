@@ -107,13 +107,79 @@ export class accountant extends modules {
         //
         //1.Collect as many labels as are neccessary for effective posting of the journal
         //guided by the simple template and the accounting sub-model.(fn)
+        const layouts: Array<quest.layout> = Array.from(this.collect_layouts(je));
         //
         //2. Use the questionnaire class in php to load the labels to the database.(pk)
+        const answer = await server.exec(
+            //
+            //Use the questionnaire class to load data.
+            "questionnaire",
+            //
+            //The only parameter required to construct a questionnaire is layouts[].
+            [layouts],
+            //
+            //Use the more general version of loading that returns a html report.
+            "load_common",
+            //
+            //Call the load common without any parameters.
+            []
+
+        )
         //
         //3. If the loading was successful return true. (jk)
+        return true;
         //
         //4. Otherwise report the error message and return false.(pm)
-        return true;
+        
+    }
+    //
+    //Collect all the layouts of the journal fro saving to the database.
+    *collect_layouts(je: journal): Iterable<quest.layout> | ArrayLike<quest.layout> {
+        //
+        //The database to save the data.
+        const dbname = "mutall_users"
+        //
+        //The entity name.
+        const ename = "je"
+        //
+        //1 Get and destructure journal entries, credit and debit accounts.
+        const {ref_num,purpose, date,amount}= je.get_je();
+        //
+        //Get the reference number
+        yield[dbname, ename, [], "ref_num", ref_num];
+        //
+        //Get the purpose of the transaction
+        yield[dbname, ename, [], "purpose", purpose];
+        //
+        //Get the date the transactoin was carried out.
+        yield[dbname, ename, [], "date", date];
+        //
+        //Get the amount in the transaction
+        yield[dbname, ename, [], "amount", amount];
+        //
+        //2 Get data for the account to credit.
+        const credit= je.get_credit();
+        //
+        //Get the credit table.
+        yield[dbname, "credit", [credit], credit, null];
+        //
+        //Get the account to credit the transaction
+        yield[dbname, "account", [credit], "name", credit];
+        //
+        //3 Get the account to debit;
+        const debit = je.get_debit();
+        //
+        //Get the debit table.
+        yield[dbname, "debit", [debit], debit, null];
+        //
+        //Get the account to debit the transaction.
+        yield[dbname, "account", [debit], "name", debit]
+        //
+        //4. Get the business id.
+        const id = je.get_business_id();
+        //
+        yield[dbname, "business", [], "id", id];
+        //
     }
 }
 //

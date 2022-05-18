@@ -92,7 +92,14 @@ export class register_intern
     //
     //Retrieves all the label based layouts from the registration form.
     get_label_layouts(): quest.layout[] {
-        throw new schema.mutall_error('Method not implemented. check with peter');
+        //
+        //dummy for test purposes.
+        const c: quest.layout[] = []
+        //
+        c.push(["mutall_users", "user", [], "email", "jane@gmail.com"]);
+        c.push(["mutall_users", "user", [], "email", "jae@gmail.com"]);
+        //
+        return c;
     }
     //
     //Retrieve all table based layouts from the registration form.
@@ -150,33 +157,57 @@ export class register_intern
     //get the column names.
     get_column_names(element: HTMLTableElement):Array<string> {
         //
-        //1. Get all the table columns.
-        const cname: NodeListOf<HTMLTableCellElement> = document.querySelectorAll("th");
+        const tname = element.id
         //
-        console.log(cname);
+        //1. Get all the table columns as a collection of TableCellElement.
+        const elements = element.querySelectorAll("th");
         //
-        //2. Convert the column fields  to column names
-        // const names = 
-        // const names: Array<string> =
-        //     //
-        //     //Convert the node list of elements to a normal array
-        //     Array.from(cname)
-        //         //
-        //         //Map every element to a table layout
-        //         .map(() => names );
-        // //
-        // //3. Return the result.
-        // return cname;
+        if (elements === null) throw new schema.mutall_error("There are no columns in this table");
+        //
+        //convert the collection to an array.
+        const cells =Array.from(elements);
+        //
+        //Map the array of table cell elements to column names.
+        const names = cells.map(cell => {
+            //
+            //Get the name from the cname datalist.
+            const name= cell.dataset.cname;
+            //
+            if (name === undefined) throw new schema.mutall_error(`No name found for this column in table${tname}`)
+            //
+            return name;
+        });
+        //
+        return names;
     }
     //
     //get the body value.
     get_body_value(element: HTMLTableElement):Array<Array<string>> {
         //
         //1. Get the input values of the table fields.
-        const values = this.document.querySelector("tbody");
         //
+        //Get the table body element.
+        const values: HTMLTableSectionElement | null = element.querySelector("tbody");
         //
-        // value. = this.document.querySelectorAll("td");
+        //Get the table rows.And 
+        const row: NodeListOf<HTMLTableRowElement> = values!.querySelectorAll("tr");
+        //
+        //convert the nodelist to an array
+        // const rows:Array<HTMLTableRowElement> = Array.from(row);
+        //
+        let c = [['1'],['2']];
+        //
+        // console.log(values)
+        //get the td's of all the rows
+        const data = values!.querySelectorAll('td');
+        console.log(data);
+        // const data = rows.forEach(td=> {
+        //     // console.log(row_)
+        //      rows.
+
+        // });
+        //  
+        return c;
     }
     //
     //check the entered data and if correct return true else return false.
@@ -200,26 +231,7 @@ export class register_intern
         //
         return save && post && send;
     }
-    //
-    // get_layouts(): Array<quest.layout> {
-    //     //1. Collect all the labels associated with the simple inputs
-    //     const inputs: Array<quest.layout> = this.get_simple_inputs();
-    //     //
-    //     //2. Collect all the labels associated with tables in the questionnaire
-    //     const tables: Array<quest.layout> = this.get_table_input();
-    //     //
-    //     //3. Combine 1 and 2 into a simple array and return it.
-    //     return [...inputs, ...tables];
-    // }
-    // get_simple_inputs(): quest.layout[] {
-    //     throw new schema.mutall_error('Method not implemented.');
-    // }
-    // get_table_inputs(): quest.layout[] {
-    //     throw new schema.mutall_error('Method not implemented.');
-    // }
-    // //
-    // async get_result(): Promise<true> {
-    //     //
-    //     return true;
-    // }
+    async show_panels(): Promise<void> {
+        //
+    }
 }

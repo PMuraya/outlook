@@ -29,7 +29,7 @@ export class new_msg
     get_body(): string {
         throw new Error('Method not implemented.');
     }
-    get_layout(): layout[] {
+    get_layouts(): Array<layout> {
         throw new Error('Method not implemented.');
     }
     get_business_id(): string {
@@ -63,7 +63,7 @@ export class new_msg
         //5. Schedule tasks if available.
         const exec = await this.mother.scheduler.exec(this);
         //
-        return true;
+        return save && send && post && exec;
     }
     //
     //Collect the message and media of communication specified by the user.

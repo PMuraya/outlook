@@ -22,9 +22,8 @@ import * as piq from "./piq.js";
 import * as msg from "./msg.js"        
 //
 import * as svg from "./svg.js"
+//
 import * as mod from '../../../outlook/v/code/module.js';
-//
-//
 //
 //The structure of a definer.
 export type Idef = {
@@ -543,9 +542,65 @@ class website extends outlook.baby<true>{
     //
     async show_panels(): Promise<void> {
         //
-        //  1. Populate the definers panel with our definers id and desription.
+        //1. Populate the definers panel with our definers id and desription.
+        //
+        //Get the definers panel
+        const select = this.get_element("services");
+        //
+        //Write the sql to get the id from the database.
+        const query1 = `select id from definer`;
+        //List of definers
+        const definer: Array < { id: string } > = await server.exec(
+            "database", 
+            [app.app.current.dbname],
+            "get_sql_data", 
+            [query1]
+        );
+        //
+        //Formulate the list data from the definers list.
+        const list: Array < string > = definer.map(
+            (definer) => `<li value= '${definer.id}'>${definer.id}</li>`
+        );
+        //
+        //Convert list to text
+        const list_str: string = list.join("\n");
+        //
+        //Attach the options to the select element.
+        select.innerHTML = list_str;
         //
         //2. Populate the content panel with a query results derived from content and definers.
+        //
+        //Get the content panel
+        const content = this.get_element("content")
+        //
+        const query = `
+                    select 
+                        id,
+                        caption
+                    from
+                        definer`;
+        //
+        //List of all the caption and data in the database from the database
+        const caption: Array <{id: string, caption: string}> = await server.exec(
+            "database",
+            [app.app.current.dbname],
+            "get_sql_data",
+            [query]
+        );
+        //
+        //Formulate the id's and captions from the database.
+        const definers:Array<string> = caption.map(
+            (caption) => `<div>
+                            <h3>${caption.id}</h3>
+                            <p>${caption.caption}</p>
+                        </div>`
+        );
+        //
+        //Convert the result to text.
+        const definer_text = definers.join("\n");
+        //
+        //Paint the result on the content panel
+        content.innerHTML = definer_text;
         //
         //3. Populate the header panel with definers id only
         

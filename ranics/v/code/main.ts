@@ -112,7 +112,7 @@ class stock
     //Collect the following label layouts:-
     //1. Car registration details directly from the form.
     //2. Business and user details indirectly from the login credentials .
-    get_layout(): Array<quest.layout> {
+    get_layouts(): Array<quest.layout> {
         //
         //0. Start with an empty collection.
         const c: Array<quest.label> = [];
@@ -224,22 +224,26 @@ class flow
     }
     //
     //
-    get_layout(): Array<quest.layout> {
+    get_layouts(): Array<quest.layout> {
         //
         //0. Start with an empty collection.
         const s: Array<quest.label> = [];
         //
         //1. Add the Car registration number to the collection.
         s.push(["mutall_ranix", "vehicle", [], "reg_no", this.reg_no]);
+        if (this.reg_no === "") this.report_element!.textContent = "Please provide a registration number";
         //
         //2. Add the Time of the day.
         s.push(["mutall_ranix", "flow", [], "direction", this.direction]);
+        if (this.direction === "") this.report_element!.textContent = "Select the direction of the vehicle";
         //
         //3. Add the type of vehicle.
         s.push(["mutall_ranix", "vehicle", [], "category", this.category]);
+        if (this.category === "") this.report_element!.textContent = "Select a category";        
         //
         //4. Add the current datetime
         s.push(["mutall_ranix", "flow", [], "datetime", this.datetime]);
+        if (this.datetime === "") this.report_element!.textContent = "Should be current time";
         //
         //5. Add the the business associated with this stock this
         //depends on who is logged in.

@@ -26,3 +26,4 @@ vendor/
 /tracker/v/temp
 /tracker/v/whatsapp
 /tracker/nbproject/private/
+tracker/v/test/main.ts
