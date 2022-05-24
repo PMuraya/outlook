@@ -1,29 +1,20 @@
-[   {
+[{
         "class_name": "capture\\query",
         "args": [
-            "flow", 
-            "select registration_number, category, vehicle_flow, datetime, operator from flow",
+            "flow",
+            "select operator.name as ope_name, flow.registration_number, flow.category, flow.vehicle_flow, flow.datetime, flow.operator from flow inner join operator on flow.operator = operator.email",
             "mutall_carpark"
         ]
     },
     ["mutall_ranix", "organization", [], "id", "mutall_data"],
-    ["mutall_ranix", "vehicle", ["flow"], "reg_no", ["\\capture\\lookup", "flow", "registration_number"]],
-    ["mutall_ranix", "vehicle", ["flow"], "category", ["\\capture\\lookup", "flow", "category"]],
-    ["mutall_ranix", "flow", ["flow"], "direction", ["\\capture\\lookup", "flow", "vehicle_flow"]],
-    ["mutall_ranix", "flow", ["flow"], "datetime", ["\\capture\\lookup", "flow", "datetime"]],
-    ["mutall_ranix", "operator", ["flow"], "email", ["\\capture\\lookup", "flow", "operator"]],
-    
-   { "class_name": "capture\\query",
-        "args": [
-            "stock",
-            "select registration_number, category, daytime, datetime, operator from stock",
-            "mutall_carpark"
-        ]
-   },
-    ["mutall_ranix", "vehicle", ["stock"], "reg_no", ["\\capture\\lookup", "stock", "registration_number"]],
-    ["mutall_ranix", "vehicle", ["stock"], "category", ["\\capture\\lookup", "stock", "category"]],
-    ["mutall_ranix", "stock", ["stock"], "session", ["\\capture\\lookup", "stock", "daytime"]],
-    ["mutall_ranix", "stock", ["stock"], "datetime", ["\\capture\\lookup", "stock", "datetime"]],
-    ["mutall_ranix", "operator", ["stock"], "email", ["\\capture\\lookup", "stock", "operator"]]
-    
+    ["mutall_ranix", "vehicle", [], "reg_no", ["\\capture\\lookup", "flow", "registration_number"]],
+    ["mutall_ranix", "vehicle", [], "category", ["\\capture\\lookup", "flow", "category"]],
+    ["mutall_ranix", "flow", [], "direction", ["\\capture\\lookup", "flow", "vehicle_flow"]],
+    ["mutall_ranix", "flow", [], "datetime", ["\\capture\\lookup", "flow", "datetime"]],
+    ["mutall_ranix", "operator", [], "email", ["\\capture\\lookup", "flow", "operator"]],
+
+
+    ["mutall_users", "user", [], "name", ["\\capture\\lookup", "operator", "name"]],
+    ["mutall_ranix", "operator", [], "name", ["\\capture\\lookup", "operator", "ope_name"]]
+
 ]

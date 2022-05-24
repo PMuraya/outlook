@@ -19,6 +19,19 @@ export class new_msg
     //
     declare public mother:main;
     //
+    //The database to save to 
+    public dbname = "mutall_users";
+    //
+    public language!:string;
+    //
+    public message!:string;
+    //
+    public event!:string;
+    //
+    public amount!:string;
+    //
+    public date!:string;
+    //
     constructor(mother: main) {
         super(mother, "new_msg.html");
     }
@@ -29,14 +42,34 @@ export class new_msg
     get_body(): string {
         throw new Error('Method not implemented.');
     }
-    get_layouts(): Array<layout> {
-        throw new Error('Method not implemented.');
-    }
+    
     get_business_id(): string {
         throw new Error('Method not implemented.');
     }
     get_je(): { ref_num: string; purpose: string; date: string; amount: number; } {
-        throw new Error('Method not implemented.');
+        //
+        //Accounting submodal entity for journal recordings.
+        const ename = "je";
+        //
+        //1.Collect all the field provided.
+        const j = [];
+        //
+        //1.1 Get the reference number.
+        j.push([""])
+        //
+        //1.2 Get the purpose of the transaction.
+        j.push([this.dbname, ename, [], "purpose", this.event]);
+        //
+        //1.3 Get the date.
+        j.push([this.dbname, ename, [], "date", this.date]);
+        //
+        //1.4 Get the amount payed.
+        j.push([this.dbname, ename, [], "amount", this.amount]);
+        //
+        //2.
+        //
+        //. Return the values.
+        return j;
     }
     get_debit(): string {
         throw new Error('Method not implemented.');
@@ -44,12 +77,46 @@ export class new_msg
     get_credit(): string {
         throw new Error('Method not implemented.');
     }
+    get_layouts(): Array<layout> {
+        //
+        //1. Start with an empty array
+        const m:Array<layout> = [ ];
+        //2. Get the language.
+        m.push([ this.dbname, "msg", [], "language", this.language ]);
+        //
+        //3. Get the message.
+        m.push([this.dbname, "msg", [], "text", this.message]);
+        //
+        //4. Get the event.
+        m.push([this.dbname, "event", [], "id", this.event]);
+        //
+        //5. Return the messages.
+        return m;
+    }
     //
     //In future, check if a file json containing iquestionare is selected
     //
    async check(): Promise<boolean> {
         //
         //1. Collect and check the data that the user has entered.
+        //
+        //1.1 Collect the language
+        this.language = this.get_input_value('event_assoc');
+        //
+        //Check that the language is selected.
+        if (this.language === null) throw new schema.mutall_error(`Select a field`);
+        //
+        //1.2 Collect the message
+        this.message = this.get_input_value("msg");
+        //
+        //Check the message
+        if (this.message === null) throw new schema.mutall_error(`Emter a message`);
+        //
+        //1.3 Collect the selected event.
+        this.event = this.get_input_value("event_assoc");
+        //
+        //Check the event.
+        if (this.event === null) throw new schema.mutall_error(`Select an event`);
         //
         //2. Save the data to the database.
         const save = await this.mother.writer.save(this);

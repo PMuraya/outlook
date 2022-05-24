@@ -13,19 +13,20 @@ export class svg extends outlook.baby<Isvg> {
     }
     //
     //In future, check if a file json containing iquestionare is selected
-    //
    async check(): Promise<boolean> {
         //
         return true;
     }
     //
-    //Collect the message and media of communication specified by the user.
+    //
     async get_result(): Promise<Isvg> {
         //
         return this.result!;
     }
     //
     async show_panels(): Promise<void> {
+        //
+        //Draw the svg circles.
         //
         //add the click event listener to the svg.
        const svg = this.get_element("svg_object");
@@ -39,5 +40,5 @@ export class svg extends outlook.baby<Isvg> {
             //
             //
          }
-        }
+    }
 }
