@@ -18,7 +18,8 @@
                 name="id">
         </label>
     <span>Description</span>
-    <textarea maxlength="200" data-dbname="mutall_users" data-ename="event" name="name" type="text"></textarea>
+    <textarea maxlength="200" data-dbname="mutall_users" data-ename="event" name="name" type="text">
+    </textarea>
 
     <div>
         <span>Start Date:</span>
@@ -112,8 +113,8 @@
                 <span>Yes</span>
             </label>
         <div class="scheduler_table" hidden>
-            <table style="width: 100%;">
-                <tr>
+            <table style="width: 100%;" id="schedule">
+                <thead>
                     <th data-dbname="mutall_users" data-ename="job" data-cname="job.no" type="number">
                         Job.no</th>
                     <th data-dbname="mutall_users" data-ename="job" data-cname="job.message" type="text">
@@ -122,29 +123,31 @@
                     <th data-dbname="mutall_users" data-ename="job" data-cname="Job Recusion" type="">
                         Job.recusion
                     </th>
-                </tr>
-                <tr>
-                    <td>
-                        1
-                    </td>
-                    <td>
-                        <input>
-                    </td>
-                    <td>
-                        <button>Schedule</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input>
-                    </td>
-                    <td>
-                        <input>
-                    </td>
-                    <td>
-                        <input>
-                    </td>
-                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            <input>
+                        </td>
+                        <td>
+                            <button>Schedule</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input>
+                        </td>
+                        <td>
+                            <input>
+                        </td>
+                        <td>
+                            <input>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <button>Add Row</button>
         </div>
@@ -158,22 +161,24 @@
             </label>
     </fieldset><br>
     <span>Add a scheduler</span>
-    <table style="width: 100%;">
-        <tr>
+    <table style="width: 100%;" id="add_schedule">
+        <thead>
             <th>Job No.</th>
             <th>Message</th>
             <th>Recursion</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td></td>
-            <td><button>recursion</button></td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td></td>
-            <td></td>
-        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td></td>
+                <td><button>recursion</button></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
     </table>
 
     <button id="go">Send</button>

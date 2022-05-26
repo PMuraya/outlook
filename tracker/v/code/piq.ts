@@ -63,6 +63,23 @@ export class register_intern
         //
         amount: number;
     } {
+        //
+        //1.Collect all the field provided.
+        const j = [];
+        //
+        //1.1 Get the reference number.
+        j.push([""])
+        //
+        //1.2 Get the purpose of the transaction.
+        //
+        //1.3 Get the date.
+        //
+        //1.4 Get the amount payed.
+        //
+        //2.
+        //
+        //. Return the values.
+        // return ;
         throw new schema.mutall_error('Method not implemented.');
     }
     //
@@ -151,6 +168,7 @@ export class register_intern
         //3. Compile the table layout.
         const table_layout: quest.table = {class_name, args: [tname, cnames, body]}
         //
+        //4. Return the table layout.
         return table_layout;
     }
     //
@@ -193,21 +211,34 @@ export class register_intern
         const row: NodeListOf<HTMLTableRowElement> = values!.querySelectorAll("tr");
         //
         //convert the nodelist to an array
-        // const rows:Array<HTMLTableRowElement> = Array.from(row);
+        const rows:Array<HTMLTableRowElement> = Array.from(row);
+        // 
+        //Get the td's of all the rows and map them to the input value
+        const data  = rows.map(
+            input => {
+                //Get the inputs in the row.
+                const inputs = Array.from(input.querySelectorAll("input"));
+                //
+                //Map every value to a td.
+                const td_value: Array<string> = inputs.map(value =>
+                    {
+                        //Get the value of the td. As an array
+                        const td_val: string | undefined= value.value;
+                        if ( td_val === undefined) throw new schema.mutall_error(`the table has no data`);
+                        //
+                        //Return the td.
+                        return td_val;
+                    }
+                    );
+                    //
+                    //Return the array of string of td.
+                    return td_value;
+            }
+        );
         //
-        let c = [['1'],['2']];
-        //
-        // console.log(values)
-        //get the td's of all the rows
-        const data = values!.querySelectorAll('td');
+        //Return the values
         console.log(data);
-        // const data = rows.forEach(td=> {
-        //     // console.log(row_)
-        //      rows.
-
-        // });
-        //  
-        return c;
+        return data;
     }
     //
     //check the entered data and if correct return true else return false.

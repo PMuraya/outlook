@@ -2,7 +2,7 @@
         "class_name": "capture\\query",
         "args": [
             "ereading",
-            "select emeter.num as ereading_serial, ereading.invoice, ereading.date, ereading.value, ereading.remark from ereading inner join emeter on ereading = emeter.emeter",
+            "select emeter.num as ereading_serial, ereading.invoice, ereading.date, ereading.value, ereading.remark from ereading inner join emeter on ereading.num = emeter.emeter",
             "mutallco_rental"
         ]
    },

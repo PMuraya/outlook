@@ -3,10 +3,18 @@
 <head>
     <title>Reply Message</title>
     <link rel="stylesheet" href="general.css">
+    <style>
+        * {
+            border-radius: 10px;
+            margin: 8 0 2 0;
+        }
+    </style>
 </head>
 
 <body>
-    <h3>Reply Message</h3>
+    <center>
+        <h3>Reply Message</h3>
+    </center>
     <label>
             <!-- By default the lang is the same as that of the original message -->
             Select language:
@@ -18,7 +26,7 @@
         </label>
     <label>
             Original message:
-            <textarea id="prev_message" disabled>
+            <textarea id="prev_message" disabled cols="10" rows="6" height="50px">
                 Reply of message goes here
             </textarea>
         </label>

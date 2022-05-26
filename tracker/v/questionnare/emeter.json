@@ -1,16 +1,16 @@
-[ {
+[{
         "class_name": "capture\\query",
         "args": [
             "emeter",
             "select num, uid, name, is_invalid, comment, source, new_num from emeter",
             "mutallco_rental"
         ]
-   },
-   ["rentize","emeter", [],"num", ["\\capture\\lookup","emeter","num"]],
-   ["rentize","emeter", [],"uid", ["\\capture\\lookup","emeter","uid"]],
-   ["rentize","emeter", [],"name", ["\\capture\\lookup","emeter","name"]],
-   ["rentize","emeter", [],"is_invalid", ["\\capture\\lookup","emeter","is_invalid"]],
-   ["rentize","emeter", [],"comment", ["\\capture\\lookup","emeter","comment"]],
-   ["rentize","emeter", [],"source", ["\\capture\\lookup","emeter","source"]],
-   ["rentize","emeter", [],"new_num", ["\\capture\\lookup","emeter","new_num"]]
+    },
+    ["rentize", "emeter", [], "num", ["\\capture\\lookup", "emeter", "num"]],
+    ["rentize", "emeter", [], "uid", ["\\capture\\lookup", "emeter", "uid"]],
+    ["rentize", "emeter", [], "name", ["\\capture\\lookup", "emeter", "name"]],
+    ["rentize", "emeter", [], "is_invalid", ["\\capture\\lookup", "emeter", "is_invalid"]],
+    ["rentize", "emeter", [], "comment", ["\\capture\\lookup", "emeter", "comment"]],
+    ["rentize", "emeter", [], "source", ["\\capture\\lookup", "emeter", "source"]],
+    ["rentize", "emeter", [], "new_num", ["\\capture\\lookup", "emeter", "new_num"]]
 ]

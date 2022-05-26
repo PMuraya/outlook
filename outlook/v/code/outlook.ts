@@ -4,6 +4,9 @@ import * as library from "../../../schema/v/code/library.js";
 //Resolve the schema classes, viz.:database, columns, mutall e.t.c.
 import * as schema from "../../../schema/v/code/schema.js";
 //
+//
+import * as server from '../../../schema/v/code/server.js'
+//
 //These are the components of the subject.
 //The ename and dbname are defined in the library.d.ts,
 //so we dont need to re-define them here.
@@ -362,7 +365,42 @@ export abstract class page extends view {
             }
         );
     }
-
+     //Fills the indentified selector element with options fetched from the given
+    //table name in the given database
+    async fill_selector(dbname: string, ename: string, selectorid: string) {
+        //
+        //1. Get the selector options from the database
+        //
+        //
+        //1.1 Get the options of the first and second column names
+        const options: library.Ifuel
+            = await server.exec("selector", [dbname, ename], "execute", []);
+        //
+        //2. Fill the selector with the options
+        //
+        //2.1. Get the selector element
+        const selector = this.get_element(selectorid);
+        //
+        //2.2. Check if the selector is valid
+        if(!(selector instanceof HTMLSelectElement))
+            throw new Error(`The element identified by ${selectorid} is not valid`);
+        //
+        //2.3 Go through the options and populate the selector with the option elements
+        for (let option of options) {
+            //
+            //2.3.1. Get the primary key from the option
+            //
+            //Formulate the name of the primary key.
+            const key= `${ename}_selector`;
+            //
+            const pk= option[key];
+            //
+            //2.3.2. Get the friendly component from the option
+            const friend= option.friend_;
+            //
+            this.create_element(selector, 'option', { value: `${pk}`, textContent: `${friend}`});
+        }
+    }
 
 }
 

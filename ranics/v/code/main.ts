@@ -51,29 +51,31 @@ export default class main extends app.app {
                     {
                         title: "Enter stock",
                         id: "stock",
-                        listener: ["event", () => this.stock()],
+                        listener: ["event", async () => await this.record_stock()],
                     },
                     {
                         title: "Enter flow",
                         id: "flow",
-                        listener: ["event", () => this.flow()],
+                        listener: ["event", () => this.record_flow()],
                     }
                 ]
             }
         ];
     }
-    async stock(): Promise<void> {
+    async record_stock(): Promise<void> {
         //
-        const Stock = new stock(this);
+        const Stock = new record_stock(this);
         //
         const result: true | undefined = await Stock.administer();
         //
         if (result === undefined) return;
+        //
+        //Update the application page to feedback the user.
     }
     //
-    async flow(): Promise<void> {
+    async record_flow(): Promise<void> {
         //
-        const Flow = new flow(this);
+        const Flow = new record_flow(this);
         //
         const result: true | undefined = await Flow.administer();
         //
@@ -81,7 +83,10 @@ export default class main extends app.app {
     }
 }
 //
-class stock
+//Collect the stock and all the data related to the:-
+//-the operator
+//-the business associated with.
+class record_stock
     extends outlook.baby<true>
     implements mod.questionnaire {
     //
@@ -94,14 +99,15 @@ class stock
     //Add definite assignment(!) assertion to the properties
     public reg_no!: string;
     //
-    //
     public daytime!: string;
-    //
     //
     public category!: string;
     //
-    //
     public datetime!: string;
+    //
+    public operator!: string;
+    //
+    public business!: string;
     //
     //construct the stock class.
     constructor(app: main) {
@@ -155,16 +161,30 @@ class stock
         if (this.category === "") this.report_element!.textContent = "Please select a category";
         //
         //1.4 Collect and check current datetime.
-        this.datetime = this.get_input_value("datetime");
+        this.datetime = this.get_input_value("datetime");        
+        if (this.datetime === "") this.report_element!.textContent = "Should be current time";
         //
         //1.5 Collect and check the operator data.
+        this.operator = this.get_operator();
         //
         //1.6 Collect and check the business info.
+        this.business = this.get_business();
         //
         //2. Save the data to the database.
         const success: boolean = await this.mother.writer.save(this);
         //
         return success;
+    }
+    //
+    //Get the business related with the stock,
+    //from the user logged in
+    get_business(): string {
+        throw new Error('Method not implemented.');
+    }
+    //
+    //Get the operator from the user who is logged in.
+    get_operator(): string {
+        throw new Error('Method not implemented.');
     }
     //
     //Collect the checked values in the form for saving to the database
@@ -179,8 +199,10 @@ class stock
         //Get the value
         const value = (<HTMLInputElement> radio).value;
         //
+        //Return the checked value.
         return value;
     }
+    //
     //Implement the abstract method
     async get_result(): Promise<true> {return true;}
     //
@@ -195,8 +217,11 @@ class stock
     }
 
 }
-//Rename to record_flow.
-class flow
+//
+//Collect the flow and all the data related to the:-
+//-the operator
+//-the business associated with.
+class record_flow
     extends outlook.baby<true>
     implements mod.questionnaire {
     //

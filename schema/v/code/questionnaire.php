@@ -1848,7 +1848,7 @@ namespace capture {
                 //positions     
                 array /* Array<position, cname> */$cnames,
                 //    
-                //A tables fueuel, as a double array of basic values    
+                //A tables fuel, as a double array of basic values    
                 array /* Array<<Array<basic_value>>> */ $ifuel,
                 //
                 //Where does the body start    

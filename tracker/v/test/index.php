@@ -93,10 +93,7 @@ $config = new config();
           various services
       </div>
       <div id="event">Events</div>
-      <div id="message">Messenger <br>
-          <button>
-            <a href="https://api.whatsapp.com/send?phone=--your phone--&text=--your text--" target="_blank">Existing User </a> <br>
-            </button><br>
+      <div id="message">Messenger
       </div>
       
       <div class="footer">

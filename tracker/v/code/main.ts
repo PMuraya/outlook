@@ -424,6 +424,23 @@ class tea_delivery
         date: string;
         amount: number;
     } {
+        //
+        //1.Collect all the field provided.
+        const j = [];
+        //
+        //1.1 Get the reference number.
+        j.push([""])
+        //
+        //1.2 Get the purpose of the transaction.
+        //
+        //1.3 Get the date.
+        //
+        //1.4 Get the amount payed.
+        //
+        //2.
+        //
+        //. Return the values.
+        // return ;
         throw new schema.mutall_error('Method not implemented.');
     }
     get_debit(): string {
@@ -631,8 +648,25 @@ class create_event
         throw new Error("Method not implemented.");
     }
     get_je(): {
-        ref_num: string; purpose: string; date: string; amount: number; //
+        ref_num: string; purpose: string; date: string; amount: number; 
     } {
+        //
+        //1.Collect all the field provided.
+        const j = [];
+        //
+        //1.1 Get the reference number.
+        j.push([""])
+        //
+        //1.2 Get the purpose of the transaction.
+        //
+        //1.3 Get the date.
+        //
+        //1.4 Get the amount payed.
+        //
+        //2.
+        //
+        //. Return the values.
+        // return ;
         throw new Error("Method not implemented.");
     }
     get_debit(): string {
@@ -652,11 +686,73 @@ class create_event
     }
     //
     //
-    //Collect all the labels as there are many inputs.
+    //Implement the method required by the questionnaire interface.
+    //It returns all the layouts derived from the create event form.
     get_layouts(): Array<quest.layout> {
-        throw new Error("Method not implemented.");
+        //
+        //1.Retrieve all the simple input layouts from the event form that are not 
+        //related to a table.
+        const simple:Array<quest.layout> = this.get_simple_inputs();
+        //
+        //2. Retrieve at table based inputs from the event form.
+        const tables: Array<quest.layout> = this.get_table_inputs();
+        //
+        //3. Return both the simple inputs and the tables inputs.
+        return simple.concat(tables);
     }
-    
+    //
+    //Get all the simple input layouts of the event form.
+    get_simple_inputs(): Array<quest.layout> {
+        throw new Error('Method not implemented.');
+    }
+    //
+    //Get all th table based inputs of the event form.
+    get_table_inputs(): Array<quest.layout> {
+        //
+        //1.Get all the table elements in the registration form.
+        const tables = this.document.querySelectorAll("table");
+        //
+        //2. Convert the table elements to table layouts.
+        const layouts:Array<quest.table> = 
+            //
+            //Convert the nodelist to a table layout
+            Array.from(tables)
+            //
+            //Map every table element to a table layout
+            .map(table => this.get_table_input(table));
+        //
+        //3.Return the result.
+        return layouts;
+    }
+    //
+    //Convert the given table element into a questionnaire table.
+    //The structure of a questionnaire table is generally defined as:-
+    // {class_name, args}
+    //in particular its defined as:-
+    //{class_name:"fuel", args: [tname, cnames, ifuel] }
+    //where:-
+    // tname is the name of the table,
+    // cnames is an array of column names to be lookedup,
+    // ifuel is a double array that represents the table body.
+    get_table_input(table: HTMLTableElement): quest.table {
+        //
+        //A. Define the table that is the source of the data.
+        //
+        //1. Get the tables class name.
+        //
+        //2. Get the required arrguements, i.e., tname, cnames, ifuel.
+        //
+        //2.1 Get the  table name , It is the id of the table.
+        //
+        //2.2 Get the column names of the table. 
+        //There are as many columns as there are th elements.
+        //
+        //2.3 Get  the body of the table as a double list of string values.
+        //
+        //3. compile the table layout.
+        //
+        //4. Return the table layout.
+    }
     //
     //
     async check(): Promise<boolean> {
