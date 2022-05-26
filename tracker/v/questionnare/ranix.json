@@ -16,14 +16,15 @@
 
     ["mutall_users", "user", [], "name", ["\\capture\\lookup", "operator", "name"]],
     ["mutall_ranix", "operator", [], "name", ["\\capture\\lookup", "operator", "ope_name"]],
-        
-   {       "class_name": "capture\\query",
-           "args": [
-               "stock",
-               "select operator.name as ope_name, stock.registration_number, stock.category, stock.daytime, stock.datetime, stock.operator from stock inner join operator on stock.operator = operator.email",
-               "mutall_carpark"
-       ]
-   },
+
+    {
+        "class_name": "capture\\query",
+        "args": [
+            "stock",
+            "select operator.name as ope_name, stock.registration_number, stock.category, stock.daytime, stock.datetime, stock.operator from stock inner join operator on stock.operator = operator.email",
+            "mutall_carpark"
+        ]
+    },
     ["mutall_ranix", "vehicle", ["stock"], "reg_no", ["\\capture\\lookup", "stock", "registration_number"]],
     ["mutall_ranix", "vehicle", ["stock"], "category", ["\\capture\\lookup", "stock", "category"]],
     ["mutall_ranix", "stock", ["stock"], "session", ["\\capture\\lookup", "stock", "daytime"]],

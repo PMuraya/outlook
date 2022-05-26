@@ -404,7 +404,7 @@ class complete_lv1_registration extends popup<void>
     //
     //Populate the business selector with businesses.
     //Hint. Use the selector query to populate.
-    fill_selector(arg0: string, arg1: string, arg2: string) {
+    async fill_selector(arg0: string, arg1: string, arg2: string) {
         throw new Error('Method not implemented.');
     }
     
@@ -441,3 +441,4 @@ class complete_lv1_registration extends popup<void>
 
 
 }
+
