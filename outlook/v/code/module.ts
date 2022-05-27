@@ -24,6 +24,7 @@ export abstract class terminal extends outlook.baby<true>{
     async get_result(): Promise<true> {
         return true;
     }
+    
 }
 //
 //This class is the home of all methods that are common to all our modules.

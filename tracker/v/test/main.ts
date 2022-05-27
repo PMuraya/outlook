@@ -95,8 +95,8 @@ export default class main extends app.app {
     }
     async complete_lv1_registration(): Promise<void> {
         //
-        //create a new instance.
-        const Regist = new complete_lv1_registration(this);
+        //create a new instance.???
+        const Regist = new complete_lv1_registration(this.config);
         //
         const result = await Regist.administer();
         //
@@ -212,10 +212,8 @@ class Reply_message
     } {
         //
         //1.Collect all the field provided.
-        const j = [];
         //
         //1.1 Get the reference number.
-        j.push([""])
         //
         //1.2 Get the purpose of the transaction.
         //
@@ -248,30 +246,31 @@ class Reply_message
         //The database name.
         const dbname = "mutall_users";
         //
-        //Start with an empty array
-        const label: Array<quest.label> = [];
+        //Start with an empty array.
+        const l: Array<quest.label> = [];
         //
         //1.Get the language.
-        label.push([dbname, "msg", [], "language", this.language]);
+        l.push([dbname, "msg", [], "language", this.language]);
         //
         //2.Get the message as a label
-        label.push([dbname, "msg", [], "text", this.message]);
+        l.push([dbname, "msg", [], "text", this.message]);
         //
         //Get the organization/business related with this message and
         //save to the relevant database, providing all the required
         //information.
-        label.push([dbname, "business", [], "id", this.organization]);
+        l.push([dbname, "business", [], "id", this.organization]);
         //
         //3. Get the amount if applicable.
         //Record the amount in the journal entry in relation to
         //the account to be debited and the account to be credited
         //for book keeping.
-        label.push([dbname, "je", [], "amount", this.amount!]);
+        l.push([dbname, "je", [], "amount", this.amount!]);
         //
-        //Return the collection of labels as a layout.
-        return label;
+        //Return the layouts ;
+        return l;
     }
     //
+    //Collect and check the repy message data and set the result.
     async check(): Promise<boolean> {
         //
         //1. Collect and check the data that the user has entered.
@@ -308,7 +307,6 @@ class Reply_message
             //
             //Do nothing.
         }
-        
         //
         //2. Save the data to the database.
         const save = await this.mother.writer.save(this);
@@ -322,25 +320,7 @@ class Reply_message
         return save && send;
     }
     //
-    //Collect the checked values in the form for saving to the database
-    get_checked_value(name: string): string {
-        //
-        //Get the identified/selected value.
-        const radio = document.querySelector(`input[name='${name}']:checked`);
-        //
-        //Return a null value if a named radion is not set
-        if (radio === null) alert("check one value");
-        //
-        //Get the value of the checkbox.
-        const value = (<HTMLInputElement> radio).value;
-        //
-        //Return the checked value.
-        return value;
-    }
-    //
-    //Collect the message and media of communication specified by the user.
-    async get_result(): Promise<true> {return true;}
-    //
+    //Additional information needed after the page fires.
     async show_panels(): Promise<void> {
         //
         //1.  Fill the language selector.
@@ -388,6 +368,7 @@ class complete_lv1_registration extends popup<void>
         //
         return true;
     }
+    //
     async get_result(): Promise<void> {}
     //
     //add an event listener.
@@ -400,12 +381,6 @@ class complete_lv1_registration extends popup<void>
         //2. Populate the business selector with businesses.
         //Hint. Use the selector query to populate.
         this.fill_selector("mutall_users", "user", "organization");
-    }
-    //
-    //Populate the business selector with businesses.
-    //Hint. Use the selector query to populate.
-    async fill_selector(arg0: string, arg1: string, arg2: string) {
-        throw new Error('Method not implemented.');
     }
     
     async fill_user_roles(): Promise<Array<string> | undefined> {
@@ -433,7 +408,6 @@ class complete_lv1_registration extends popup<void>
         if (role_ids === undefined) throw new schema.mutall_error(
             "User has aborted the (level 1) registration"
         );
-
         //
         // The registration was successful so, return the role ids
         return this.user!.role_ids;

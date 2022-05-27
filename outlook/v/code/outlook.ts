@@ -95,7 +95,25 @@ export class view {
         //
         return elem.value;
     }
-
+    //
+    //Returns the checked values in the form for saving to the database
+    public get_checked_value(name: string): string {
+        //
+        //Get the identified value
+        const radio = document.querySelector(`input[name='${name}']:checked`);
+        //
+        //Ensure that the radio elemnt is a HTMLInputElement.
+        if (!(radio instanceof HTMLInputElement)) throw new schema.mutall_error("The above is not HTMLInputElement");
+        //
+        //Return a null value if a named radion is not set
+        if (radio === null) alert("check one value");
+        //
+        //Get the value
+        const value = (radio).value;
+        //
+        //Return the checked value.
+        return value;
+    }
     //Create a new element from  the given tagname and attributes
     //we assume that the element has no children in this version.
     public create_element<
@@ -365,7 +383,7 @@ export abstract class page extends view {
             }
         );
     }
-     //Fills the indentified selector element with options fetched from the given
+    //Fills the indentified selector element with options fetched from the given
     //table name in the given database
     async fill_selector(dbname: string, ename: string, selectorid: string) {
         //
@@ -382,7 +400,7 @@ export abstract class page extends view {
         const selector = this.get_element(selectorid);
         //
         //2.2. Check if the selector is valid
-        if(!(selector instanceof HTMLSelectElement))
+        if (!(selector instanceof HTMLSelectElement))
             throw new Error(`The element identified by ${selectorid} is not valid`);
         //
         //2.3 Go through the options and populate the selector with the option elements
@@ -391,14 +409,14 @@ export abstract class page extends view {
             //2.3.1. Get the primary key from the option
             //
             //Formulate the name of the primary key.
-            const key= `${ename}_selector`;
+            const key = `${ename}_selector`;
             //
-            const pk= option[key];
+            const pk = option[key];
             //
             //2.3.2. Get the friendly component from the option
-            const friend= option.friend_;
+            const friend = option.friend_;
             //
-            this.create_element(selector, 'option', { value: `${pk}`, textContent: `${friend}`});
+            this.create_element(selector, 'option', {value: `${pk}`, textContent: `${friend}`});
         }
     }
 

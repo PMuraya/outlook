@@ -51,18 +51,18 @@ export default class main extends app.app {
                     {
                         title: "Enter stock",
                         id: "stock",
-                        listener: ["event", async () => await this.record_stock()],
+                        listener: ["event", async () => await this.stock()],
                     },
                     {
                         title: "Enter flow",
                         id: "flow",
-                        listener: ["event", () => this.record_flow()],
+                        listener: ["event", () => this.flow()],
                     }
                 ]
             }
         ];
     }
-    async record_stock(): Promise<void> {
+    async stock(): Promise<void> {
         //
         const Stock = new record_stock(this);
         //
@@ -73,7 +73,7 @@ export default class main extends app.app {
         //Update the application page to feedback the user.
     }
     //
-    async record_flow(): Promise<void> {
+    async flow(): Promise<void> {
         //
         const Flow = new record_flow(this);
         //
@@ -87,7 +87,7 @@ export default class main extends app.app {
 //-the operator
 //-the business associated with.
 class record_stock
-    extends outlook.baby<true>
+    extends mod.terminal
     implements mod.questionnaire {
     //
     declare public mother: main;
@@ -179,32 +179,11 @@ class record_stock
     //Get the business related with the stock,
     //from the user logged in
     get_business(): string {
-        throw new Error('Method not implemented.');
     }
     //
     //Get the operator from the user who is logged in.
     get_operator(): string {
-        throw new Error('Method not implemented.');
     }
-    //
-    //Collect the checked values in the form for saving to the database
-    get_checked_value(name: string): string {
-        //
-        //Get the identified value
-        const radio = document.querySelector(`input[name='${name}']:checked`);
-        //
-        //Return a null value if a named radion is not set
-        if (radio === null) alert("check one value");
-        //
-        //Get the value
-        const value = (<HTMLInputElement> radio).value;
-        //
-        //Return the checked value.
-        return value;
-    }
-    //
-    //Implement the abstract method
-    async get_result(): Promise<true> {return true;}
     //
     async show_panels(): Promise<void> {
         //
@@ -222,7 +201,7 @@ class record_stock
 //-the operator
 //-the business associated with.
 class record_flow
-    extends outlook.baby<true>
+    extends mod.terminal
     implements mod.questionnaire {
     //
     declare public mother: main;
@@ -298,28 +277,6 @@ class record_flow
         const ans = this.mother.writer.save(this);
         //
         return ans;
-    }
-    //
-    //Collect the checked values in the form for saving to the database
-    get_checked_value(name: string): string {
-        //
-        //Get the identified value
-        const radio = document.querySelector(`input[name='${name}']:checked`);
-        //
-        //Return a null value if a named radion is not set
-        if (radio === null) alert("check one value");
-        //
-        //Get the value
-        const value = (<HTMLInputElement> radio).value;
-        //
-        return value;
-    }
-    //
-    //Get input returns a true value to show that we left the administration 
-    //process successfully and i.e. did not abort.
-    async get_result(): Promise<true> {
-        //
-        return true;
     }
     //
     //Show the time and operator of the flow.

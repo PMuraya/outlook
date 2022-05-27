@@ -13,7 +13,7 @@ export type Imsg = {msg:string};
 //
 //use popup to create a new message
 export class new_msg 
-    extends outlook.baby<true>
+    extends mod.terminal
     implements mod.message, mod.questionnaire, mod.journal, mod.cron_job
  {
     //
@@ -137,12 +137,7 @@ export class new_msg
         return save && send && post && exec;
     }
     //
-    //Collect the message and media of communication specified by the user.
-    async get_result(): Promise<true> {
-        //
-        return true;
-    }
-    //
+    //Do nothing.
     async show_panels(): Promise<void> {
         //
         

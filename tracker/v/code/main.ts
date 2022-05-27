@@ -108,12 +108,6 @@ export default class main extends app.app {
                         title: "Input Assignments",
                         id: "input_assignments",
                         listener: ["event", () => this.input_assignments()]
-                    },//
-                    //View due assignments 
-                    {
-                        title: "View due assignments",
-                        id: "view_due_assignments",
-                        listener: ["event", () => this.view_due_assignments()]
                     }
                 ]
             },
@@ -214,33 +208,6 @@ export default class main extends app.app {
         //check the validity of the data
         if (result === undefined) return;
 
-    }
-    //
-    //List all assignments that are due and have not been reported.
-    //Ordered by Date. 
-    view_due_assignments(): void {
-       //
-       //1.Create a SQL to get data from the database.
-       const sql = `select 
-                          todo.id,
-                          todo.description,
-                          developer.email,
-                          datediff(now(),
-                          todo.start_date) as days_due
-                     from
-                          todo
-                          inner join developer on developer.developer =
-                          todo.developer
-                     where
-                           datediff(now(),
-                           todo.start_date) >= 14`;
-         //
-         //2. Create a new SQL form using the sql.
-         
-         
-         //
-         //3. Administer the form.
-                  
     }
     //
     //Tea delivery

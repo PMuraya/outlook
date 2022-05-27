@@ -8,11 +8,10 @@ import * as schema from '../../../schema/v/code/schema.js';
 //Resolve the iquestionnaire
 import * as quest from '../../../schema/v/code/questionnaire.js';
 //
-import {questionnaire, message, journal} from '../../../outlook/v/code/module.js'
+import * as mod from '../../../outlook/v/code/module.js'
 //
 //import main from tracker
 import main from './main.js';
-import {basic_value} from '../../../schema/v/code/library.js';
 //
 export type Ipiq = {piq: string};
 //
@@ -23,8 +22,8 @@ export type Ipiq = {piq: string};
 //
 //Completing level 2 registration
 export class register_intern
-    extends outlook.baby<true>
-    implements questionnaire, message, journal {
+    extends mod.terminal
+    implements mod.questionnaire, mod.message, mod.journal {
     //
     declare public mother: main;
     //
@@ -175,14 +174,16 @@ export class register_intern
     //get the column names.
     get_column_names(element: HTMLTableElement):Array<string> {
         //
+        //Set the table name.
         const tname = element.id
         //
         //1. Get all the table columns as a collection of TableCellElement.
         const elements = element.querySelectorAll("th");
         //
-        if (elements === null) throw new schema.mutall_error("There are no columns in this table");
+        //Check the nodelist to ensure the table has columns.
+        if (elements === null) throw new schema.mutall_error(`There are no columns in this table ${tname}`);
         //
-        //convert the collection to an array.
+        //Convert the collection to an array.
         const cells =Array.from(elements);
         //
         //Map the array of table cell elements to column names.
@@ -191,11 +192,14 @@ export class register_intern
             //Get the name from the cname datalist.
             const name= cell.dataset.cname;
             //
-            if (name === undefined) throw new schema.mutall_error(`No name found for this column in table${tname}`)
+            //Check to ensure that all the tables have column names.
+            if (name === undefined) throw new schema.mutall_error(`No name found for this column in table ${tname}`)
             //
+            //Return the names.
             return name;
         });
         //
+        //Return the column.
         return names;
     }
     //
@@ -214,10 +218,10 @@ export class register_intern
         const rows:Array<HTMLTableRowElement> = Array.from(row);
         // 
         //Get the td's of all the rows and map them to the input value
-        const data  = rows.map(
-            input => {
+        const data: Array<Array<string>>  = rows.map( input =>
+             {
                 //Get the inputs in the row.
-                const inputs = Array.from(input.querySelectorAll("input"));
+                const inputs: Array<HTMLInputElement> = Array.from(input.querySelectorAll("input"));
                 //
                 //Map every value to a td.
                 const td_value: Array<string> = inputs.map(value =>
@@ -228,16 +232,14 @@ export class register_intern
                         //
                         //Return the td.
                         return td_val;
-                    }
-                    );
+                    });
                     //
                     //Return the array of string of td.
                     return td_value;
             }
         );
         //
-        //Return the values
-        console.log(data);
+        //Return the body value.
         return data;
     }
     //
@@ -262,6 +264,8 @@ export class register_intern
         //
         return save && post && send;
     }
+    //
+    //Do nothing
     async show_panels(): Promise<void> {
         //
     }
