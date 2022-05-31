@@ -8,10 +8,13 @@ import * as schema from '../../../schema/v/code/schema.js';
 //Resolve the iquestionnaire
 import * as quest from '../../../schema/v/code/questionnaire.js';
 //
-import * as mod from '../../../outlook/v/code/module.js'
+import * as mod from '../../../outlook/v/code/module.js';
+//
+import * as server from '../../../schema/v/code/server.js';
 //
 //import main from tracker
 import main from './main.js';
+import { basic_value } from '../../../schema/v/code/library.js';
 //
 export type Ipiq = {piq: string};
 //
@@ -47,8 +50,57 @@ export class register_intern
     //
     //This is the business that an intern is registering to.
     get_business_id(): string {
-        //extends error and returns an alert.
-        throw new schema.mutall_error('Method not implemented.');
+        //
+        //Use the current logged in user to get the business associated.
+        //
+        const user = this.get_user();
+        //
+        const business =  this.get_business(user);
+        //
+        //Return the business name.
+        return business;
+        
+    }
+    //
+    //Get the user currently logged in.
+    get_user() {
+        //
+        const user:string | null = this.win.localStorage.getItem("user");
+        //
+        //If no user is found.
+        if (user === null) throw new schema.mutall_error("There is no user found");
+        //
+        //Destructure
+        const {email }=  JSON.parse(user);
+        //
+        //Return the user.
+        return email;
+    }
+    //
+    //Get the business name from the database.
+    async get_business(user: any) {
+        //
+        const sql = `
+        select 
+            business.name
+        from 
+            member
+            inner join business on member.business = business.business 
+            inner join user on member.user = user.user
+        where
+            user.email = '${user}'
+         `;
+        //
+        //Get the data from the database.
+        const ope: Array<{name: string;}> = await server.exec(
+            "database",
+            ["mutall_users"],
+            "get_sql_data",
+            [sql]
+        );
+        //
+        //Return the value 
+        return ope[0].name;
     }
     //
     //This is to post the accountant journal where the fee is 0.
@@ -107,7 +159,7 @@ export class register_intern
     }
     //
     //Retrieves all the label based layouts from the registration form.
-    get_label_layouts(): quest.layout[] {
+    get_label_layouts(): Array<quest.layout> {
         //
         //dummy for test purposes.
         const c: quest.layout[] = []
@@ -162,7 +214,7 @@ export class register_intern
         const cnames: Array<string> = this.get_column_names(element);
         //
         //2.3 Get the body of the table as double list of string values.
-        const body: Array<Array<string>> = this.get_body_value(element);
+        const body: Array<Array<basic_value>> = this.get_body_value(element);
         //
         //3. Compile the table layout.
         const table_layout: quest.table = {class_name, args: [tname, cnames, body]}
@@ -203,8 +255,8 @@ export class register_intern
         return names;
     }
     //
-    //get the body value.
-    get_body_value(element: HTMLTableElement):Array<Array<string>> {
+    //Compile the body rows and columns
+    get_body_value(element: HTMLTableElement):Array<Array<basic_value>> {
         //
         //1. Get the input values of the table fields.
         //
@@ -212,23 +264,22 @@ export class register_intern
         const values: HTMLTableSectionElement | null = element.querySelector("tbody");
         //
         //Get the table rows.And 
-        const row: NodeListOf<HTMLTableRowElement> = values!.querySelectorAll("tr");
+        const row_name: NodeListOf<HTMLTableRowElement> = values!.querySelectorAll("tr");
         //
         //convert the nodelist to an array
-        const rows:Array<HTMLTableRowElement> = Array.from(row);
+        const rows:Array<HTMLTableRowElement> = Array.from(row_name);
         // 
-        //Get the td's of all the rows and map them to the input value
-        const data: Array<Array<string>>  = rows.map( input =>
+        //2. Get the td's of all the rows and map them to the input value
+        const data: Array<Array<basic_value>>  = rows.map( row =>
              {
                 //Get the inputs in the row.
-                const inputs: Array<HTMLInputElement> = Array.from(input.querySelectorAll("input"));
+                const inputs: Array<HTMLInputElement> = Array.from(row.querySelectorAll("input"));
                 //
                 //Map every value to a td.
-                const td_value: Array<string> = inputs.map(value =>
+                const td_value: Array<basic_value> = inputs.map(cell =>
                     {
                         //Get the value of the td. As an array
-                        const td_val: string | undefined= value.value;
-                        if ( td_val === undefined) throw new schema.mutall_error(`the table has no data`);
+                        const td_val: basic_value = this.convert_to_basic(cell.value);
                         //
                         //Return the td.
                         return td_val;
@@ -241,6 +292,15 @@ export class register_intern
         //
         //Return the body value.
         return data;
+    }
+    //
+    //Check the basic value to get the data types of the values collected.
+    //-empty | undefined return null
+    //number return number use"parseFloat"
+    //otherwise return a string.
+    convert_to_basic(value: string): basic_value {
+        //
+        //
     }
     //
     //check the entered data and if correct return true else return false.
@@ -269,4 +329,5 @@ export class register_intern
     async show_panels(): Promise<void> {
         //
     }
+    
 }

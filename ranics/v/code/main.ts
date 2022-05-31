@@ -168,7 +168,7 @@ class record_stock
         this.operator = this.get_operator();
         //
         //1.6 Collect and check the business info.
-        this.business = this.get_business();
+        this.business = await this.get_business();
         //
         //2. Save the data to the database.
         const success: boolean = await this.mother.writer.save(this);
@@ -176,13 +176,54 @@ class record_stock
         return success;
     }
     //
-    //Get the business related with the stock,
-    //from the user logged in
-    get_business(): string {
-    }
-    //
     //Get the operator from the user who is logged in.
     get_operator(): string {
+        //
+        //Get the operator from the currently logged in user.
+        const operater:string | null = this.win.localStorage.getItem("user");
+        //
+        //If no user is found.
+        if (operater === null) throw new schema.mutall_error("There is no user found");
+        //
+        //Destructure
+        const {email}=  JSON.parse(operater);
+        //
+        //Return the user.
+        return email;
+    }
+    //
+    //Get the business related with the flow,
+    //from the user logged in
+    async get_business(): Promise<string> {
+        //
+        //Use the current logged in user to get the business associated.
+        //
+        const user: string = this.get_operator();
+        console.log(user);
+        //
+        //Structure the sql.
+        const sql = `
+            select 
+                business.name
+            from 
+                member
+                inner join business on member.business = business.business 
+                inner join user on member.user = user.user
+            where
+                user.email = '${user}'
+        `;
+        //
+        //Get the data from the database.
+        const ope: Array<{name: string;}> = await server.exec(
+            "database",
+            ["mutall_users"],
+            "get_sql_data",
+            [sql]
+        );
+        //
+        //Return the value 
+        console.log(ope[0].name);
+        return ope[0].name;
     }
     //
     async show_panels(): Promise<void> {
@@ -193,6 +234,14 @@ class record_stock
         //
         //2.Show the operator.
         //
+        //Get the operater input field.
+        const field = this.get_element("email");
+        //
+        //Ensure the field is a HTMLInputElement.
+        if (!(field instanceof HTMLInputElement)) throw new schema.mutall_error("The field is not a HTMLInputElement");
+        //
+        //Assign the field the operator from the current logged in user.
+        field.value = this.get_operator();
     }
 
 }
@@ -221,6 +270,10 @@ class record_flow
     //
     //
     public datetime!: string;
+    //
+    public operator!: string;
+    //
+    public business!: string;
     //
     //construct the flow class
     constructor(app: main) {
@@ -272,11 +325,65 @@ class record_flow
         //
         //1.4 Collect and check the datetime.
         this.datetime = this.get_input_value("datetime");
+                //
+        //1.5 Collect and check the operator data.
+        this.operator = this.get_operator();
+        //
+        //1.6 Collect and check the business info.
+        this.business = await this.get_business();
+
         //
         //2. Save the data to the database.
         const ans = this.mother.writer.save(this);
         //
         return ans;
+    }
+    //
+    //Get the operator from the user who is logged in.
+    get_operator(): string {
+        //
+        //Get the operator from the currently logged in user.
+        const operater = this.win.localStorage.getItem("user");
+        //
+        //If no user is found.
+        if (operater === null) throw new schema.mutall_error("There is no user found");
+        //
+        //Destructure
+        const {email}=  JSON.parse(operater);
+        //
+        //Return the user.
+        return email;
+    }
+    //
+    //Get the business related with the flow,
+    //from the user logged in
+    async get_business(): Promise<string> {
+        //
+        //Use the current logged in user to get the business associated.
+        //
+        const user = this.get_operator();
+        //Structure the sql.
+        const sql = `
+            select 
+                business.name
+            from 
+                member
+                inner join business on member.business = business.business 
+                inner join user on member.user = user.user
+            where
+                user.email = '${user}'
+        `;
+        //
+        //Get the data from the database.
+        const ope: Array<{name: string;}> = await server.exec(
+            "database",
+            ["mutall_users"],
+            "get_sql_data",
+            [sql]
+        );
+        //
+        //Return the value 
+        return ope[0].name;
     }
     //
     //Show the time and operator of the flow.
@@ -288,6 +395,13 @@ class record_flow
         //
         //2.Show the operator.
         //
+        //Get the operater input field.
+        const field = this.get_element("email");
+        //
+        //Ensure the field is a HTMLInputElement.
+        if (!(field instanceof HTMLInputElement)) throw new schema.mutall_error("The field is not a HTMLInputElement");
+        //
+        //Assign the field the operator from the current logged in user.
+        field.value = this.get_operator();
     }
-
 }

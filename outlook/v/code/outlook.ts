@@ -89,8 +89,8 @@ export class view {
         //get teh identified element
         const elem = this.get_element(id);
         //
-        //It must be an input  element
-        if (!(elem instanceof HTMLInputElement))
+        //It must be an input  element or textarea.
+        if (!(elem instanceof HTMLInputElement || elem instanceof HTMLTextAreaElement))
             throw new schema.mutall_error(`'{$id}' is not an input element`);
         //
         return elem.value;
@@ -102,10 +102,10 @@ export class view {
         //Get the identified value
         const radio = document.querySelector(`input[name='${name}']:checked`);
         //
-        //Ensure that the radio elemnt is a HTMLInputElement.
+        //Ensure that the radio element is a HTMLInputElement.
         if (!(radio instanceof HTMLInputElement)) throw new schema.mutall_error("The above is not HTMLInputElement");
         //
-        //Return a null value if a named radion is not set
+        //Return a null value if a named radio is not set.
         if (radio === null) alert("check one value");
         //
         //Get the value
@@ -114,6 +114,29 @@ export class view {
         //Return the checked value.
         return value;
     }
+    //
+    //Get the selected value 
+    get_selected_value(id: string): string {
+        //
+        //Get the HTMLSelectElement from the form.
+        const select = document.getElementById(id);
+        //
+        //Ensure that the select is a HTMLSelectElement.
+        if (!(select instanceof HTMLSelectElement)) {
+            //
+            const msg = `The element used is not a HTMLSelectElement.`;
+            //
+            alert(msg);
+            throw new Error(msg);
+        }
+        //
+        //Ensure the select element is a HTMLSelectElement.
+        const val = select.value;
+        //
+        //Return the selected value/
+        return val;
+    }
+    //
     //Create a new element from  the given tagname and attributes
     //we assume that the element has no children in this version.
     public create_element<
@@ -385,19 +408,20 @@ export abstract class page extends view {
     }
     //Fills the indentified selector element with options fetched from the given
     //table name in the given database
-    async fill_selector(dbname: string, ename: string, selectorid: string) {
+    async fill_selector( ename: string,dbname: string, selectorid: string) {
         //
         //1. Get the selector options from the database
         //
         //
         //1.1 Get the options of the first and second column names
         const options: library.Ifuel
-            = await server.exec("selector", [dbname, ename], "execute", []);
+            = await server.exec("selector", [ename, dbname], "execute", []);
         //
         //2. Fill the selector with the options
         //
         //2.1. Get the selector element
         const selector = this.get_element(selectorid);
+        console.log(selector);
         //
         //2.2. Check if the selector is valid
         if (!(selector instanceof HTMLSelectElement))
@@ -410,11 +434,14 @@ export abstract class page extends view {
             //
             //Formulate the name of the primary key.
             const key = `${ename}_selector`;
+            console.log(key);
             //
             const pk = option[key];
+            console.log(pk);
             //
             //2.3.2. Get the friendly component from the option
-            const friend = option.friend_;
+            const friend = option.friend__;
+            console.log(friend);
             //
             this.create_element(selector, 'option', {value: `${pk}`, textContent: `${friend}`});
         }

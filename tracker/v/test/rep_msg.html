@@ -18,10 +18,10 @@
     <label>
             <!-- By default the lang is the same as that of the original message -->
             Select language:
-            <select>
-                <option>Kikuyu</option>
-                <option>Maasai</option>
-                <option>Swahili</option>
+            <select id="language">
+                <option value="kikuyu">Kikuyu</option>
+                <option value="maasai">Maasai</option>
+                <option value="swahili">Swahili</option>
             </select>
         </label>
     <label>
@@ -46,10 +46,10 @@
                     onclick="Main.show_panel('amount', true)"/>
                 <span>Yes</span>
             </label>
-        <div class="amount" id="amount" hidden>
+        <div class='amount' id="amount" hidden>
             <label>
                     <span>Amount:</span>
-                    <input type="number"/>
+                    <input id="amount_no" type="number"/>
                 </label>
         </div>
         <label>

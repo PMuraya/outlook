@@ -32,6 +32,8 @@ export class new_msg
     //
     public date!:string;
     //
+    public ref_num!:string;
+    //
     constructor(mother: main) {
         super(mother, "new_msg.html");
     }
@@ -55,7 +57,7 @@ export class new_msg
         const j = [];
         //
         //1.1 Get the reference number.
-        j.push([""])
+        j.push([this.dbname, ename, [], "ref_num", this.ref_num])
         //
         //1.2 Get the purpose of the transaction.
         j.push([this.dbname, ename, [], "purpose", this.event]);
@@ -102,7 +104,7 @@ export class new_msg
         //1. Collect and check the data that the user has entered.
         //
         //1.1 Collect the language??
-        this.language = this.get_input_value('event_assoc');
+        this.language = this.get_input_value('languages');
         //
         //Find a more friendly way to tell the user to select.
         //Check that the language is selected.
@@ -116,6 +118,9 @@ export class new_msg
         //
         //1.3 Collect the selected event.
         this.event = this.get_input_value("event_assoc");
+        //
+        //Get the ref num by combining the event and date.
+        this.ref_num = this.get_ref_num();
         //
         //Check the event.
         if (this.event === null) throw new schema.mutall_error(`Select an event`);
@@ -137,9 +142,18 @@ export class new_msg
         return save && send && post && exec;
     }
     //
-    //Do nothing.
+    //Get the reference number by generating from existing data about the message
+    //i.e using the event and the date
+    //Ask (pm)
+    get_ref_num(): string {
+        throw new Error('Method not implemented.');
+    }
+    //
+    //
     async show_panels(): Promise<void> {
         //
+        //Fill the language selector.
+        this.fill_selector("msg","mutall_users", "languages");
         
     }
  }

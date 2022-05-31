@@ -39,6 +39,7 @@ export default class main extends app.app {
     //
     //
     public msg!:Array<{text:string}>;
+    //
     //Initialize the main application.
     constructor(config: app.Iconfig) {
         super(config);
@@ -107,18 +108,20 @@ export default class main extends app.app {
     //
     //Reply to the message that is currently selected in
     //the message panel of the application.
-    async reply_msg(): Promise<void> {
+    async reply_msg(): Promise<void>{
         //       
         //1. Get the message panel    
         const panel = this.get_element("message");
-        //
-        console.log(panel);
         //
         //2. Get the primary key using the message panel.
         const pk: number =await this.get_selected_message_pk(panel);
         //
         //2.3 Use the primary key to retrieve the text message from the database.
         const msg:string = await this.get_message_text(pk);
+        //
+        //Get the message (msg) from above and store it locally to be able to access it 
+        //when the reply message fires.
+        localStorage.setItem('msg', JSON.stringify(msg));
         //
         //Create a terminal class to supprot the reply message.
         const reply = new Reply_message(this);
@@ -135,8 +138,6 @@ export default class main extends app.app {
         //that causes the page to flash. A better method would be to add the reply
         //to the message panel. Thats the challenge, but for this version we shall take
         //the less sophisticated method.
-        //2.2 Get the text area element of where to add the message.
-        
         //
     }
     //
@@ -170,8 +171,6 @@ export default class main extends app.app {
         //Verify that your data retrievel extracted one and only one message
         //
         //return the text message.
-        console.log(this.msg[0].text);
-        //
         return this.msg[0].text;
     }
    
@@ -191,7 +190,7 @@ class Reply_message
     //
     public organization!: string;
     //
-    public amount?: string;
+    public amount!: string;
     //
     //create a new reply message class instance
     constructor(mother: main) {
@@ -276,7 +275,7 @@ class Reply_message
         //1. Collect and check the data that the user has entered.
         //
         //1.1 Collect and check the language.
-        this.language = this.get_input_value("language");
+        this.language = this.get_selected_value("language");
         //
         //Check the selected language.
         if (this.language === null) alert ("Select a language");
@@ -287,20 +286,15 @@ class Reply_message
         //Check the message
         if (this.message ===null) alert ("Please write a message");
         //
-        // 1.3 Collect and check the organization.???
-        this.organization = this.get_input_value("organization");
-        //
-        //Check the organization.
-        if (this.organization === null) alert ("No organization available");
-        
-        //
         //Collect and check the amount data where the value is checked.
         const checked = this.get_checked_value("contribution");
+        console.log(checked);
         //
         if(checked === "yes") {
             //
             //1.4 Collect and check the amount.
-            this.amount = this.get_input_value("amount");
+            this.amount = this.get_input_value("amount_no");
+            //
             //Check the amount.
             if (this.amount === null) alert ("Enter a valid amount.")
         } else{
@@ -324,6 +318,7 @@ class Reply_message
     async show_panels(): Promise<void> {
         //
         //1.  Fill the language selector.
+        this.fill_selector("msg", "mutall_users","language");
         //
         //2. Paint the original message on the template.
         //
@@ -334,15 +329,19 @@ class Reply_message
         if (!(text_area instanceof HTMLTextAreaElement))
             throw new schema.mutall_error(`The element identified by prev_message is not a textarea`);
         //
-        // 2.3 Put the message in the text area.???
-        text_area.value = this.msg;
+        //Retrieve the message (msg) from the local storage.
+        var text_msg = localStorage.getItem('msg');
+        //
+        // 2.3 Put the retrieved message in the text area.???
+        text_area.value =(JSON.parse(text_msg!));
         //
         //3. Switch the contribution on and off depending on whether
         //the original message is associated with an event.
         //
     }
-
 }
+//
+//Make it a part of the registration.
 //
 //Complete the level one registration of the user after logging into the system.
 class complete_lv1_registration extends popup<void>
@@ -376,11 +375,14 @@ class complete_lv1_registration extends popup<void>
         //
         //1. Populate the roles fieldset.
         //Hint. Check out how the current roles are being filled in from the database.
-        this.fill_user_roles();
+        const roles =  this.fill_user_roles();
+        //
+        //Get the roles div and add the roles
+        const set_roles = this.get_element("content");
         //
         //2. Populate the business selector with businesses.
         //Hint. Use the selector query to populate.
-        this.fill_selector("mutall_users", "user", "organization");
+        this.fill_selector( "user","mutall_users", "organization");
     }
     
     async fill_user_roles(): Promise<Array<string> | undefined> {
@@ -406,7 +408,7 @@ class complete_lv1_registration extends popup<void>
         //
         //Test if the user has aborted registration or not
         if (role_ids === undefined) throw new schema.mutall_error(
-            "User has aborted the (level 1) registration"
+            "user aborted"
         );
         //
         // The registration was successful so, return the role ids

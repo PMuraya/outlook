@@ -20,7 +20,7 @@ export class selector{
         //
         //Database name
         dbname: string
-    )
+    );
     //
     execute(): Ifuel;
 }
