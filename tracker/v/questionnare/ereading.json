@@ -1,0 +1,15 @@
+[ {
+        "class_name": "capture\\query",
+        "args": [
+            "ereading",
+            "select emeter.num as ereading_serial, ereading.invoice, ereading.date, ereading.value, ereading.remark from ereading inner join emeter on ereading.num = emeter.emeter",
+            "mutallco_rental"
+        ]
+   },
+   ["rentize","ereading", [],"invoice", ["\\capture\\lookup","ereading","invoice"]],
+   ["rentize","ereading", [],"date", ["\\capture\\lookup","ereading","date"]],
+   ["rentize","ereading", [],"value", ["\\capture\\lookup","ereading","value"]],
+   ["rentize","ereading", [],"remark", ["\\capture\\lookup","ereading","remark"]],
+   
+   ["rentize","emeter", [],"num", ["\\capture\\lookup","ereading","ereading_serial"]]
+]

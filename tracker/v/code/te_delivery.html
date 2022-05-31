@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery form</title>
+    <style>
+        * {
+            border-radius: 5px;
+            margin: 10 2 10 2;
+        }
+    </style>
+
+    <link rel="stylesheet" href="general.css">
+</head>
+
+<body>
+    <form>
+        <p>
+            <center><strong>Delivery Form</strong></center>
+        </p>
+        <label>Merchant:
+            <!-- Use select to create a drop down list -->
+            <select id="merchant">
+            </select>
+        </label>
+
+        <label> Reference number:
+            <input id="ref" type="text" name="ref" />
+        </label>
+        <label> Date:
+            <input id="ref" type="date" name="ref" />
+        </label>
+        <!-- This is a horizontal line break -->
+        <hr>
+        <!-- A data entry table styled to be 100%  -->
+        <div>
+            <table style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <td>
+                        <input list="item" name="item">
+                        <datalist id="item">
+                            <option value="Chapati">
+                            <option value="Mandazi">
+                            <option value="Samosa">
+                            <option value="Smokie">
+                        </datalist>
+                    </td>
+                    <td><input type="number" name="quantity"></td>
+                    <td><input type="number" name="price"></td>
+                    <td><input type="number" name="amount" disabled="true"></td>
+
+                </tbody>
+                <tbody>
+                    <td>
+                        <input list="item" name="item">
+                        <datalist id="item">
+                            <option value="Chapati">
+                            <option value="Mandazi">
+                            <option value="Samosa">
+                            <option value="Smokie">
+                        </datalist>
+                    </td>
+                    <td><input type="number" name="quantity"></td>
+                    <td><input type="number" name="price"></td>
+                    <td><input type="number" name="amount" disabled="true"></td>
+
+                </tbody>
+
+            </table>
+            <button class="add-row">
+                More
+            </button>
+        </div>
+        <hr>
+        <button id="go">Send</button>
+        <button id="cancel">Cancel</button>
+    </form>
+
+</body>
+
+</html>

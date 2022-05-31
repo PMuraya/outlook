@@ -1,0 +1,13 @@
+[ {
+        "class_name": "capture\\query",
+        "args": [
+            "service",
+            "select auto, description, name, price from service",
+            "mutallco_rental"
+        ]
+   },
+   ["rentize","service", [],"auto", ["\\capture\\lookup","service","auto"]],
+   ["rentize","service", [],"description", ["\\capture\\lookup","service","description"]],
+   ["rentize","service", [],"name", ["\\capture\\lookup","service","name"]],
+   ["rentize","service", [],"price", ["\\capture\\lookup","service","price"]]
+]

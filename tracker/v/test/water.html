@@ -1,0 +1,77 @@
+<html>
+
+<head>
+    <title>Reading</title>
+
+    <!-- Make the page phone sensitive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Local style-->
+    <link id="wreading_record.css" rel="stylesheet" type="text/css" href="wreading_record.css" />
+    <link rel="stylesheet" href="general.css">
+    <style>
+        * {
+            border-radius: 10px;
+            margin: 20 0 10 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="head">
+        <center>
+            <h2>Water Reading</h2>
+        </center>
+    </div>
+    <fieldset>
+        <label>Date of Reading:
+            <input
+                id="date"
+                name="date"
+                type="date"
+                />
+        </label>
+        <label> Water Meter:
+            <select 
+                name="meter" 
+                onclick="" 
+                onchange=""
+            >
+            Select a meter
+        </select>
+        </label>
+        <label> Last Reading:
+            <input
+                id="last_reading"
+                type="text"
+                disabled="true"
+                size="10"
+                onchange=""
+                />
+            &nbsp; on &nbsp;
+            <span id='last_date' name="date"></span>
+        </label>
+        <label>Current Reading:
+            <input
+                id="current_reading"
+                type="number"
+                size="10"
+                oninput=""
+                />
+        </label>
+        <label>Consumption:
+            <input
+                id="consumption"
+                type="number"
+                size="5"
+                onchange=""
+                disabled="true"
+                />
+        </label>
+
+    </fieldset>
+    <button id="go">Save</button>
+    <button id="cancel">Cancel</button>
+</body>
+
+</html>

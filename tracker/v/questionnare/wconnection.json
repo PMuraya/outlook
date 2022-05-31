@@ -1,0 +1,18 @@
+[ {
+        "class_name": "capture\\query",
+        "args": [
+            "wconnection",
+            "select wmeter.serial_no as meter_no, room.uid as room_no, wconnection.start_reading, wconnection.start_date, wconnection.rate, wconnection.end_reading, wconnection.end_date, wconnection.end_reading, wconnection.disconnected from wconnection inner join wmeter on wconnection = wmeter.wmeter inner join room on wconnection = room.room",
+            "mutallco_rental"
+        ]
+   },
+   ["rentize","wconnection", [],"start_reading", ["\\capture\\lookup","wconnection","start_reading"]],
+   ["rentize","wconnection", [],"start_date", ["\\capture\\lookup","wconnection","start_date"]],
+   ["rentize","wconnection", [],"rate", ["\\capture\\lookup","wconnection","rate"]],
+   ["rentize","wconnection", [],"end_reading", ["\\capture\\lookup","wconnection","end_reading"]],
+   ["rentize","wconnection", [],"end_date", ["\\capture\\lookup","wconnection","end_date"]],
+   ["rentize","wconnection", [],"disconnected", ["\\capture\\lookup","wconnection","disconnected"]],
+   
+   ["rentize","wmeter", [],"serial_no", ["\\capture\\lookup","wconnection","meter_no"]],
+   ["rentize","room", [], "uid", ["\\capture\\lookup","wconnection","room_no"]]
+]

@@ -1,3 +1,4 @@
+
 //
 // 
 import * as schema from "./schema.js"
@@ -8,6 +9,21 @@ import * as quest from "./questionnaire.js"
 //
 //This represents the modal.
 export type Ifuel = Array<{[index:string]:basic_value}>;
+//
+//
+export class selector{
+    //
+    constructor(
+        //
+        //Entity name
+        ename:string,
+        //
+        //Database name
+        dbname: string
+    )
+    //
+    execute(): Ifuel;
+}
 //
 //Modelling the database connection
 class database {

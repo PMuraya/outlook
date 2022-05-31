@@ -1,0 +1,53 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+
+
+/* 
+    Created on : Apr 11, 2022, 2:49:37 PM
+    Author     : Carlo
+*/
+
+
+/*Grid design and styling procedure*/
+
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    padding: 2px;
+    display: grid;
+    gap: 3px;
+    grid-template-rows: 5% 95%;
+    grid-template-areas: "header header " "content content "
+}
+
+svg {
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    grid-area: header;
+    display: grid;
+    background-color: lightgoldenrodyellow;
+    font-size: 30px;
+}
+
+.content {
+    grid-area: content;
+    background-color: lightcyan;
+}
+
+h4 {
+    margin: 1px;
+    height: 40px;
+}
+
+button {
+    width: 50px;
+    height: 20px;
+    float: right;
+    margin: 5px;
+}

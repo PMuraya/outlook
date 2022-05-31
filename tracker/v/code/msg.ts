@@ -1,50 +1,145 @@
 //
-//
-//Resolves reference to the asset.products data type
+//Resolves references to the asset.products data type.
+import * as mod from '../../../outlook/v/code/module.js';
 import * as outlook from '../../../outlook/v/code/outlook.js';
+import { layout } from '../../../schema/v/code/questionnaire.js';
 //
 //Import schema.
 import * as schema from "../../../schema/v/code/schema.js";
 //
-export type Imsg = {msg: string};
+import main from './main.js';
 //
-//Use a pop-up to create a new message.
-export class msg extends outlook.baby<Imsg> {
+export type Imsg = {msg:string};
+//
+//use popup to create a new message
+export class new_msg 
+    extends mod.terminal
+    implements mod.message, mod.questionnaire, mod.journal, mod.cron_job
+ {
     //
-    constructor(base:outlook.page) {
-        super(base, "new_msg.html");
+    declare public mother:main;
+    //
+    //The database to save to 
+    public dbname = "mutall_users";
+    //
+    public language!:string;
+    //
+    public message!:string;
+    //
+    public event!:string;
+    //
+    public amount!:string;
+    //
+    public date!:string;
+    //
+    constructor(mother: main) {
+        super(mother, "new_msg.html");
     }
     //
-    //In future, check if a file json file containing Iquestionnaire is selected.
-    //For now, do nothing
-    async check(): Promise<boolean> { 
+    get_sender(): string {
+        throw new Error('Method not implemented.');
+    }
+    get_body(): string {
+        throw new Error('Method not implemented.');
+    }
+    
+    get_business_id(): string {
+        throw new Error('Method not implemented.');
+    }
+    get_je(): { ref_num: string; purpose: string; date: string; amount: number; } {
         //
-        //Get the message text.
-        const text = <HTMLTextAreaElement>this.get_element('msg');
+        //Accounting submodal entity for journal recordings.
+        const ename = "je";
         //
-        if (text.value===''){
+        //1.Collect all the field provided.
+        const j = [];
+        //
+        //1.1 Get the reference number.
+        j.push([""])
+        //
+        //1.2 Get the purpose of the transaction.
+        j.push([this.dbname, ename, [], "purpose", this.event]);
+        //
+        //1.3 Get the date.
+        j.push([this.dbname, ename, [], "date", this.date]);
+        //
+        //1.4 Get the amount payed.
+        j.push([this.dbname, ename, [], "amount", this.amount]);
+        //
+        //2.
+        //
+        //. Return the values.
+        return j;
+    }
+    get_debit(): string {
+        throw new Error('Method not implemented.');
+    }
+    get_credit(): string {
+        throw new Error('Method not implemented.');
+    }
+    get_layouts(): Array<layout> {
+        //
+        //1. Start with an empty array
+        const m:Array<layout> = [ ];
+        //2. Get the language.
+        m.push([ this.dbname, "msg", [], "language", this.language ]);
+        //
+        //3. Get the message.
+        m.push([this.dbname, "msg", [], "text", this.message]);
+        //
+        //4. Get the event.
+        m.push([this.dbname, "event", [], "id", this.event]);
+        //
+        //5. Return the messages.
+        return m;
+    }
+    //
+    //In future, check if a file json containing iquestionare is selected??
+    //
+    //Collect and check the data entered by the user sending the message.
+   async check(): Promise<boolean> {
+        //
+        //1. Collect and check the data that the user has entered.
+        //
+        //1.1 Collect the language??
+        this.language = this.get_input_value('event_assoc');
+        //
+        //Find a more friendly way to tell the user to select.
+        //Check that the language is selected.
+        if (this.language === null) throw new schema.mutall_error(`Select a language`);
+        //
+        //1.2 Collect the message
+        this.message = this.get_input_value("msg");
+        //
+        //Check the message
+        if (this.message === null) throw new schema.mutall_error(`Enter a message`);
+        //
+        //1.3 Collect the selected event.
+        this.event = this.get_input_value("event_assoc");
+        //
+        //Check the event.
+        if (this.event === null) throw new schema.mutall_error(`Select an event`);
+        //
+        //2. Save the data to the database.
+        const save = await this.mother.writer.save(this);
+        //
+        //3. Send the appropriate message to the user(s).
+        const send = await this.mother.messenger.send(this);
+        //
+        //Execute this only if there is any event and contribution.
             //
-            this.win.alert(`Please enter message`);
+            //4. Update the journal entry(je) 
+            const post = await this.mother.accountant.post(this);
             //
-            return false;
-        }
+            //5. Schedule tasks if available.
+            const exec = await this.mother.scheduler.exec(this);
         //
-        //Compile the message.
-        this.result = <Imsg>{msg: text.value};
-        //
-        return true;
+        return save && send && post && exec;
     }
     //
-    //Collect the message and media of communication specified by the user.
-    async get_result(): Promise<Imsg> {
+    //Do nothing.
+    async show_panels(): Promise<void> {
         //
-        return this.result!;
+        
     }
-    
-    async show_panels(){
-        const myalert = this.get_element('alert');
-        myalert.onclick = ()=>this.win.alert('Aler!');
-    }
-    
-    
-}
+ }

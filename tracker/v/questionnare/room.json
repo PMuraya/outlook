@@ -1,0 +1,21 @@
+[ {
+        "class_name": "capture\\query",
+        "args": [
+            "room",
+            "select uid,is_psuedo, title, floor, wing, width_ft, width_inch, breadth_ft, breadth_inch, area_sq_m, area_sq_ft from room",
+            "mutallco_rental"
+        ]
+   },
+   ["rentize", "room", [], "uid", ["\\capture\\lookup","room","uid"]],
+   ["rentize", "room", [], "is_psuedo", ["\\capture\\lookup","room","is_psuedo"]],
+   ["rentize", "room", [], "title", ["\\capture\\lookup","room","title"]],
+   ["rentize", "room", [], "floor", ["\\capture\\lookup","room","floor"]],
+   ["rentize", "room", [], "wing", ["\\capture\\lookup","room","wing"]],
+   ["rentize", "room", [], "width_ft", ["\\capture\\lookup","room","width_ft"]],
+   ["rentize", "room", [], "width_inch", ["\\capture\\lookup","room","width_inch"]],
+   ["rentize", "room", [], "breadth_ft", ["\\capture\\lookup","room","breadth_ft"]],
+   ["rentize", "room", [], "breadth_inch", ["\\capture\\lookup","room","breadth_inch"]],
+   ["rentize", "room", [], "area_sq_m", ["\\capture\\lookup","room","area_sq_m"]],
+   ["rentize", "room", [], "area_sq_ft", ["\\capture\\lookup","room","area_sq_ft"]],
+   ["rentize", "property", [], "uid", "mutall_rental"]
+]

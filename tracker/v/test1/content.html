@@ -1,0 +1,55 @@
+<html>
+
+<head>
+    <title>Content list</title>
+
+    <link rel="stylesheet" href="inde.css">
+</head>
+
+<body>
+
+    <label>Caption:
+        <input type="text" name="text">
+    </label>
+    <fieldset>
+        <legend>Server where the document is located</legend>
+
+        <label>
+            <input type="radio" name="source" id="source" required onclick="show(true, 'local');
+            show(false, 'remote')">Local Machine
+
+            <div id="local" hidden>
+                <div class="media">
+                    <input type="file" name="file">
+                </div>
+            </div>
+        </label>
+
+        <label>
+            <input type="radio" name="source" id="source" required onclick="show(false, 'local');
+            show(true, 'remote')">Remote Server
+
+            <div id="remote" hidden>
+                <div class="media">Github Url(http address):
+                    <input type="url" name="url"><br>
+                    Other:
+                    <input type="url" name="url">
+                </div>
+            </div>
+        </label>
+    </fieldset>
+    <label>Author:
+        <select id="author" name="author"></select>
+    </label>
+    <label>Definer
+        <select id="definer" name="definer"></select>
+    </label>
+    <button id="go">Save</button>
+    <button id="cancel">Cancel</button>
+
+    <script src="index.js">
+    </script>
+
+</body>
+
+</html>

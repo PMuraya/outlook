@@ -1,0 +1,96 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    text-align: center;
+    font-size: 30px;
+    text-transform: uppercase;
+    font-weight: 900;
+}
+
+.grid-wrapper {
+    display: grid;
+    grid-template-rows: min-content auto min-content;
+    grid-template-columns: 1fr 3fr;
+    overflow: auto;
+    height: 100%;
+}
+
+aside {
+    /* starts on the first horizontal line, and ends on the second horizontal line */
+    grid-column: 1/2;
+    /* starts on the second horizontal line, and ends on the third horizontal line */
+    grid-row: 2/3;
+    background-color: rgb(237, 237, 237);
+    padding: 5px;
+}
+
+article {
+    /* starts on the second horizontal line, and ends on the third horizontal line */
+    grid-column: 2/3;
+    /* starts on the second horizontal line, and ends on the third horizontal line */
+    grid-row: 2/3;
+    background-color: rgb(213, 215, 217);
+    padding: 5px;
+}
+
+header {
+    /* starts on the first horizontal line, and ends on the third horizontal line */
+    grid-column: 1/3;
+    /* starts on the first horizontal line, and ends on the second horizontal line */
+    grid-row: 1/2;
+    background-color: rgb(116, 234, 238);
+    position: static;
+    padding: 5px;
+}
+
+footer {
+    /* starts on the first horizontal line, and ends on the third horizontal line */
+    grid-column: 1/3;
+    /* starts on the third horizontal line, and ends on the fourth horizontal line */
+    grid-row: 3/4;
+    background-color: rgb(187, 191, 191);
+}
+
+
+/* flex */
+
+.flex-wrapper {
+    display: flex;
+    flex-grow: 2;
+}
+
+@media screen and (max-width: 600px) {
+    body {
+        background-color: olive;
+    }
+    .grid-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+    .flex-wrapper {
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+    /* Hide the panel when viewing in mobile view */
+    aside {
+        display: none;
+    }
+    #menuToggler {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        background-image: url(pics/menuToggler.svg);
+        background-repeat: no-repeat;
+        background-size: 100% auto;
+        background-position: center center;
+    }
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}

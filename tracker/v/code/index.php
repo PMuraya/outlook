@@ -2,15 +2,16 @@
 //
 //This is the application's namespace
 namespace tracker;
-
+//
 include "config.php";
 $config = new config();
 ?>
+            
 <html>
     <head>
         <!-- 
         The tile of your project -->
-        <title><?php echo $config->id; ?></title>
+        <title><?php echo $config->title; ?></title>
         <!-- 
         Styling the index page in terms of grids -->
         <link rel="stylesheet" href="index.css"/>
@@ -43,17 +44,19 @@ $config = new config();
             
             //Start the application after fully loading the current 
             //window.
-            window.onload = async ()=>{
+            window.onload = async () =>{
                 //
                 //Use the php configuration file to create the main application
-                //page
                 window.Main = new main(<?php echo json_encode($config); ?>);
                 //
-                //Complete the main construction and start interection with the  user
+                //Complete the creatio of 'main' by evoking the asynchronous 
+                //methods (which are not callable ffrom th constructor)
                 await window.Main.initialize();
             };
-        </script>
-        
+        </script>        
+        <!-- Marker for styling columns -->
+        <style id="columns"></style>
+      
     </head>
     
     <body>
@@ -62,7 +65,7 @@ $config = new config();
           Company logo -->
           <div id="logo">
                 <div>
-                    <img src="../images/tracker.png" height="50" width="100" alt="logo">
+                    <img src="../images/<?php echo $config->logo; ?>" height="50" width="100">
                 </div>
                 <select id="selection" onchange="app.current.change_subject(this)">
                 </select>
@@ -74,19 +77,31 @@ $config = new config();
               ?>    
           </div>
       </div>
+      <!--<div id="why">Why</div>-->
       <div id="services">Services
-      </div>
+      </div> 
       <div id="content">
+            Content
+            <table>
+                <thead></thead>
+                <tbody></tbody>    
+            </table>
+            
       </div>
       <div id="welcome">
           Please <button onclick="app.current.login()">login</button> to access 
           various services
       </div>
-      <div id="event">Event</div>
-      <div id="message">Message</div>
+      <div id="event">Events</div>
+      <div id="message">Messenger <br>
+          <button>
+            <a href="https://api.whatsapp.com/send?phone=--your phone--&text=--your text--" target="_blank">Existing User </a> <br>
+            </button><br>
+      </div>
+      
       <div class="footer">
           <div id="developer">
-              <img src="../images/kaniu.jpg" alt="developer's image" class="img_dev">
+              <img src="../images/<?php echo $config->developer_image; ?>" alt="developer's image" class="img_dev">
           </div>
           <div id="signature">Developed by: <?php echo $config->developer; ?></div>
           <div id="company">Mutall Data Co.</div>

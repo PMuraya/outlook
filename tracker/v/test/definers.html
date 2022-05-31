@@ -1,0 +1,64 @@
+<html>
+
+<head>
+    <title>Definer</title>
+    <style>
+        * {
+            font-size: 25px;
+            line-height: 1.5;
+        }
+        
+        body {
+            padding: 2%;
+        }
+        
+        label {
+            display: block;
+            margin: .5% 0;
+        }
+        
+        table,
+        td,
+        th {
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: auto;
+        }
+        
+        td input {
+            width: 100%;
+        }
+        
+        @media (max-width: 500px) {
+            body {
+                font-size: 50px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <fieldset>
+        <legend>Definers</legend>
+        <label>
+            <span>Definer ID</span>
+                 <input type="text">
+        </label>
+        <label>
+                <span>Definer Caption</span>
+                <input type="text">
+            </label>
+        <label>
+                <span>Organization</span>
+                <input type="text">
+            </label>
+        <label>
+                <span>Sequence</span>
+                <input type="text">
+            </label><br>
+        <button id="go">Ok</button>
+        <button id="cancel">Cancel</button>
+    </fieldset>
+</body>
+
+</html>

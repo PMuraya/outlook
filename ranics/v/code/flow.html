@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>vehicle_flow</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--
+        Link to the css file. -->
+    <link rel="stylesheet" href="ranics.css" />
+</head>
+
+<body>
+    <form class="frame" action="" method="post">
+        <h3>Vehicle Flow</h3>
+        <p> Registration Number</p>
+        <input type="text" style="text-transform:uppercase" id="reg_no" name="reg_no" placeholder="Number Plate" maxlength="8" required="true" />
+        <!-- 
+            Vehicle category. -->
+        <fieldset>
+            <legend>Vehicle Category:</legend>
+            <label><input type="radio" name="category" value="Car" />Car</label>
+            <label><input type="radio" name="category" value="Lorry" />Lorry</label>
+            <label><input type="radio" name="category" value="Motorcycle" />Motorcycle</label>
+        </fieldset>
+        <!--
+            Vehicle flow. -->
+        <fieldset>
+            <legend>Direction of the vehicle:</legend>
+            <label><input type="radio" name="direction" value="Incoming" />Incoming </label>
+            <label><input type="radio" name="direction" value="Outgoing" />Outgoing</label>
+        </fieldset>
+
+        <input type="text" value="" id="datetime" name="datetime" />
+        <input type='text' name="email" value="you" />
+    </form>
+    <div id="report" class="error">
+
+    </div>
+    <button id="go">Go</button>
+    <button id="cancel">Cancel</button>
+</body>
+
+</html>

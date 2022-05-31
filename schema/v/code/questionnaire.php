@@ -825,7 +825,7 @@ namespace capture {
             if (isset($this->tname))
                 return;
             //
-            //Split the columns of of this artefact into sub-expressions
+            //Split the columns of this artefact into sub-expressions
             $exps = iterator_to_array($this->yield_exps());
             //
             //Select those lookup expressions
@@ -876,7 +876,7 @@ namespace capture {
         }
 
         //
-        //BCollect the milk table names associated with this artefact
+        //B. Collect the milk table names associated with this artefact
         function yield_exps(): \Generator{
             //
             //Loop through all the columns of this artefact to yield 
@@ -891,7 +891,13 @@ namespace capture {
                 //
                 //For foreign keys columns, the nearest artefact must be set
                 elseif (
-                    $column->source instanceof \foreign && isset($column->nearest) && $column->nearest instanceof artefact
+                    $column->source instanceof \foreign 
+                    && isset($column->nearest) 
+                    && $column->nearest instanceof artefact
+                    //
+                    //Avoid hierachical situations; it arises when this artefact is
+                    //the same as the one we are analyzing
+                    && ($column->nearest !== $this)
                 )
                     yield from $column->nearest->yield_exps();
             }
@@ -1842,7 +1848,7 @@ namespace capture {
                 //positions     
                 array /* Array<position, cname> */$cnames,
                 //    
-                //A tables fueuel, as a double array of basic values    
+                //A tables fuel, as a double array of basic values    
                 array /* Array<<Array<basic_value>>> */ $ifuel,
                 //
                 //Where does the body start    

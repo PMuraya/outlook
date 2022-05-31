@@ -657,9 +657,9 @@ export class theme extends outlook.panel {
     //
     //Convert the row object obtained from the server to a tr element.
     //It's public because it's called by create (in crud), to create a blank row.
-    public load_tr_element(
+   public load_tr_element(
         //
-        //Tee table row to load data to. 
+        //The table row to load data to. 
         tr:HTMLTableRowElement,
         //
         //The row of data to load to the tr. There may be none for newly
