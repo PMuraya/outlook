@@ -1,24 +1,20 @@
 //
-//Import app from the outlook library.
-import {popup} from '../../../outlook/v/code/outlook.js';
-//
 import * as outlook from '../../../outlook/v/code/outlook.js';
-
-import * as app from "../../../outlook/v/code/app.js";
 //
-import {input, io} from '../../../outlook/v/code/io.js';
+import * as app from "../../../outlook/v/code/app.js";
 //
 //Import server
 import * as server from '../../../schema/v/code/server.js';
 //
-//Import schema.
-import * as schema from '../../../schema/v/code/schema.js';
-//
-//Resolve the iquestionnaire
-import * as quest from '../../../schema/v/code/questionnaire.js';
-//
 import * as mod from '../../../outlook/v/code/module.js';
-import * as lib from '../../../schema/v/code/library.js';
+//
+import * as reg from './reg.js';
+//
+import * as rep from './reply_msg.js';
+//
+import * as eve from './event_planner.js';
+//
+import * as load from './load.js';
 //
 //
 //The structure of a definer.
@@ -27,7 +23,7 @@ export type Idef = {
     caption: string;
     organization: string;
     seq: number;
-}
+};
 //System for daily management of organization activities.
 export default class main extends app.app {
     //
@@ -38,7 +34,7 @@ export default class main extends app.app {
     public scheduler: mod.scheduler;
     //
     //
-    public msg!:Array<{text:string}>;
+    public msg?:Array<{text:string, subject: string, event:string}>;
     //
     //Initialize the main application.
     constructor(config: app.Iconfig) {
@@ -69,6 +65,11 @@ export default class main extends app.app {
                         listener: ["crud", 'event', ['review'], '+', "mutall_users"]
                     },
                     {
+                        title: "Create an event" ,
+                        id: "create_event",
+                        listener: ["event", () => this.create_event()]
+                    },
+                    {
                         title: "Manage Messages",
                         id: "messages",
                         listener: ["crud", 'msg', ['review'], '+', "mutall_users"]
@@ -84,26 +85,59 @@ export default class main extends app.app {
                     {
                         title: "Register (LV1)",
                         id: "complete_lv1_registration",
-                        listener: ["event", () => this.complete_lv1_registration()]
+                        listener: ["event", () => this.complete_lv_registration()]
                     },
                     {
                         title: "Reply message",
                         id: "reply_message",
                         listener: ["event", () => this.reply_msg()]
+                    },
+                    {
+                        title: "Load_table",
+                        id: "load_table",
+                        listener: ["event", ()=> this.load_table_data()]
                     }
                 ]
             }];
     }
-    async complete_lv1_registration(): Promise<void> {
+    //
+    //Load the first table of mutallco_rental.
+    async load_table_data(): Promise<void> {
+         //
+        //Create an instance of the class
+        const table_load = new load.load_tables(this);
+        //
+        //Call crud page and close when done.
+        const result = await table_load.administer();
+        //
+        //check the validity of the data
+        if (result === undefined ) return;
+    }
+    //
+    //cd v/test
+    async complete_lv_registration(): Promise<void> {
         //
         //create a new instance.???
-        const Regist = new complete_lv1_registration(this.config);
+        const Regist = new reg.complete_lv1_registration(this);
         //
         const result = await Regist.administer();
         //
         //collect all the user data
         if (result === undefined) return;
 
+    }
+    //
+    //Create event and display on the events panel
+    async create_event(): Promise<void>{
+        //
+        //Create an instance of the class
+        const Event = new eve.event_planner(this);
+        //
+        //Call crud page and close when done.
+        const result = await Event.administer();
+        //
+        //check the validity of the data
+        if (result === undefined ) return;
     }
     //
     //Reply to the message that is currently selected in
@@ -124,7 +158,7 @@ export default class main extends app.app {
         localStorage.setItem('msg', JSON.stringify(msg));
         //
         //Create a terminal class to supprot the reply message.
-        const reply = new Reply_message(this);
+        const reply = new rep.Reply_message(this);
         //
         //Wait for the user to reply.
         const response: true | undefined = await reply.administer();
@@ -171,250 +205,8 @@ export default class main extends app.app {
         //Verify that your data retrievel extracted one and only one message
         //
         //return the text message.
-        return this.msg[0].text;
+        return this.msg![0].text;
     }
    
-}
-//
-//Reply to the message that is currently selected in
-//the message panel of the application.
-class Reply_message
-    extends mod.terminal
-    implements mod.questionnaire, mod.message, mod.journal {
-    //
-    declare public mother: main;
-    //
-    public language!: string;
-    //
-    public message!: string;
-    //
-    public organization!: string;
-    //
-    public amount!: string;
-    //
-    //create a new reply message class instance
-    constructor(mother: main) {
-        //
-        super(mother, "rep_msg.html")
-    }
-    get_business_id(): string {
-        throw new Error('Method not implemented.');
-    }
-    get_je(): {
-        ref_num: string;
-        //
-        purpose: string;
-        //
-        date: string;
-        //
-        amount: number;
-    } {
-        //
-        //1.Collect all the field provided.
-        //
-        //1.1 Get the reference number.
-        //
-        //1.2 Get the purpose of the transaction.
-        //
-        //1.3 Get the date.
-        //
-        //1.4 Get the amount payed.
-        //
-        //2.
-        //
-        //. Return the values.
-        // return ;
-        throw new Error('Method not implemented.');
-    }
-    get_debit(): string {
-        throw new Error('Method not implemented.');
-    }
-    get_credit(): string {
-        throw new Error('Method not implemented.');
-    }
-    get_sender(): string {
-        throw new Error('Method not implemented.');
-    }
-    get_body(): string {
-        throw new Error('Method not implemented.');
-    }
-    //
-    //Collect all the label layouts from the messaging reply dialogue box.
-    get_layouts(): Array<quest.label> {
-        //
-        //The database name.
-        const dbname = "mutall_users";
-        //
-        //Start with an empty array.
-        const l: Array<quest.label> = [];
-        //
-        //1.Get the language.
-        l.push([dbname, "msg", [], "language", this.language]);
-        //
-        //2.Get the message as a label
-        l.push([dbname, "msg", [], "text", this.message]);
-        //
-        //Get the organization/business related with this message and
-        //save to the relevant database, providing all the required
-        //information.
-        l.push([dbname, "business", [], "id", this.organization]);
-        //
-        //3. Get the amount if applicable.
-        //Record the amount in the journal entry in relation to
-        //the account to be debited and the account to be credited
-        //for book keeping.
-        l.push([dbname, "je", [], "amount", this.amount!]);
-        //
-        //Return the layouts ;
-        return l;
-    }
-    //
-    //Collect and check the repy message data and set the result.
-    async check(): Promise<boolean> {
-        //
-        //1. Collect and check the data that the user has entered.
-        //
-        //1.1 Collect and check the language.
-        this.language = this.get_selected_value("language");
-        //
-        //Check the selected language.
-        if (this.language === null) alert ("Select a language");
-        //
-        //1.2 Collect and check the message.
-        this.message = this.get_input_value("message");
-        //
-        //Check the message
-        if (this.message ===null) alert ("Please write a message");
-        //
-        //Collect and check the amount data where the value is checked.
-        const checked = this.get_checked_value("contribution");
-        console.log(checked);
-        //
-        if(checked === "yes") {
-            //
-            //1.4 Collect and check the amount.
-            this.amount = this.get_input_value("amount_no");
-            //
-            //Check the amount.
-            if (this.amount === null) alert ("Enter a valid amount.")
-        } else{
-            //
-            //Do nothing.
-        }
-        //
-        //2. Save the data to the database.
-        const save = await this.mother.writer.save(this);
-        //
-        //3. Reply the appropriate message from the user(s).
-        const send = await this.mother.messenger.send(this);
-        //
-        //4. Decide whether the accounting and scheduler modules are neccesary.
-        //if yes invoke them.
-        //
-        return save && send;
-    }
-    //
-    //Additional information needed after the page fires.
-    async show_panels(): Promise<void> {
-        //
-        //1.  Fill the language selector.
-        this.fill_selector("msg", "mutall_users","language");
-        //
-        //2. Paint the original message on the template.
-        //
-        //2.2 Get the text area element of where to add the message.
-        const text_area: HTMLElement = this.get_element("prev_message");
-        //
-        //2.2 Ensure the element we are painting to is a textarea.
-        if (!(text_area instanceof HTMLTextAreaElement))
-            throw new schema.mutall_error(`The element identified by prev_message is not a textarea`);
-        //
-        //Retrieve the message (msg) from the local storage.
-        var text_msg = localStorage.getItem('msg');
-        //
-        // 2.3 Put the retrieved message in the text area.???
-        text_area.value =(JSON.parse(text_msg!));
-        //
-        //3. Switch the contribution on and off depending on whether
-        //the original message is associated with an event.
-        //
-    }
-}
-//
-//Make it a part of the registration.
-//
-//Complete the level one registration of the user after logging into the system.
-class complete_lv1_registration extends popup<void>
-// type role: Array<string>, org:string}
-{
-    //
-    //
-    public dbname!: string;
-    //
-    public dbase!: schema.database;
-    //
-    public user!: outlook.user;
-    //
-    //construct the reg class
-    constructor(
-        //
-        public config: app.Iconfig
-    ) {
-        super("lv1_reg.html")
-    }
-    async check(): Promise<boolean> {
-        // const save = await this.mother.writer.save(this);
-        //
-        return true;
-    }
-    //
-    async get_result(): Promise<void> {}
-    //
-    //add an event listener.
-    async show_panels() {
-        //
-        //1. Populate the roles fieldset.
-        //Hint. Check out how the current roles are being filled in from the database.
-        const roles =  this.fill_user_roles();
-        //
-        //Get the roles div and add the roles
-        const set_roles = this.get_element("content");
-        //
-        //2. Populate the business selector with businesses.
-        //Hint. Use the selector query to populate.
-        this.fill_selector( "user","mutall_users", "organization");
-    }
-    
-    async fill_user_roles(): Promise<Array<string> | undefined> {
-        //
-        //1.Collect from the user the minimum registration requirement.
-        //The minimum requirement are the roles
-        //
-        //Collect the user roles for this application from its
-        //products
-        const inputs = this.dbase!.get_roles();
-        //
-        //If these roles are undefined alert the user
-        if (inputs === undefined || inputs.length < 0) {
-            alert("No roles found");
-            // return;
-        }
-        //
-        //Open the popup page for roles
-        const Role = new outlook.choices<string>(this.config.general, inputs, "role_id");
-        //
-        //Get the user roles
-        const role_ids = await Role.administer();
-        //
-        //Test if the user has aborted registration or not
-        if (role_ids === undefined) throw new schema.mutall_error(
-            "user aborted"
-        );
-        //
-        // The registration was successful so, return the role ids
-        return this.user!.role_ids;
-    }
-
-
 }
 

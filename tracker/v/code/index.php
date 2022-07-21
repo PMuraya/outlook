@@ -6,9 +6,11 @@ namespace tracker;
 include "config.php";
 $config = new config();
 ?>
-            
-<html>
-    <head>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Allows a user to refresh the page. -->
+    <!-- <meta http-equiv="refresh" content="30" /> -->
         <!-- 
         The tile of your project -->
         <title><?php echo $config->title; ?></title>
@@ -92,14 +94,10 @@ $config = new config();
           Please <button onclick="app.current.login()">login</button> to access 
           various services
       </div>
+      <div id="message">Messenger</div>
       <div id="event">Events</div>
-      <div id="message">Messenger <br>
-          <button>
-            <a href="https://api.whatsapp.com/send?phone=--your phone--&text=--your text--" target="_blank">Existing User </a> <br>
-            </button><br>
-      </div>
-      
-      <div class="footer">
+      <!--  -->
+      <div class="footer" id="footer">
           <div id="developer">
               <img src="../images/<?php echo $config->developer_image; ?>" alt="developer's image" class="img_dev">
           </div>

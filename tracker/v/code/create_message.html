@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>create message</title>
+    <style>
+        * {
+            border-radius: 10px;
+            margin: 4px;
+        }
+        
+        input :disabled {
+            border: 0.5px white solid;
+        }
+    </style>
+    <link rel="stylesheet" href="general.css">
+</head>
+
+<body>
+    <center>
+        <h1>create message</h1>
+    </center>
+    <hr>
+    <!-- label for choosing a language -->
+
+    <label>
+                Choose a language: 
+                <select id="language">
+                </select>
+            </label>
+    <label>
+                Date
+            <input id="date" type="date" disabled>
+            </label>
+    <label>Subject
+                <input type="text" id="subject">
+            </label>
+    <!-- label for the message -->
+    <label>Enter message<br>
+                <textarea id="msg"></textarea>
+            </label>
+    <fieldset>
+        <legend>Is this message associated with an event?</legend>
+        <label>
+                    <input type="radio" id="event" name="event" value="no" onclick="Main.show_panel('new_event', false)">
+                   <span> No</span>
+                </label>
+        <label>
+                    <input type="radio" id="event" name="event" value="yes" onclick="Main.show_panel('new_event', true)">
+                    <span>Yes</span>
+                </label>
+        <div class="new_event" id="new_event" hidden>
+            <button type="button" id="create_event">create event</button>
+        </div>
+    </fieldset>
+    <button id="go">Send</button>
+    <button id="cancel">Cancel</button>
+</body>
+
+</html>

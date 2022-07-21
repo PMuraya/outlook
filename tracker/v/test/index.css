@@ -2,6 +2,10 @@ html {
     height: 100%;
 }
 
+* {
+    border-radius: 5px;
+}
+
 
 /*Grid design and styling procedure*/
 
@@ -15,32 +19,27 @@ body {
     grid-template-columns: 1fr 4fr 1fr;
     /* represents a fraction of the available space in the grid container */
     grid-template-rows: 1fr 2fr 2fr 2fr 1fr;
-    grid-template-areas: 
-        "header header header" 
-        "services content welcome" 
-        "services content event" 
-        "services content message" 
-        "footer footer footer";
+    grid-template-areas: "header header header" "services content welcome" "services content event" "services content message" "footer footer footer";
 }
 
 .header {
     grid-area: header;
-    display: grid;
-    grid-template-columns: 30% 70%;
+    display: flex;
+    flex-direction: row;
     background-color: lightgoldenrodyellow;
 }
 
-#company {
+.header #company {
     grid-row: header;
     font-weight: bold;
     font-size: 35px;
-    place-self: center;
-    padding-right: 50%;
+    text-align: center;
+    margin-left: 150px;
 }
 
 #logo {
     grid-row: header;
-    padding-left: 5%;
+    padding-left: 5px;
 }
 
 .heading {
@@ -62,11 +61,10 @@ body {
 #services {
     grid-area: services;
     background-color: lightgoldenrodyellow;
+    line-height: 1.5;
     overflow: auto;
     resize: horizontal;
     /* allows one to resize the grid area horizontally */
-    min-width: 215px;
-    max-width: 230px;
 }
 
 #content {
@@ -85,20 +83,18 @@ body {
     max-width: 800px;
     min-height: 138px;
     max-height: 280px;
-
 }
 
 #message {
     grid-area: message;
     background-color: lightblue;
-    overflow: auto; 
+    overflow: auto;
     resize: both;
     /* allows one to resize the grid area horizontally and vertically  */
     min-width: 220px;
     max-width: 800px;
     min-height: 138px;
     max-height: 300px;
-    
 }
 
 
@@ -148,6 +144,7 @@ Convert the cursor to a pointer. */
 #company {
     grid-row: footer;
     place-self: center;
+    font-weight: bold;
     font-size: 20px;
     padding-bottom: 20px;
 }
@@ -190,5 +187,82 @@ normal mode*/
 Tame select tag's properties */
 
 #selection {
-    width: 25%;
+    width: auto
+}
+
+
+/*  */
+
+@media all and (max-width:600px) {
+    body {
+        height: auto;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 45% 55%;
+        grid-template-rows: 15% 75% 10%;
+        grid-template-areas: "header welcome" "services services" "footer footer";
+    }
+    .header {
+        display: grid;
+        padding: 8px;
+    }
+    #logo {
+        grid-area: header;
+        display: flex;
+        flex-direction: column;
+    }
+    #welcome {
+        grid-area: welcome;
+        background-color: lightgoldenrodyellow;
+    }
+    #services {
+        grid-area: services;
+        display: flex;
+        flex-direction: column;
+        width: auto;
+    }
+    .footer {
+        grid-area: footer;
+        display: flex;
+        flex-direction: row;
+    }
+    #content {
+        display: none;
+    }
+    #message {
+        display: none;
+    }
+    #event {
+        display: none;
+    }
+    .header #company {
+        display: none;
+    }
+    /*  */
+    #developer {
+        grid-row: footer;
+        padding-left: 10px;
+        padding-bottom: 10px;
+    }
+    #signature {
+        font-weight: bold;
+        font-size: 16px;
+        padding-top: 3px;
+        padding-bottom: 5px;
+    }
+    #company {
+        place-self: start;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 5px;
+    }
+    /*  */
+    .img_dev {
+        width: 100%;
+        max-height: 100%;
+        margin-left: 0;
+        margin-bottom: 0;
+        padding: 0;
+    }
 }

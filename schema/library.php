@@ -1083,7 +1083,7 @@ class dbase_mutall_data extends dbase
                 ($mutall) as mutall on mutall.attribute_name=info.column_name and mutall.entity=info.entity
             where isnull(mutall.entity)");
         //
-        //Select the attributes to add
+        //Select the attrbutes to add
         $insert = $this->chk("
             insert into attribute 
                 (
@@ -2748,7 +2748,7 @@ class page_home extends page
         //
         //Load the identity translation style sheet
         $xsl = new DOMDocument;
-        $xsl->load('../library/definers.xsl');
+        $xsl->load('../schema/definers.xsl');
         //
         // Configure the transformer
         $proc = new XSLTProcessor;
@@ -2775,7 +2775,7 @@ class page_home extends page
         //
         //Load the identity translation style sheet
         $xsl = new DOMDocument;
-        $xsl->load("../library/services.xsl");
+        $xsl->load("../schema/services.xsl");
         //
         // Configure the transformer
         $proc = new XSLTProcessor;
@@ -2804,7 +2804,7 @@ class page_home extends page
         //
         //Load the identity translation style sheet
         $xsl = new DOMDocument;
-        $xsl->load('../library/identity.xsl');
+        $xsl->load('../schema/identity.xsl');
         //
         // Configure the transformer
         $proc = new XSLTProcessor;
@@ -5210,7 +5210,7 @@ class driver_xml extends driver
         //
         //Load the identity translation style sheet
         $xsl = new DOMDocument;
-        $xsl->load('../library/identity.xsl');
+        $xsl->load('../schema/identity.xsl');
         //
         // Configure the transformer
         $proc = new XSLTProcessor;

@@ -6,7 +6,7 @@
     <style>
         * {
             border-radius: 10px;
-            margin: 20 2 10 2;
+            margin: 5 2 5 2;
         }
     </style>
 </head>
@@ -20,35 +20,13 @@
             <legend>Roles</legend>
             <!--  Place marker for the available roles of the current 
                 application-->
-            <label>
-                    CEO
-                    <input 
-                        type="radio"
-                        name="operation_id"
-                        value="ceo"
-                    >
-            </label>
-            <label>
-                Intern
-                <input 
-                    type="radio"
-                    name="operation_id"
-                    value="intern"
-                >
-            </label>
+            <div id="content"></div>
 
         </fieldset>
-        <fieldset id="organization">
+        <fieldset id="org">
             <label>
                 Select organization 
-                <select name="organization" id="org"></select>
-            </label>
-            <label>
-                Add a new organization 
-                <input 
-                    type="text"
-                    name="organization"
-                >
+                <select id="organization"></select>
             </label>
         </fieldset>
         <button id="go">Save</button>

@@ -1,29 +1,38 @@
 //
-//Import app from the outlook library.
-import {popup} from '../../../outlook/v/code/outlook.js';
-//
+//Import outlook from the outlook library.
 import * as outlook from '../../../outlook/v/code/outlook.js';
-
-import * as app from "../../../outlook/v/code/app.js";
 //
-import {input, io} from '../../../outlook/v/code/io.js';
+//Import app from the outlook library
+import * as app from "../../../outlook/v/code/app.js";
 //
 //Import server
 import * as server from '../../../schema/v/code/server.js';
 //
-//Import schema.
-import * as schema from '../../../schema/v/code/schema.js';
+//Resolve the modules.
+import * as mod from '../../../outlook/v/code/module.js';
 //
-//Resolve the iquestionnaire
-import * as quest from '../../../schema/v/code/questionnaire.js'; 
+//Import all the classes for the tracker services.
 //
+//Resolve the level 2 registration.
 import * as piq from "./piq.js";
+//
 //Import the test msg class.
 import * as msg from "./msg.js"        
 //
+//Resolve the svg work.
 import * as svg from "./svg.js"
 //
-import * as mod from '../../../outlook/v/code/module.js';
+//Resolve the reply message.
+import * as rep from './reply_msg.js';
+//
+//Resolve the event planner.
+import * as eve from './event_planner.js';
+//
+//Resolve tea payment and delivery.
+import * as tea from './tea.js';
+//
+//Resolve the website class.
+import * as web from './website.js'
 //
 //The structure of a definer.
 export type Idef = {
@@ -32,6 +41,7 @@ export type Idef = {
     organization: string;
     seq: number;
 }
+//
 //System for daily management of organization activities.
 export default class main extends app.app {
     //
@@ -39,6 +49,9 @@ export default class main extends app.app {
     public messenger: mod.messenger;
     public accountant: mod.accountant;
     public scheduler: mod.scheduler;
+    //
+    //The message.
+    public msg?:Array<{text:string, subject: string, event:string}>;
     //
     //Initialize the main application.
     constructor(config: app.Iconfig) {
@@ -66,6 +79,11 @@ export default class main extends app.app {
                         listener: ["crud", 'event', ['review'], '+', "mutall_users"]
                     },
                     {
+                        title: "Create an event" ,
+                        id: "create_event",
+                        listener: ["event", () => this.create_event()]
+                    },
+                    {
                         title: "Manage Messages",
                         id: "messages",
                         listener: ["crud", 'msg', ['review'], '+', "mutall_users"]
@@ -74,6 +92,11 @@ export default class main extends app.app {
                         title: "Create message",
                         id: "create_msg",
                         listener: ["event", ()=>{this.new_msg()}]
+                    },
+                    {
+                        title: "Reply message",
+                        id: "reply_message",
+                        listener: ["event", () => this.reply_msg()]
                     }
                 ]
             },
@@ -109,19 +132,6 @@ export default class main extends app.app {
                         id: "input_assignments",
                         listener: ["event", () => this.input_assignments()]
                     }
-                ]
-            },
-            {
-                title: "Event planner",
-                id: 'event_planner',
-                solutions: [
-                       //
-                       //Add a service for creating new events.
-                       {
-                          title: "Create an event" ,
-                          id: "create_event",
-                          listener: ["event", () => this.create_event()]
-                       }
                 ]
             },
             {
@@ -168,19 +178,6 @@ export default class main extends app.app {
             }];
         }
     //
-    //Create event and display on the events panel
-    async create_event(): Promise<void>{
-        //
-        //Create an instance of the class
-        const Event = new create_event(this);
-        //
-        //Call crud page and close when done.
-        const result = await Event.administer();
-        //
-        //check the validity of the data
-        if (result === undefined ) return;
-    }
-    //
     //
     async svg(): Promise<void> {
         //
@@ -200,7 +197,7 @@ export default class main extends app.app {
     async website(): Promise<void>{
         //
         //create an instance of the class 
-        const Website = new website(this);
+        const Website = new web.website(this);
         //
         //Call crud page and close when done.
         const result = await Website.administer();
@@ -214,7 +211,7 @@ export default class main extends app.app {
     async tea_delivery(): Promise<true> {
         //
         //Create an instance of the tea_delivery class
-        const delivery = new tea_delivery(this);
+        const delivery = new tea.tea_delivery(this);
         //
         //Open the popup and close when the user is done.
         await delivery.administer();
@@ -227,7 +224,7 @@ export default class main extends app.app {
     async pay_tea(): Promise<boolean>{
         //
         //Create an instance of the tea payment class.
-        const payment = new pay_tea();
+        const payment = new tea.pay_tea();
         //
         // Open the popup and close when the user is done.
         await payment.administer();
@@ -245,7 +242,19 @@ export default class main extends app.app {
         //Call crud page and close when done.
         await input.administer();
     }
-    
+    //
+    //Create event and display on the events panel
+    async create_event(): Promise<void>{
+        //
+        //Create an instance of the class
+        const Event = new eve.event_planner(this);
+        //
+        //Call crud page and close when done.
+        const result = await Event.administer();
+        //
+        //check the validity of the data
+        if (result === undefined ) return;
+    }
     //
     //An event listener for registering a new user.
     async register_intern(): Promise<true | undefined> {
@@ -267,17 +276,97 @@ export default class main extends app.app {
     //An event listener for creating a new message.
     async new_msg(): Promise<void> {
         //
-        //create a popup that facilitates sending a new message
-        const Msg = new msg.new_msg(this);
+        //Create a terminal page that facilitates sending a new message
+        const page = new msg.new_message(this);
         //
-        //collect all the data from the user
-        const result: true | undefined = await Msg.administer();
+        //Collect the message from the user and send it.
+        const result: true | undefined = await page.administer();
         //
-        //check the validity of the data
+        //Check if the message was successfully sent. If not do nothing.
         if (result === undefined) return;
         //
-        //The message was succesfully sent so update the page.
-        //??
+        //The message was succesfully sent so update the message panel
+        // of this application page.
+        this.refresh_message_panel();
+        
+    }
+    //
+    //Get the messages panel and refresh to display the new message.
+    refresh_message_panel():void {
+        //
+        //Get the message panel.
+        const message = this.get_element('message');
+        //
+        //Repaint the panel.
+        // const query =;
+    }
+    //
+    //Reply to the message that is currently selected in
+    //the message panel of the application.
+    async reply_msg(): Promise<void>{
+        //       
+        //1. Get the message panel    
+        const panel = this.get_element("message");
+        //
+        //2. Get the primary key using the message panel.
+        const pk: number =await this.get_selected_message_pk(panel);
+        //
+        //2.3 Use the primary key to retrieve the text message from the database.
+        const msg:string = await this.get_message_text(pk);
+        //
+        //Get the message (msg) from above and store it locally to be able to access it 
+        //when the reply message fires.
+        localStorage.setItem('msg', JSON.stringify(msg));
+        //
+        //Create a terminal class to supprot the reply message.
+        const reply = new rep.Reply_message(this);
+        //
+        //Wait for the user to reply.
+        const response: true | undefined = await reply.administer();
+        //
+        //Check the response to see whether the user aborted the reply
+        //or not. If aborted, discontinue this process.
+        if (response === undefined) return;
+        //
+        //At this point we are successful to replying to the message.
+        //Refresh the message panel to see the response. This is a drastic action
+        //that causes the page to flash. A better method would be to add the reply
+        //to the message panel. Thats the challenge, but for this version we shall take
+        //the less sophisticated method.
+        //
+    }
+    //
+    ///Get the primary key of the selected message using the panel.
+    async get_selected_message_pk(panel: HTMLElement): Promise<number> {
+        //
+        //Get the class of the selected message.
+        const message: Element | null = panel.querySelector(".TR");
+        //
+        //Use the message class to get the primary key
+        const msg_pk = message!.getAttribute("pk");
+        //
+        //Convert the string to a number.
+        const number = parseFloat(msg_pk!);
+        //
+        //Return the primary key.
+        return number;
+    }
+    //
+    //Get the message from the database using the primary key above.
+    async get_message_text(pk: number): Promise<string> {
+        //
+        //Get the message from the database and extract
+        //the text from the database.
+        this.msg = await server.exec(
+            "database",
+            ["mutall_users"],
+            "get_sql_data",
+            [`SELECT text, subject, event FROM  msg WHERE msg.msg = ${pk}`]
+        );
+        //Verify that your data retrievel extracted one and only one message
+        //
+        //return the text message.
+        return this.msg![0].text;
     }
     //
     async definer(): Promise<void> {
@@ -304,179 +393,19 @@ export default class main extends app.app {
         //Attach the options to the select element.
         select.innerHTML = options_str;
     } 
-}
-
-class definer extends outlook.baby<Idef>{
-   //
-    static innerHTML: HTMLElement;
     //
-    //
-    constructor(app: main) {
+    //Override the initializa method.
+    async show_panels(): Promise<void>{
         //
-      super(app,'definers.html')  
+        //call the super/parent initialization.
+        await super.show_panels();
+        //
+        //await this.daily_error_rate();
     }
-    //In future, check if a file json file containing Iquestionnaire is selected.
-    //For now, do nothing
-   async check(): Promise<boolean>{return true;}
-    //
-    show_panels(): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-    //
-    async get_result(): Promise<Idef> {
-        //
-        //Get the definer id
-        const id = this.get_element('id');
-        //
-        //ensure you have an input element
-        if (!(id instanceof HTMLInputElement)){
-            //
-            throw new schema.mutall_error(`input for element "identifier" not found`);
-        }
-        //
-        //Get the definer caption
-        const caption = this.get_element('caption');
-        //
-        //ensure you have an input element.
-        if(!(caption instanceof HTMLInputElement)){
-            //
-            throw new schema.mutall_error(`Input for element "caption" not found`);
-        }
-        //
-        //Get the organisation
-        const organization = this.get_element('organization');
-        //
-        //ensure the is an input element
-        if(!(organization instanceof HTMLInputElement)){
-            //
-            throw new schema.mutall_error(`Input for element"organization" not found`);
-        }
-        //
-        //Get the sequence
-        const seq = this.get_element('seq');
-        //
-        //Ensure there is an input element
-        if(!(seq instanceof HTMLInputElement)){
-            //
-            throw new schema.mutall_error(`Input for element "sequence" not found`);
-        }
-        //
-        //compile the message 
-        const idefi: Idef = {
-            def: id.value,
-            caption: caption.value,
-            organization: organization.value,
-            seq: seq.valueAsNumber
-        };
-        //
-        return idefi;
-     }
-}
-class tea_delivery 
-    extends outlook.baby<true>
-    implements mod.journal 
-{
-    //
-    declare public mother:main;
-    //
-    constructor(mother: main){
-      super(mother, 'tea_delivery.html')
-    }
-    get_business_id(): string {
-        throw new schema.mutall_error('Method not implemented.');
-    }
-    get_je(): {
-        ref_num: string; 
-        purpose: string; 
-        date: string;
-        amount: number;
-    } {
-        //
-        //1.Collect all the field provided.
-        const j = [];
-        //
-        //1.1 Get the reference number.
-        j.push([""])
-        //
-        //1.2 Get the purpose of the transaction.
-        //
-        //1.3 Get the date.
-        //
-        //1.4 Get the amount payed.
-        //
-        //2.
-        //
-        //. Return the values.
-        // return ;
-        throw new schema.mutall_error('Method not implemented.');
-    }
-    get_debit(): string {
-        throw new schema.mutall_error('Method not implemented.');
-    }
-    get_credit(): string {
-        throw new schema.mutall_error('Method not implemented.');
-    }
-    //
-    //check if a file json file containing Iquestionnaire is selected.
-    //For now, do nothing
-    async check():Promise<boolean> {
-        //
-        //1. Post to the accounts module.
-        const post: boolean = await this.mother.accountant.post(this);
-        //
-        //At this point if an error occurs during posting, its handled at the module level
-        //See the implmentation in the module class.
-        //
-        return post;
-    }
-    //
-    //Collect data to show whether we should update the home page or not.
-    async get_result(): Promise<true> {
-        //
-        return true;
-    }
-    //
-    //Add an event listener to the ok button.
-    async show_panels() {
-      //
-      //1.Populate the merchants selector.
-      //
-      //Get the ok button
-      const save = this.get_element("go");
-      
-    }
-  }
-  //
-  //Tea payment 
-class pay_tea extends popup<void>{
-    //
-    constructor(){  
-        super('pay_tea.html')
-    }
-    //
-    //Collect data to show show if we should update the homepage or not.
-    async check(): Promise<boolean> {return true};
-    //
-    //Collect data to show whether we should update the home page or not.
-    async get_result(): Promise<void> {}
-    //
-    //Add an event listener to the ok button.
-    async show_panels() {
-        //
-        //Get the ok button
-        const save = this.get_element("go");
-        //
-        //Add an event listener to the ok button.
-        save.onclick = async () => this.pay_tea();
-    }
-    pay_tea (){
-        //
-        alert('Success');
-     }
 }
 //
 //Assignments input. 
-class input_assignments extends popup<void>{
+class input_assignments extends outlook.popup<void>{
     //
     constructor(){
         super('')
@@ -501,251 +430,4 @@ class input_assignments extends popup<void>{
         alert('Success');
     }
 }
-//
-//
-class website extends outlook.baby<true>{
-    //
-    //Construct class website.
-    constructor(app: main){
-        //
-        super(app, "web.html")
-    }
-    //
-    //check the entered data and if correct return true else return false.
-    //And prevents one from leaving the page.
-    async check(): Promise<true> {
-        //
-        return true;        
-    }
-    //
-    //Implement abstract method
-    async get_result(): Promise<true> {
-        //
-        return true;
-    }
-    //
-    async show_panels(): Promise<void> {
-        //
-        //1. Populate the definers panel with our definers id and desription.
-        //
-        //Get the definers panel
-        const select = this.get_element("services");
-        //
-        //Write the sql to get the id from the database.
-        const query1 = `select id from definer`;
-        //List of definers
-        const definer: Array < { id: string } > = await server.exec(
-            "database", 
-            [app.app.current.dbname],
-            "get_sql_data", 
-            [query1]
-        );
-        //
-        //Formulate the list data from the definers list.
-        const list: Array < string > = definer.map(
-            (definer) => `<li value= '${definer.id}'>${definer.id}</li>`
-        );
-        //
-        //Convert list to text
-        const list_str: string = list.join("\n");
-        //
-        //Attach the options to the select element.
-        select.innerHTML = list_str;
-        //
-        //2. Populate the content panel with a query results derived from content and definers.
-        //
-        //Get the content panel
-        const content = this.get_element("content")
-        //
-        const query = `
-                    select 
-                        id,
-                        caption
-                    from
-                        definer`;
-        //
-        //List of all the caption and data in the database from the database
-        const caption: Array <{id: string, caption: string}> = await server.exec(
-            "database",
-            [app.app.current.dbname],
-            "get_sql_data",
-            [query]
-        );
-        //
-        //Formulate the id's and captions from the database.
-        const definers:Array<string> = caption.map(
-            (caption) => `<div>
-                            <h3>${caption.id}</h3>
-                            <p>${caption.caption}</p>
-                        </div>`
-        );
-        //
-        //Convert the result to text.
-        const definer_text = definers.join("\n");
-        //
-        //Paint the result on the content panel
-        content.innerHTML = definer_text;
-        //
-        //3. Populate the header panel with definers id only
-        
-    }
-}
-//
-//
-class create_event 
-    extends outlook.baby<true> 
-    implements  mod.questionnaire, mod.message, mod.cron_job, mod.journal 
-{
-    //
-    declare public mother: main;
-    //
-    //Create an instance of class create_event.
-    constructor(mother: main) {
-        //
-        super(mother, 'Event_form.html')
-    }
-    get_sender(): string {
-        throw new Error('Method not implemented.');
-    }
-    get_body(): string {
-        throw new Error('Method not implemented.');
-    }
-    //
-    get_business_id(): string {
-        throw new Error("Method not implemented.");
-    }
-    get_je(): {
-        ref_num: string; purpose: string; date: string; amount: number; 
-    } {
-        //
-        //1.Collect all the field provided.
-        const j = [];
-        //
-        //1.1 Get the reference number.
-        j.push([""])
-        //
-        //1.2 Get the purpose of the transaction.
-        //
-        //1.3 Get the date.
-        //
-        //1.4 Get the amount payed.
-        //
-        //2.
-        //
-        //. Return the values.
-        // return ;
-        throw new Error("Method not implemented.");
-    }
-    get_debit(): string {
-        throw new Error("Method not implemented.");
-    }
-    get_credit(): string {
-        throw new Error("Method not implemented.");
-    }
-    //
-    report_error(): void {
-        throw new Error('Method not implemented.');
-    }
-    //
-    // Implement the scheduler for scheduling tasks.
-    exec(crj: mod.cron_job): Promise<boolean> {
-        throw new Error('Method not implemented.');
-    }
-    //
-    //
-    //Implement the method required by the questionnaire interface.
-    //It returns all the layouts derived from the create event form.
-    get_layouts(): Array<quest.layout> {
-        //
-        //1.Retrieve all the simple input layouts from the event form that are not 
-        //related to a table.
-        const simple:Array<quest.layout> = this.get_simple_inputs();
-        //
-        //2. Retrieve at table based inputs from the event form.
-        const tables: Array<quest.layout> = this.get_table_inputs();
-        //
-        //3. Return both the simple inputs and the tables inputs.
-        return simple.concat(tables);
-    }
-    //
-    //Get all the simple input layouts of the event form.
-    get_simple_inputs(): Array<quest.layout> {
-        throw new Error('Method not implemented.');
-    }
-    //
-    //Get all th table based inputs of the event form.
-    get_table_inputs(): Array<quest.layout> {
-        //
-        //1.Get all the table elements in the registration form.
-        const tables = this.document.querySelectorAll("table");
-        //
-        //2. Convert the table elements to table layouts.
-        const layouts:Array<quest.table> = 
-            //
-            //Convert the nodelist to a table layout
-            Array.from(tables)
-            //
-            //Map every table element to a table layout
-            .map(table => this.get_table_input(table));
-        //
-        //3.Return the result.
-        return layouts;
-    }
-    //
-    //Convert the given table element into a questionnaire table.
-    //The structure of a questionnaire table is generally defined as:-
-    // {class_name, args}
-    //in particular its defined as:-
-    //{class_name:"fuel", args: [tname, cnames, ifuel] }
-    //where:-
-    // tname is the name of the table,
-    // cnames is an array of column names to be lookedup,
-    // ifuel is a double array that represents the table body.
-    get_table_input(table: HTMLTableElement): quest.table {
-        //
-        //A. Define the table that is the source of the data.
-        //
-        //1. Get the tables class name.
-        //
-        //2. Get the required arrguements, i.e., tname, cnames, ifuel.
-        //
-        //2.1 Get the  table name , It is the id of the table.
-        //
-        //2.2 Get the column names of the table. 
-        //There are as many columns as there are th elements.
-        //
-        //2.3 Get  the body of the table as a double list of string values.
-        //
-        //3. compile the table layout.
-        //
-        //4. Return the table layout.
-    }
-    //
-    //
-    async check(): Promise<boolean> {
-        //
-         //1. Collect and check the data that the user has entered.
-        //
-        //2. Save the data to the database.
-        const save = await this.mother.writer.save(this);
-        //
-        //3. Send the appropriate message to the user(s).
-        const send = await this.mother.messenger.send(this);
-        //
-        //4. Update the accounting book keeping system.
-       const post = await this.mother.accountant.post(this);
-        //
-        //5. Schedule tasks if necessary.
-        const exec = await this.mother.scheduler.exec(this);
-        //
-        return save && send && post && exec;
-    }
-    async get_result(): Promise<true> {
-        //
-        return true;
-    }
-    //
-    async show_panels(): Promise<void> {
-        //
-    }
-}
+

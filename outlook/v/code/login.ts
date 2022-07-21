@@ -13,7 +13,7 @@ import * as server from "../../../schema/v/code/server.js"
 type provider_id = 'google' | 'facebook' | 'outlook';
 //
 //types of operations for accesing the application service
-type operation_id = "login" | "register";
+export type operation_id = "login" | "register";
 
 //
 //This is a page used for authenticating users so
@@ -30,7 +30,7 @@ export class page extends popup<user> {
         //super(app.current.config!.login);
         super(url)
     }
-
+    //
     //Return the logged in user
     async get_result() {
         //
@@ -59,29 +59,29 @@ export class page extends popup<user> {
         }
         const provider_id = <provider_id> values[0];
         //
-        //Retrieve the checked operation id
+        //Retrieve the checked operation id.
         values = this.get_input_choices('operation_id');
         //
-        //Check the values for validity
+        //Check the values for validity.
         if (values.length !== 1) {
             throw new schema.mutall_error(`Please select one Operation`);
         }
         const operation_id = <operation_id> values[0];
         //
-        //1. Define the provider
+        //1. Define the provider.
         let Provider: provider;
         //
         switch (provider_id) {
             case "outlook":
                 //
                 //Retrieve the credentials
-                const email =
-                    (<HTMLInputElement> this.get_element('email')).value;
+                const name =
+                    (<HTMLInputElement> this.get_element('name')).value;
                 //
                 const password =
                     (<HTMLInputElement> this.get_element('password')).value;
                 //
-                Provider = new outlook(email, password, operation_id);
+                Provider = new outlook(name, password, operation_id);
                 break;
             default:
                 throw new schema.mutall_error("The selected provider is not yet developed");
@@ -116,14 +116,14 @@ export class page extends popup<user> {
         }
         //
         //2. Check if e-mail is empty, then flag it as an error if it is empty.
-        const email_is_valid: boolean = is_valid('email');
+        const name_is_valid: boolean = is_valid('name');
         //
         //3. Check if password is empty, then flag it as an error if it is
         //empty.
         const password_is_valid: boolean = is_valid('password');
         //
-        //Return true if both the email and password are valid
-        return email_is_valid && password_is_valid;
+        //Return true if both the name and password are valid
+        return name_is_valid && password_is_valid;
     }
     async show_panels(): Promise<void> {
         //
@@ -196,12 +196,12 @@ class google {
 class outlook extends provider {
     //
     //
-    public email: string;
+    public name: string;
     public password: string;
 
-    constructor(email: string, password: string, operation: operation_id) {
+    constructor(name: string, password: string, operation: operation_id) {
         super('outlook', operation);
-        this.email = email;
+        this.name = name;
         this.password = password;
     }
     //
@@ -219,22 +219,22 @@ class outlook extends provider {
                 "database",
                 ["mutall_users"],
                 "register",
-                [this.email, this.password]);
+                [this.name, this.password]);
         } else {
             //
             //LOGIN
-            //Authenticate the user using the given email and password
+            //Authenticate the user using the given name and password
             const ok = await server.exec(
                 "database",
                 ["mutall_users"],
                 "authenticate",
-                [this.email, this.password]);
+                [this.name, this.password]);
             //
             //If the login is not successful throw an exception
             if (!ok) throw new schema.mutall_error("Invalid login credentials");
         }
         //
-        return new user(this.email);
+        return new user(this.name);
     }
 
 }

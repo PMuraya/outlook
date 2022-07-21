@@ -12,6 +12,8 @@ $config = new config();
         <!-- 
         The tile of your project -->
         <title><?php echo $config->title; ?></title>
+        <!--  -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- 
         Styling the index page in terms of grids -->
         <link rel="stylesheet" href="index.css"/>

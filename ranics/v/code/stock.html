@@ -13,6 +13,9 @@
     <div id="stock">
         <form class="frame" action="" method="post">
             <h3>Vehicle Stock</h3>
+            <!-- 
+                Vehicle registration number.
+            -->
             <label>Car Registration Number:
                 <input 
                     data-ename="stock"
@@ -21,32 +24,42 @@
                     type="text" 
                     style="text-transform:uppercase"   
                     maxlength="8"
+                    minlength="7"
                     pattern="\w{3}\d{3}\w" 
                     title="Use this format instead KBZ999Z" 
+                    placeholder="Number Plate"
                     required 
                 />
             </label>
             <fieldset>
+                <!--
+                     The type of vehicle. 
+                -->
                 <legend>Vehicle Category:</legend>
-                <label><input type="radio" name="category" value="Car" required />Car</label>
-                <label><input type="radio" name="category" value="Lorry" required />Lorry</label>
-                <label><input type="radio" name="category" value="Motorcycle" required />Motorcycle</label>
+                <label><input type="radio" id="category" name="category" value="Car" required />Car</label>
+                <label><input type="radio" id="category" name="category" value="Lorry" required />Lorry</label>
+                <label><input type="radio" id="category" name="category" value="Motorcycle" required />Motorcycle</label>
             </fieldset>
 
             <fieldset>
+                <!-- 
+                    The time of the day.
+                -->
                 <legend>Time of the Day:</legend>
-                <label><input type="radio" name="daytime" value="Morning" required />Morning</label>
-                <label><input type="radio" name="daytime" value="Mid-day" required />Mid-day</label>
-                <label><input type="radio" name="daytime" value="Evening" required />Evening</label>
+                <label><input type="radio" id="daytime" name="daytime" value="Morning" required />Morning</label>
+                <label><input type="radio" id="daytime" name="daytime" value="Mid-day" required />Mid-day</label>
+                <label><input type="radio" id="daytime" name="daytime" value="Evening" required />Evening</label>
             </fieldset>
             <fieldset>
-                <label><input id="datetime" name="datetime" /></label>
-                <label><input type='text' name="email" id="email" /></label>
+                <label><input id="datetime" name="datetime" hidden/></label>
+                <label><input type='text' name="name" id="name" hidden /></label>
+                <!-- 
+                     The error message reporting element
+                -->
+                <div id="reports" class="error">
+                </div>
             </fieldset>
         </form>
-    </div>
-    <div id="report" class="error">
-
     </div>
     <button id="go">Go</button>
     <button id="cancel">Cancel</button>

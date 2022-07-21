@@ -5,56 +5,28 @@ import * as outlook from '../../../outlook/v/code/outlook.js'
 //
 import * as server from '../../../schema/v/code/server.js'
 //
-//A class to be implemented when creating a new class to avoid repetition.
-//Once the class is called, one does not need to do anything else.
-export abstract class terminal extends outlook.baby<true>{
-    constructor(
-        //
-        //The mother view to the application.
-        mother: outlook.page,
-        //
-        //The html page to load
-        html: string
-    ) {
-        super(mother, html)
-    }
-    //
-    //This method does nothing other than satisfying the contractual
-    // obligation of a baby class.
-    async get_result(): Promise<true> {
-        return true;
-    }
-    
-}
-//
 //This class is the home of all methods that are common to all our modules.
 //For instance, all modules should be able to report errors to the user.
-export abstract class modules {
+export abstract class component {
     //
     constructor() {
         //
-
     }
     //This method is called when we need to report errors. It must be implemented
     //by all modules.
-    abstract report_error(): void;
+    report_errors(errors:Array<string>): void{};
 }
 //
 //This class supports the registrar module developed for supporting recording of
 // data to the database for all our template forms.(the writer saves the
 // questionnaire)
-export class writer extends modules {
+export class writer extends component {
     //
     //The conctructor of the class.
     constructor() {
         //
         super()
         //
-    }
-    //
-    //For reporting any error that occurs to aid in debugging.
-    report_error(): void {
-        throw new Error('Method not implemented.');
     }
     //
     //Get the data in the form layouts and save the data to the database .
@@ -85,13 +57,18 @@ export class writer extends modules {
         //if not return false with the error reporting for checking.
         return true;
     }
+    //
+    //For reporting any error that occurs to aid in debugging.
+    report_error(): void {
+        throw new Error('Method not implemented.');
+    }
 }
 //
 //The accounting class that captures transaction data in a double entry format
 //which then proceeds to split into the refined data as per the DEALER model. Once
 //done the transaction it is labelled as a debit or credit within an application.
 //(the accounting class posts a journal)
-export class accountant extends modules {
+export class accountant extends component {
     //
     constructor() {
         //
@@ -99,9 +76,7 @@ export class accountant extends modules {
     }
     //
     //For reporting any error that occurs to aid in debugging.
-    report_error(): void {
-        throw new Error('Method not implemented.');
-    }
+    report_error(): void {}
     //Post the given accounts to the general ledger and return true is
     //successful and false otherwise.
     async post(je: journal): Promise<boolean> {
@@ -125,7 +100,7 @@ export class accountant extends modules {
             //Call the load common without any parameters.
             []
 
-        )
+        );
         //
         //3. If the loading was successful return true. (jk)
         return true;
@@ -134,60 +109,24 @@ export class accountant extends modules {
         
     }
     //
-    //Collect all the layouts of the journal fro saving to the database.
-    *collect_layouts(je: journal): Iterable<quest.layout> | ArrayLike<quest.layout> {
+    //Collect all the layouts of the journal for saving to the database.
+    *collect_layouts(je: journal): Generator<quest.layout> {
         //
-        //The database to save the data.
-        const dbname = "mutall_users"
+        //1 Get the journal entries.
+        je.get_je();
         //
-        //The entity name.
-        const ename = "je"
+        //2. Get the account to debit;
+        je.get_debit();
         //
-        //1 Get and destructure journal entries, credit and debit accounts.
-        const {ref_num,purpose, date,amount}= je.get_je();
-        //
-        //Get the reference number
-        yield[dbname, ename, [], "ref_num", ref_num];
-        //
-        //Get the purpose of the transaction
-        yield[dbname, ename, [], "purpose", purpose];
-        //
-        //Get the date the transactoin was carried out.
-        yield[dbname, ename, [], "date", date];
-        //
-        //Get the amount in the transaction
-        yield[dbname, ename, [], "amount", amount];
-        //
-        //2 Get data for the account to credit.
-        const credit= je.get_credit();
-        //
-        //Get the credit table.
-        yield[dbname, "credit", [credit], credit, null];
-        //
-        //Get the account to credit the transaction
-        yield[dbname, "account", [credit], "name", credit];
-        //
-        //3 Get the account to debit;
-        const debit = je.get_debit();
-        //
-        //Get the debit table.
-        yield[dbname, "debit", [debit], debit, null];
-        //
-        //Get the account to debit the transaction.
-        yield[dbname, "account", [debit], "name", debit]
-        //
-        //4. Get the business id.
-        const id = je.get_business_id();
-        //
-        yield[dbname, "business", [], "id", id];
-        //
+        //3. Get the business id.
+        je.get_business_id();
     }
 }
 //
 //The messenger class supports sending of messages from one user to another but
 //the functionality changes in different applications.(The messenger sends a
 //message)
-export class messenger extends modules {
+export class messenger extends component {
     //
     constructor() {
         //
@@ -201,7 +140,6 @@ export class messenger extends modules {
     //
     async send(msg: message): Promise<boolean> {
         //
-
         //
         return true;
     }
@@ -209,7 +147,7 @@ export class messenger extends modules {
 
 //
 //Allow performing of cron jobs without a persons involvement.
-export class scheduler extends modules {
+export class scheduler extends component {
     //
     constructor() {
         //
@@ -234,7 +172,7 @@ export class scheduler extends modules {
 //
 //This class supports the payments made. This is done by invoking the accountant and
 //have a record of each transaction.
-export class cashier extends modules {
+export class cashier extends component {
     //
     constructor() {
         //

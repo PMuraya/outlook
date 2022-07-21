@@ -19,10 +19,10 @@ class config extends \config{
     public string $app_db = "mutall_ranix"; 
     //
     //This is the logo's file name in the images sub-folder.
-    public string $logo = "tracker.png";
+    public string $logo = "rm.jpg";
     //Subject comprises of the entity name to show in the home page
     //plus the database it comes from.
-    public string $subject_ename="vehicle";
+    public string $subject_ename="flow";
     public array $subject;
      //
     //The full trademark name of the application

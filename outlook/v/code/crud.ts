@@ -18,7 +18,7 @@ import * as quest from "../../../schema/v/code/questionnaire.js";
 import * as theme from "./theme.js";
 //
 //There is only one class in this file:merger; its the default export
-import merger from "../../../outlook/v/code/merger.js";
+import merger from "./merger.js";
 //
 import {app} from './app.js'
 

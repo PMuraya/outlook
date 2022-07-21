@@ -13,7 +13,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/schema/v/code/schema.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'/schema/v/code/sql.php';
 //
 //construct a new seleector query based on tenant in rentize.
-$s = new selector("tenant", "rentize");
+$s = new selector("wmeter", "rentize");
 //
 //echo "<pre>".$s->stmt()."</pre>";
 $result = $s->execute();

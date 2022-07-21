@@ -53,8 +53,13 @@ import * as schema from "../../../schema/v/code/schema.js"
      }
      //
      //
-    show_panels(): Promise<void> {
-        throw new Error("Method not implemented.");
+     async show_panels(): Promise<void> {
+        //
+        //The for loop is used so that the panels can throw
+        //exception and stop when this happens
+        for (const panel of this.panels.values()) {
+            await panel.paint();
+        }
     }
  }
  //

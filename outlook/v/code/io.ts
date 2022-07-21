@@ -21,7 +21,7 @@ import * as server from "../../../schema/v/code/server.js";
     export type Stuff = typeof AVAILABLE_STUFF[number];
  */
 //Types of io based on the input element
-const input_types = <const> [ "date", "text", "number", "file", "image", "email"];
+const input_types = <const> [ "date", "text", "number", "file", "image", "email","name"];
 type input_type =  typeof input_types[number];
 //
 //Other Non-input types

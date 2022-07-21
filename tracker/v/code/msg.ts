@@ -1,159 +1,218 @@
 //
-//Resolves references to the asset.products data type.
+import * as outlook from '../../../outlook/v/code/outlook.js'
+//
+//Resolve the modules.
 import * as mod from '../../../outlook/v/code/module.js';
-import * as outlook from '../../../outlook/v/code/outlook.js';
-import { layout } from '../../../schema/v/code/questionnaire.js';
 //
-//Import schema.
-import * as schema from "../../../schema/v/code/schema.js";
+//Import layout from the schema library.
+import * as quest from  '../../../schema/v/code/questionnaire.js';
+import * as schema from '../../../schema/v/code/schema.js';
 //
+//Import event class.
+import {event_planner} from './event_planner.js'
+//
+//Import class main.
 import main from './main.js';
 //
+//Expoert the msg interface.
 export type Imsg = {msg:string};
 //
-//use popup to create a new message
-export class new_msg 
-    extends mod.terminal
-    implements mod.message, mod.questionnaire, mod.journal, mod.cron_job
+//This class allows us to write a message to the database and send it.
+export class new_message
+    //
+    //A special quiz class that returns a result that is either true or undefined
+    //depending on whether the operation was succesful or not.
+    extends outlook.terminal
+    implements 
+        //
+        //This interface allows this page to send the message to users of the
+        // current business.
+        mod.message,
+        //
+        //This interface allows this page to write the message to the database.
+        mod.questionnaire
  {
     //
+    //Why declare? To allow us to access the modules currently defined in
+    //the main class. NB: Mother is already a property that is of type Page and
+    //page does not have the modules.
     declare public mother:main;
     //
-    //The database to save to 
+    //The database to save to.
     public dbname = "mutall_users";
     //
-    public language!:string;
+    //The language of the message.
+    public language?:string;
     //
-    public message!:string;
+    //The message to send.
+    public message?:string;
     //
-    public event!:string;
+    //The event associated with the message.
+    public event_name?:string;
     //
-    public amount!:string;
+    //The date the message is sent.
+    public date?:string;
     //
-    public date!:string;
+    //The subject of the message.
+    public subject?: string;
     //
-    public ref_num!:string;
+    //The planner class is used to create an event.
+    public planner?: event_planner;
     //
+    //The business that the user is logged in to.
+    public organization?: string;
+    //
+    //Create a new instance of the message class.
     constructor(mother: main) {
-        super(mother, "new_msg.html");
+        //
+        //1. Call the constructor of the parent class with the mother page and file name.
+        super(mother, "create_message.html");
     }
     //
+    //Get the sender of the message.
     get_sender(): string {
-        throw new Error('Method not implemented.');
+        //
+        //Get the user from the currently logged in user.
+        const sender = this.mother.user;
+        //
+        //Ensure that the user is available.
+        if(sender === undefined) throw new schema.mutall_error(`There is no user found`);
+        //
+        //Return the user name.
+        return sender.name!; 
     }
+    //
+    //Get the content of the message.
     get_body(): string {
         throw new Error('Method not implemented.');
     }
-    
-    get_business_id(): string {
-        throw new Error('Method not implemented.');
+    //
+    //Collect as many labels as there are properties for saving.
+    get_layouts(): Array<quest.layout> {
+        //
+        //5. Return the layout.
+        return Array.from(this.collect_msg());
     }
-    get_je(): { ref_num: string; purpose: string; date: string; amount: number; } {
+    *collect_msg(): Generator<quest.layout> {
         //
-        //Accounting submodal entity for journal recordings.
-        const ename = "je";
+        //1. Get the language.
+        yield[this.dbname, "msg", [], "language", this.language!];
         //
-        //1.Collect all the field provided.
-        const j = [];
+        //2. Get the message.
+        yield[this.dbname, "msg", [], "text", this.message!]
         //
-        //1.1 Get the reference number.
-        j.push([this.dbname, ename, [], "ref_num", this.ref_num])
+        //3. Get the subject.
+        yield[this.dbname, "msg", [], "subject", this.subject!];
         //
-        //1.2 Get the purpose of the transaction.
-        j.push([this.dbname, ename, [], "purpose", this.event]);
+        //4. Get the date.
+        yield[this.dbname, "msg", [], "date", this.date!]
         //
-        //1.3 Get the date.
-        j.push([this.dbname, ename, [], "date", this.date]);
+        //5. Get the organization.
+        yield[this.dbname, "business", [], "id", this.organization!];
         //
-        //1.4 Get the amount payed.
-        j.push([this.dbname, ename, [], "amount", this.amount]);
-        //
-        //2.
-        //
-        //. Return the values.
-        return j;
-    }
-    get_debit(): string {
-        throw new Error('Method not implemented.');
-    }
-    get_credit(): string {
-        throw new Error('Method not implemented.');
-    }
-    get_layouts(): Array<layout> {
-        //
-        //1. Start with an empty array
-        const m:Array<layout> = [ ];
-        //2. Get the language.
-        m.push([ this.dbname, "msg", [], "language", this.language ]);
-        //
-        //3. Get the message.
-        m.push([this.dbname, "msg", [], "text", this.message]);
-        //
-        //4. Get the event.
-        m.push([this.dbname, "event", [], "id", this.event]);
-        //
-        //5. Return the messages.
-        return m;
+        //6. Get the event.
     }
     //
     //In future, check if a file json containing iquestionare is selected??
     //
-    //Collect and check the data entered by the user sending the message.
+    //Collect and check the data entered by the user sending the message,
+    //then write to the data database where appropriate and send the message.
    async check(): Promise<boolean> {
         //
         //1. Collect and check the data that the user has entered.
         //
-        //1.1 Collect the language??
-        this.language = this.get_input_value('languages');
-        //
-        //Find a more friendly way to tell the user to select.
-        //Check that the language is selected.
-        if (this.language === null) throw new schema.mutall_error(`Select a language`);
+        //1.1 Collect the language if necessary.
+        if(this.language_exists())
+            this.language = this.get_selected_value('language');
         //
         //1.2 Collect the message
         this.message = this.get_input_value("msg");
         //
-        //Check the message
-        if (this.message === null) throw new schema.mutall_error(`Enter a message`);
+        //1.3 Collect the subject
+        this.subject = this.get_input_value("subject");
         //
-        //1.3 Collect the selected event.
-        this.event = this.get_input_value("event_assoc");
+        //1.4 Collect the date in the mysql format.(not from the input)
+        this.date = this.get_input_value('date');
         //
-        //Get the ref num by combining the event and date.
-        this.ref_num = this.get_ref_num();
+        //1.5 Collect the organization.
+        this.organization = this.get_business();
         //
-        //Check the event.
-        if (this.event === null) throw new schema.mutall_error(`Select an event`);
+        //1.6 Collect the event if any. This must already have been done during
+        //event admistration so its not necessary.
         //
         //2. Save the data to the database.
         const save = await this.mother.writer.save(this);
         //
-        //3. Send the appropriate message to the user(s).
-        const send = await this.mother.messenger.send(this);
+        //Abort this process if the message was not saved succesfully.
+        if(!save) return false;
         //
-        //Execute this only if there is any event and contribution.
-            //
-            //4. Update the journal entry(je) 
-            const post = await this.mother.accountant.post(this);
-            //
-            //5. Schedule tasks if available.
-            const exec = await this.mother.scheduler.exec(this);
-        //
-        return save && send && post && exec;
+        //3. Send the message text to the users of the business that the 
+        //current user belongs to.
+        return await this.mother.messenger.send(this);
     }
     //
-    //Get the reference number by generating from existing data about the message
-    //i.e using the event and the date
-    //Ask (pm)
-    get_ref_num(): string {
-        throw new Error('Method not implemented.');
+    //Get the business from the current logged in user.
+    get_business(): string | undefined {
+        //
+        const business = this.mother.user!.business!;
+        //Get the user.
+        if(business.source === 'selector') return business.pk;
     }
     //
-    //
+    //Add additional data to the page after it has loaded.
     async show_panels(): Promise<void> {
         //
-        //Fill the language selector.
-        this.fill_selector("msg","mutall_users", "languages");
-        
+        //1. Fill the language selector if necessar.
+        if(this.language_exists()) {
+            //
+            //1. Show the language.
+            //
+            //2.Populate the selector.
+            this.fill_selector("msg","mutall_users", "language");
+        } else{
+            //
+            //hide the language label.
+        }
+        //
+        //2. Initialize the date field with todays date.
+        //
+        //2.1 Get the date input.
+        const input = this.get_element('date');
+        //
+        //2.1.1 Ensure that the input is a HTMLInputElement.
+        if(!(input instanceof HTMLInputElement)) 
+            throw new schema.mutall_error(`The element identified by '${input}' is not a HTMLInputElement`);
+        //
+        //2.2 Append the date to the Input.
+        input.valueAsDate = new Date();
+        //
+        //
+        //3. Add a listener to the create event button.
+        const create = this.get_element('create_event');
+        //
+        //create the event using an onclick event.
+        create.onclick = async () => await this.create_event();
+    }
+    //
+    //Check the language.
+    language_exists(): boolean {
+        //
+    }
+    //
+    //Create an event.
+    async create_event(): Promise<void>{
+        //
+        //Create a new instance of the event.
+        const planner = new event_planner(this.mother);
+        //
+        //administer the class and return the result.
+        const result = await planner.administer();
+        //
+        //Check if the event was created or not. If not abort this process.
+        if(result === undefined) return;
+        //
+        //If the event was created, get the name of the event from the planner and
+        //save it.
+        this.event_name = planner.event_name;
     }
  }

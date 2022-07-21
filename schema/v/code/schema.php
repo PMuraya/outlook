@@ -274,7 +274,11 @@ class schema extends mutall {
     //When a shema object is written to a database, the result can be accessed
     //from here
     public /*answer*/ $answer;
-
+    //
+    //Log the loading process into an xml file by default this is true
+    //but after 10 records of loading this will be set to false.
+    public bool $log_xml = true;
+    //
     //The partial name is used for identifying this object in the
     //context of generating xml logs
     function __construct(string $partial_name='no_name') {
@@ -323,7 +327,7 @@ class schema extends mutall {
         //Save this answer for future reference.
         $this->answer = $ans;
         //
-        //Log the result if loggig mode is on.
+        //Log the result if logging mode is on.
         if ($log){
             //
             log::$current->add_attr('result', "$ans");
@@ -337,11 +341,12 @@ class schema extends mutall {
     }
     
     //Determines if logging is necessary or not. By default, logging is 
-    //necessary. In the case of a beral, we should control logging, to
-    //avoid cluterring the log file with repetitive errors
-    function logging_is_necessary($row){
+    //necessary depending on the setting of the log xml property.
+    //After logging 10 barrels, the loading will be stopped for all schema
+    //classes.
+    function logging_is_necessary($row): bool{
         //
-        return true;
+        return $this->log_xml;
     }
     
     //
@@ -680,23 +685,23 @@ class database extends schema {
     // 
     //Use this database to test if a user with the given credentials is 
     //found in the user database or not.
-    public function authenticate(string $email, string $password):bool{
+    public function authenticate(string $name, string $password):bool{
         // 
         //Create an sql/view to retrieve the password from  user table. 
-        //the user with the given email 
+        //the user with the given name 
         $sql = "select password "
                 . "from user "
-                . "where email= '$email' ";
+                . "where name= '$name' ";
         //
         //Execute the query and retrieve the password
         $users= $this->get_sql_data($sql);
         // 
-        // Test if there is any user that matches the email if not we return
+        // Test if there is any user that matches the name if not we return
         //false 
         if(count($users)===0){return false;}
         // 
         //If there is more than one  user we throw an exception
-        if(count($users)>1){throw new myerror("More than one email found. "
+        if(count($users)>1){throw new myerror("More than one name found. "
                 . "Check your data model");}
         //If the user exists verify the password.
         return password_verify($password, $users[0]["password"]);
@@ -708,13 +713,13 @@ class database extends schema {
     //
     //Create a new account for the given user from first principles 
     //so that we can take charge of error reporting.
-    public function register(string $email, string $password):void{
+    public function register(string $name, string $password):void{
         // 
         //Create an sql/view to retrieve the password from  user table. 
-        //the user with the given email 
+        //the user with the given name
         $sql = "select password "
                 . "from user "
-                . "where email= '$email' ";
+                . "where name= '$name' ";
         //
         //Execute the query and retrieve the password
         $users= $this->get_sql_data($sql);
@@ -733,15 +738,15 @@ class database extends schema {
                     //Get the entity to insert 
                     . "INTO  {$entity} \n"
                     //
-                    //Insert the two columns email and password
+                    //Insert the two columns name and password
                     . "("
-                            . "{$entity->columns["email"]->to_str()},"
+                            . "{$entity->columns["name"]->to_str()},"
                             . "{$entity->columns["password"]->to_str()} "
                     . ")\n"
                     //
                     //Insert the given values.
                     . "VALUES ("
-                         . "'{$email}','" .password_hash($password, PASSWORD_DEFAULT)."'"
+                         . "'{$name}','" .password_hash($password, PASSWORD_DEFAULT)."'"
                     . ")\n";
             //
             //Execute the insert query
@@ -765,8 +770,8 @@ class database extends schema {
                     . "{$entity->columns["password"]}='"
                         .password_hash($password, PASSWORD_DEFAULT). "'\n"
                     //
-                    //Update only the given emailed user.
-                    . "WHERE {$entity->columns["email"]}='$email'\n";
+                    //Update only the given named user.
+                    . "WHERE {$entity->columns["name"]}='$name'\n";
             //
             //execute
             $this->query($stmt);
@@ -777,7 +782,7 @@ class database extends schema {
         }
         //
         //We have a user who has a password already 
-        throw new \Exception("Your email $email already exists have an account with please log in "
+        throw new \Exception("Your name $name already exists have an account with please log in "
                 . "with your password");
         
     }
@@ -1862,7 +1867,7 @@ class table extends entity {
                //No need for naming this view
                "noname",
                //
-               //Add the email criteria
+               //Add the name criteria
                $criteria
            );
         // 
@@ -2086,13 +2091,13 @@ class view extends entity {
         //
         //Get the current database, guided by the database name of the from 
         //clause
-//        $dbase= database::$current[$this->from->dbname];
-//        //
-//        //Execute the $sql to get the $result in an array 
-//        $array = $dbase->get_sql_data($sql);
+        $dbase= database::$current[$this->from->dbname];
+        //
+        //Execute the $sql to get the $result in an array 
+        $array = $dbase->get_sql_data($sql);
         //
         //Return the array 
-        return $sql;
+        return $array;
     }
 
     

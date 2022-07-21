@@ -1,77 +1,59 @@
+<!DOCTYPE html>
 <html>
 
 <head>
-    <title>Send message</title>
-    <link rel="stylesheet" href="general.css">
+    <title>create message</title>
     <style>
-        /*Make the font size good enough for projection*/
-        
         * {
-            padding: 5 2 10 2;
-            border-radius: 5px;
+            font-size: 30px;
+            margin: 5px;
+            border-radius: 10px;
+        }
+        
+        label {
+            display: block;
         }
     </style>
 
 </head>
 
 <body>
-    <label for="languages">Choose a Language:
-
-            <select name="languages" id="languages">
-                <option value="--">---</option>
-                <option value="kikuyu">Kikuyu</option>
-                <option value="maasai">Maasai</option>
-                <option value="luo">Luo</option>
-            </select>
-        </label>
-    <!--
-          Where to type the message. -->
-    <label>
-            Enter Message <br />
-            <textarea id="msg" rows="5" cols="25"></textarea>
-        </label>
-    <!--
-          Private message. -->
+    <center>
+        <h1>create message</h1>
+    </center>
+    <!-- label for choosing a language -->
     <fieldset>
-        <legend>Is this message related to an event?</legend>
-
+        <label for="language">
+        Choose a language: 
+        <select id="languages">
+            <option value="eng">English</option>
+            <option value="kisw">Kiswahili</option>
+            <option value="kikuyu">Kikuyu</option> 
+            <option value="masai">Maasai</option>
+        </select>
+    </label>
         <label>
-                    <input type="radio" name="visibility"  onclick="Main.show_panel('event', true)"  />Yes
-                </label>
-        <div id="event" hidden>
-            <div class="media">
-                Select event
-                <select name="event">
-                            <option id="event_assoc" value="---">---</option>
-                            <option id="event_assoc" value="hiking">Hiking</option>
-                            <option id="event_assoc" value="Wedding">Wedding</option>
-                            <option id="event_assoc" value="funeral">Funeral</option>
-                        </select>
-            </div>
-        </div>
+        Send-to:
+        <select id="send">
+           <option value ="send"></option>
+        </select>
+    </label>
+        <!-- label for the message -->
+        <label>Enter message:
+            <textarea></textarea>
+        </label>
+        <fieldset>
+            <legend>Is the message associated with an event:</legend>
+            <label>
+                <input type="radio" id="yes" name="event">
+                Yes
+                <button type="button">create-event</button>
+            </label>
 
-        <input type="radio" name="visibility" onclick="Main.show_panel('event', false)" />No
-        <div id="event" hidden>
-            <div class="media">
-                Create Event
-                <input type="text">
-            </div>
-        </div>
-        <div id="members"></div>
-        <div id="date">
-            <input id="date" type="text" hidden>
-        </div>
-
+            <label>
+                <input type="radio" id="no" name="event">
+                No
+            </label>
+        </fieldset>
     </fieldset>
-
-    <!--
-          Display new words here.-->
-    <div id="untranslated"></div>
-
-    <button id="go">Send</button>
-    <button id="cancel">Cancel</button>
-    <button id="alert">Alert</button>
-
 </body>
-
-</html>

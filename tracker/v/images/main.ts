@@ -16,9 +16,6 @@ import * as schema from '../../../schema/v/code/schema.js';
 //Resolve the iquestionnaire
 import * as quest from '../../../schema/v/code/questionnaire.js';   
 //
-import * as piq from "./piq";
-//
-import * as msg from "./msg";
 //
 //System for tracking assignments for employees of an organization.
 //
@@ -147,12 +144,12 @@ export default class main extends app.app {
        const sql = `select 
                           todo.id,
                           todo.description,
-                          developer.email,
+                          intern.name,
                           datediff(now(),
                           todo.start_date) as days_due
                      from
                           todo
-                          inner join developer on developer.developer =
+                          inner join intern on intern.intern =
                           todo.developer
                      where
                            datediff(now(),

@@ -3,6 +3,19 @@
 <head>
     <title>Registration form</title>
     <link rel="stylesheet" href="general.css">
+    <style>
+        * {
+            border-radius: 10px;
+            margin: 2 0 2 0;
+        }
+        
+        @media screen and (max-width: 600px) {
+            * {
+                font-size: 18px;
+                padding-top: 10px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -41,7 +54,9 @@
                         type="radio" 
                         onclick="Main.show_panel(true, 'end_date');
                                 Main.show_panel(false, 'icdl_date')"
-                        value="under_graduate"/>
+                        value="under_graduate"
+                        checked
+                    />
                     <span>Fixed term for Under Graduates</span>
                 </label>
         <div id="end_date" hidden>
@@ -51,7 +66,8 @@
                             data-dbname="mutall_tracker"
                             data-ename="intern"
                             name='end_date' 
-                            type="date">
+                            type="text"
+                            value="19/07/2022">
                     </label>
         </div>
 
@@ -73,7 +89,9 @@
                             data-dbname="mutall_tracker"
                             data-ename="intern"
                             name='end_date' 
-                            type="date">
+                            type="text"
+                            value="19/10/2022"
+                        >
                     </label>
         </div>
     </fieldset>
@@ -85,7 +103,9 @@
                         data-dbname="mutall_tracker"
                         data-ename="intern"
                         name="requirement" 
-                        type="checkbox">
+                        type="checkbox"
+                        value="laptop"
+                    >
                     <span>Laptop(preferably with a core i7 processor)</span>
                 </label>
 
@@ -94,7 +114,10 @@
                         data-dbname="mutall_tracker"
                         data-ename="intern"
                         name="requirement" 
-                        type="checkbox">
+                        type="checkbox"
+                        checked
+                        value="smart phone"
+                    >
                     <span>Smart phone</span>
                 </label>
 
@@ -103,7 +126,9 @@
                         data-dbname="mutall_tracker"
                         data-ename="intern"
                         name="requirement"
-                        type="checkbox" 
+                        type="checkbox"
+                        value="others" 
+                        
                         onclick="Main.show_panel(true, 'other_equipments')">
                     <span>Other</span>
                 </label>
@@ -118,6 +143,7 @@
                         name="available"
                         value="yes"
                         type="radio"
+                        checked
                         onclick="Main.show_panel(false, 'Available')">
                     <span>Yes</span>
                 </label>
@@ -134,8 +160,8 @@
                 </label>
         <div id="available" hidden>
             what time are you available from
-            <input data-dbname="mutall_tracker" data-ename="intern" name="from_time" type="time"> To
-            <input data-dbname="mutall_tracker" data-ename="intern" name="to_time" type="time">
+            <input data-dbname="mutall_tracker" data-ename="intern" name="from_time" type="time" value="0700"> To
+            <input data-dbname="mutall_tracker" data-ename="intern" name="to_time" type="time" value="1400">
         </div>
     </fieldset>
 
@@ -160,7 +186,9 @@
                             data-ename="user"
                             name="name"                      
                             type="text"
-                            maxlength="25">
+                            maxlength="25"
+                            value="Frank N"
+                            >
                     </label>
             <label>
                         <span>Email</span>
@@ -169,7 +197,8 @@
                             data-ename="user"
                             name="email"
                             type="text"
-                            maxlength="25">
+                            maxlength="25"
+                            value="frank@gmail.com">
                     </label>
             <label>
                         <span>Phone Number</span>
@@ -178,7 +207,8 @@
                             data-ename="user"
                             name="phone_number"
                             type="text"
-                            maxlength="10">
+                            maxlength="10"
+                            value="0786575656">
                     </label>
         </fieldset>
 
@@ -188,14 +218,20 @@
                         data-ename="intern"
                         name="seld_sponsored"
                         type="radio"
+                        checked
+                        value="no"
                         onclick="Main.show_panel(true, 'self-sponsored'); Main.show_panel(false, 'sponsored')">
                     <span>No</span>
                 </label>
         <div id="self-sponsored" hidden>
             <span>How will you support yourself?</span><br>
-            <textarea maxlength="200" data-dbname="mutall_tracker" data-ename="intern">
-
-                    </textarea>
+            <textarea 
+                maxlength="200" 
+                data-dbname="mutall_tracker" 
+                data-ename="intern"
+                value="self sponsered"
+            >
+            </textarea>
         </div>
     </fieldset>
 
@@ -256,7 +292,9 @@
                         data-ename="intern"
                         name="language"
                         type="checkbox"
-                        value="php">
+                        value="php"
+                        checked>
+                        
                     <span>Php</span>
                 </label>
             <label>
@@ -265,7 +303,8 @@
                         data-ename="intern"
                         name="language"
                         type="checkbox"
-                        value="javascript">
+                        value="javascript"
+                        checked>
                     <span>Javascript</span>
                 </label>
             <label>
@@ -357,7 +396,8 @@
                     data-ename="referee"
                     name="name" 
                     type="text"
-                    maxlength="25">
+                    maxlength="25"
+                    value="carlo">
             </label>
 
         <label>
@@ -367,7 +407,8 @@
                     data-ename="referee"
                     name="email"
                     type="text"
-                    maxlength="25">
+                    maxlength="25"
+                    value="carlo@gmail.com">
             </label>
 
         <label>
@@ -377,7 +418,8 @@
                     data-ename="referee"
                     name="phone_number"
                     type="text"
-                    maxlength="10">
+                    maxlength="10"
+                    value="0786579656">
             </label>
     </fieldset>
 
@@ -389,6 +431,7 @@
                     data-ename="intern"
                     name="residence"
                     type="radio"
+                    value="yes"
                     onclick="Main.show_panel(false, 'resident_town')"/>
             </label>
         <label>
@@ -422,6 +465,7 @@
                     name="name"
                     type="text"
                     maxlength="25"
+                    value="carl"
                     />
             </label>
         <label>
@@ -431,7 +475,8 @@
                     data-ename="kin"
                     name='email'
                     type="text"
-                    maxlength="25"/>
+                    maxlength="25"/
+                    value="fans@gmail.com">
             </label>
         <label>
                 <span>Phone Number</span>
@@ -440,7 +485,8 @@
                     data-ename="kin"
                     name="phone"
                     type="text"
-                    maxlength="10">
+                    maxlength="10"
+                    value="0786575696">
             </label>
     </fieldset>
     <button id="go">Go</button>

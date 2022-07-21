@@ -12,36 +12,48 @@
 <body>
     <form class="frame" action="" method="post">
         <h3>Vehicle Flow</h3>
-        <p> Registration Number</p>
-        <input type="text" style="text-transform:uppercase" id="reg_no" name="reg_no" placeholder="Number Plate" maxlength="8" required="true" />
         <!-- 
-            Vehicle category. -->
+            Vehicle registration number.
+         -->
+        <p> Registration Number</p>
+        <input 
+            type="text" 
+            style="text-transform:uppercase" 
+            id="reg_no" 
+            name="reg_no" 
+            placeholder="Number Plate" 
+            pattern="\w{3}\d{3}\w"
+            maxlength="8" 
+            minlength="7"
+            required
+            />
+        <!-- 
+            Vehicle category.
+         -->
         <fieldset>
             <legend>Vehicle Category:</legend>
-            <label><input type="radio" name="category" value="Car" />Car</label>
-            <label><input type="radio" name="category" value="Lorry" />Lorry</label>
-            <label><input type="radio" name="category" value="Motorcycle" />Motorcycle</label>
+            <label><input type="radio" id="category" name="category" value="Car" required />Car</label>
+            <label><input type="radio" id="category" name="category" value="Lorry" required/>Lorry</label>
+            <label><input type="radio" id="category" name="category" value="Motorcycle" required/>Motorcycle</label>
         </fieldset>
         <!--
-            Vehicle flow. -->
+            Vehicle flow direction.
+         -->
         <fieldset>
             <legend>Direction of the vehicle:</legend>
-            <label><input type="radio" name="direction" value="Incoming" />Incoming </label>
-            <label><input type="radio" name="direction" value="Outgoing" />Outgoing</label>
+            <label><input type="radio" id="direction" name="direction" value="Incoming" required/>Incoming </label>
+            <label><input type="radio" id="direction" name="direction" value="Outgoing" required/>Outgoing</label>
         </fieldset>
         <fieldset>
-            <label>
-                <input type="text" value="" id="datetime" name="datetime" />
-            </label>
-            <label>
-                <input type='text' name="email" id="email" />
-            </label>
+            <label><input id="datetime" name="datetime" hidden/></label>
+            <label><input type='text' name="name" id="name" hidden /></label>
+            <div id="reports" class="error">
+            </div>
         </fieldset>
     </form>
-    <div id="report" class="error">
-
+    <div id="reports" class="error">
     </div>
-    <button id="go">Go</button>
+    <button id="go">Ok </button>
     <button id="cancel">Cancel</button>
 </body>
 

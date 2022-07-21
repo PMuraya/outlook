@@ -4,7 +4,7 @@
 //
 //The page_ecords class used to drive this page is defiend in the extended 
 //library that supporta a broda set of useres o interact with this page 
-require_once "../library/library.php";
+require_once "../schema/library.php";
 
 //Retrieve $_GET variable indirectly to avoid the warning about access to global 
 //variables
@@ -22,10 +22,10 @@ $page_record= new page_record($qstring);
         <title>Create <?php echo $page_record->tname; ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=0.8">
 
-        <link id="mutallcss" rel="stylesheet" type="text/css" href="../library/mutall.css">
+        <link id="mutallcss" rel="stylesheet" type="text/css" href="../schema/mutall.css">
         
         <!-- Include the Services Javascript library and all her ancestors-->
-        <script id='library.js' src="../library/library.js"></script>
+        <script id='library.js' src="../schema/library.js"></script>
         
         <!--Script for defining the objects needed for interacting with this page-->
         <script id='page'>

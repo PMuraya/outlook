@@ -3,8 +3,8 @@
 //be server-specific and should be set up is part of Outlook's installation -- 
 //not when we switch to a different application
 class config{
-    const username = "root";
-    const password =null;
+    const username = "mutall";
+    const password ='mutall';
     //
     //The shared users database 
     const dbname="mutall_users";
@@ -28,6 +28,8 @@ class config{
     //This is the general template for collecting simple user data.
     public string $general = "/outlook/v/code/general.html";
     // 
+    //This is the general template for collecting simple user data.
+    public string $lv1 = "/tracker/v/test/lv1_reg.html";
     //The maximum number of records that can be retrieved from 
     //the server using one single fetch. Its value is used to modify 
     //the editor sql by  adding a limit clause 

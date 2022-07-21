@@ -13,7 +13,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/schema/v/code/schema.php';
 include_once $_SERVER['DOCUMENT_ROOT'].'/schema/v/code/questionnaire.php';
 //
 //Get the Kentionary data (in questionnaire format) to export
-$text = file_get_contents("ranix.json");
+$text = file_get_contents("msg.json");
 //
 //Convert the json to the Iquestionnaire php structure
 $Iquestionnaire = json_decode($text);
@@ -22,7 +22,8 @@ $Iquestionnaire = json_decode($text);
 //Remember questionnaire is defined in the root namspace
 $q = new \questionnaire($Iquestionnaire);
 //
-//Export the questionnaire data and log the progress to the given xml file
-$result = $q->load_common(__DIR__."\\log.xml");
+//Export the questionnaire data and log the progress to the given xml file.
+//Load common without the log.xml
+$result = $q->load_common("");
 //
 echo json_encode($result);

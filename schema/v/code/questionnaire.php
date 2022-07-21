@@ -118,7 +118,7 @@ class questionnaire extends schema {
         //
         //Sort all the artefacts by order ascending of dependency to simplify 
         //the look of the (xml) logfile. NB. Dependency is a function of the
-        //artefact's reltional "depth" and the size of the alias.
+        //artefact's relational "depth" and the size of the alias.
         $this->artefacts->sort( fn($a, $b)=>
             //
             //If both the compared artefacts belong to the same entity...
@@ -184,7 +184,7 @@ class questionnaire extends schema {
 
     //This is the most common way of loading data to a database. It is an 
     //extension of the basic load process but returns a html report -- rather than
-    //a structure outut that needs decoding.
+    //a structure output that needs decoding.
     function load_common(
         //
         //Log the loading process in this xml file    
@@ -192,9 +192,10 @@ class questionnaire extends schema {
         //
         //Log the runtime errors in this text file    
         string $error_file="errors.html"
-    ):string /*html report*/{
+    ):string /* "ok" | html (report)*/{
         //
-        //Do the basic load
+        //Do the basic loading process to return a complex
+        //structure called Imala.
         $Imala = $this->load($logfile, $error_file);
         //
         //Convert the Imala to a summary report in html
@@ -427,7 +428,7 @@ class questionnaire extends schema {
     //are reported as an array of:- 
     //tname: the table whose errors are being reported
     //answer:Summary of saving the table, based on rows loaded
-    //labels:Laout labels for the first row saved
+    //labels:Layout labels for the first row saved
     private function export_td_artefacts(): array/* <{tname, answer, header_errors,body_errors}> */ {
         //
         //Prepare to return the result
@@ -1745,7 +1746,8 @@ namespace capture {
                 //Save the barrel to the database
                 $ans = $barrel->save($row);
                 //
-                //Update the tables row counter
+                //Update the tables row counter for tracking how many 
+                //records have been loaded to the database.
                 $this->row_index++;
                 //
                 //If the answer is an error, log it to the error stream and decide
@@ -2346,6 +2348,15 @@ namespace capture {
             );
             //
             return $labels;
+        }
+        //
+        //Limit the number of barrels logged to 10 by overriding the following
+        //method. 
+        public function logging_is_necessary($row): bool {
+            //
+            //Switch on the logging process for the first 10 records of any
+            //table and switch of after the 10th record.
+            return ($this->log_xml = $this->table->row_index < 10);
         }
     }
 

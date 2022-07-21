@@ -1,22 +1,25 @@
 <html>
-    <head>
-        <title>Login</title>
-        <script>
-            //
-            //Show/hide credentials as required. 
-            function hide_credentials(yes){
-                document.querySelector('#credentials').hidden=yes;
-            }
-        </script>
-        <style>
-            label{display:block}
-        </style>
-    </head>
-    
-    <body>
-        <fieldset id="providers">
-            <legend>Providers:</legend>
-            <label>
+
+<head>
+    <title>Login</title>
+    <script>
+        //
+        //Show/hide credentials as required. 
+        function hide_credentials(yes) {
+            document.querySelector('#credentials').hidden = yes;
+        }
+    </script>
+    <style>
+        label {
+            display: block
+        }
+    </style>
+</head>
+
+<body>
+    <fieldset id="providers">
+        <legend>Providers:</legend>
+        <label>
                 Google 
                 <input 
                     type="radio" 
@@ -24,7 +27,7 @@
                     onchange='hide_credentials(true)'
                     value="google"> 
             </label>
-            <label>
+        <label>
                 Facebook
                 <input 
                     type="radio"
@@ -33,7 +36,7 @@
                    value="facebook" 
                     >
             </label>
-            <label>
+        <label>
                 Custom
                 <input 
                     type="radio" 
@@ -43,19 +46,19 @@
                     value="outlook">
             </label>
 
-            <fieldset id="credentials">
-                <legend> Credentials:</legend>
-                <label>
-                    E-mail<input 
-                        type="email" 
-                        id="email"
-                        value="camilus@gmail.com"
+        <fieldset id="credentials">
+            <legend> Credentials:</legend>
+            <label>
+                    Username<input 
+                        type="name" 
+                        id="name"
+                        value="camilus"
                         required
                         >
                     
                     <span class="report"> * </span>
                 </label>
-                <label>
+            <label>
                     Password<input 
                         type="password" 
                         id="password"
@@ -64,10 +67,10 @@
                         >
                     <span class="report"> * </span>
                 </label>
-            </fieldset>
         </fieldset>
-        <fieldset>
-            <legend>Operations:</legend>
+    </fieldset>
+    <fieldset>
+        <legend>Operations:</legend>
         <label>
                 Login
                 <input 
@@ -84,8 +87,9 @@
                     name="operation_id" 
                     value="register">
             </label>
-       </fieldset>
-        <button id="go" >Ok</button>
-        <button id="cancel" >Cancel</button>
-    </body>
+    </fieldset>
+    <button id="go">Ok</button>
+    <button id="cancel">Cancel</button>
+</body>
+
 </html>

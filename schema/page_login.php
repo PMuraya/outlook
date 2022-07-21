@@ -22,7 +22,7 @@ $page_login= new page_login($qstring);
         
         <meta name="viewport" content="width=device-width, initial-scale=1.2">
 
-        <script src="../library/library.js"></script>
+        <script src="../schema/library.js"></script>
 
         <!-- Script for referencing the prototypes for objects needed for 
         interacting with this page -->

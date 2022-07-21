@@ -12,6 +12,7 @@ export type Ifuel = Array<{[index:string]:basic_value}>;
 //
 //
 export class selector{
+    onchange: (event: Event) => Promise<void>;
     //
     constructor(
         //
@@ -66,10 +67,10 @@ class database {
     query(sql:string):number;
     //
     //Use the given credentials to authenticate the matching user.
-    authenticate(email:string, password:string):boolean;
+    authenticate(name:string, password:string):boolean;
     //
     //Use the given credentials to create a new user account.
-    register(email:string, password:string):void;
+    register(name:string, password:string):void;
     
 }
 //
@@ -323,14 +324,14 @@ export class app{
     //Returns those produts available to a user for this application. These
     //are free products as well as any that the user has are paid 
     //for, a.k.a., assets
-    available_products(email:string):Array<{product_id:string}>
+    available_products(name:string):Array<{product_id:string}>
 }
 
 export class app{
     constructor(app_id: string);
     get_products():Array<Iproduct>
     customed_products():Array<{role_id:string,product_id:string}>
-    subscribed_products(email:string):Array<{product_id:string}>
+    subscribed_products(name:string):Array<{product_id:string}>
 }
 //
 //The following data types support the data merging operations. In future

@@ -83,58 +83,64 @@ export class view {
         return radios.map(r => (<HTMLInputElement> r).value);
     }
 
-    //Returns the value from an input element
+    //Returns the value from an identified input or textarea element.
+    //The function will fail if there is no input value.
     public get_input_value(id: string): string {
         //
-        //get teh identified element
+        //Get the identified element.
         const elem = this.get_element(id);
         //
         //It must be an input  element or textarea.
         if (!(elem instanceof HTMLInputElement || elem instanceof HTMLTextAreaElement))
-            throw new schema.mutall_error(`'{$id}' is not an input element`);
+            throw new schema.mutall_error(`'${id}' is not an input or textarea element`);
         //
+        //There must be a value in the element.
+        if (elem.value === "") 
+            throw new schema.mutall_error(`No value found for element '${id}'`);
+        // 
+        //Return the input element value.
         return elem.value;
     }
     //
-    //Returns the checked values in the form for saving to the database
+    //Returns the value of the checked radio button that have this given name.
+    //There must be atleast one checked value.
     public get_checked_value(name: string): string {
         //
-        //Get the identified value
+        //Get the radio button that is checked.
         const radio = document.querySelector(`input[name='${name}']:checked`);
         //
+        //There must be atleast one checked value under the given name.
+        if (radio === null) alert(`No checked value found under this name '${name}'`);
+        //
         //Ensure that the radio element is a HTMLInputElement.
-        if (!(radio instanceof HTMLInputElement)) throw new schema.mutall_error("The above is not HTMLInputElement");
+        if (!(radio instanceof HTMLInputElement)) 
+            throw new schema.mutall_error(`The input named '${name}' is not a HTMLInputElement`);
         //
-        //Return a null value if a named radio is not set.
-        if (radio === null) alert("check one value");
-        //
-        //Get the value
-        const value = (radio).value;
+        //The radio button value must be set.
+        if(radio.value === "") 
+            throw new schema.mutall_error(`No value found for input named '${name}'`);
         //
         //Return the checked value.
-        return value;
+        return radio.value;
     }
     //
-    //Get the selected value 
+    //Get the selected value from the identified selector.
+    //There must be a selected value.
     get_selected_value(id: string): string {
         //
-        //Get the HTMLSelectElement from the form.
-        const select = document.getElementById(id);
+        //Get the Select Element identified by the id.
+        const select = this.get_element(id);
         //
         //Ensure that the select is a HTMLSelectElement.
-        if (!(select instanceof HTMLSelectElement)) {
-            //
-            const msg = `The element used is not a HTMLSelectElement.`;
-            //
-            alert(msg);
-            throw new Error(msg);
-        }
+        if (!(select instanceof HTMLSelectElement))
+            throw new schema.mutall_error(`The element identified by '${id}' is not a HTMLSelectElement.`);
         //
-        //Ensure the select element is a HTMLSelectElement.
-        const val = select.value;
+        //Ensure that the select element value is set.
+        if(select.value === "") 
+            throw new schema.mutall_error(`The value of the select element identified by '${id}' is not set.`);
         //
-        //Return the selected value/
-        return val;
+        //Return the selected value
+        return select.value;
     }
     //
     //Create a new element from  the given tagname and attributes
@@ -174,8 +180,8 @@ export class view {
             if (key === "className") {
                 //
                 //Take care of multiple class values
-                const classes = (<string> value).split(" ");
-                classes.forEach(c => element.classList.add(c));
+                const classes = (value).split(" ");
+                classes.forEach((c: string) => element.classList.add(c));
             }
             else if (key === "textContent") {
                 element.textContent = value;
@@ -406,14 +412,11 @@ export abstract class page extends view {
             }
         );
     }
-    //Fills the indentified selector element with options fetched from the given
+    //Fills the identified selector element with options fetched from the given
     //table name in the given database
-    async fill_selector( ename: string,dbname: string, selectorid: string) {
+    async fill_selector( ename: string,dbname: string, selectorid: string): Promise<HTMLSelectElement> {
         //
         //1. Get the selector options from the database
-        //
-        //
-        //1.1 Get the options of the first and second column names
         const options: library.Ifuel
             = await server.exec("selector", [ename, dbname], "execute", []);
         //
@@ -421,7 +424,6 @@ export abstract class page extends view {
         //
         //2.1. Get the selector element
         const selector = this.get_element(selectorid);
-        console.log(selector);
         //
         //2.2. Check if the selector is valid
         if (!(selector instanceof HTMLSelectElement))
@@ -434,17 +436,17 @@ export abstract class page extends view {
             //
             //Formulate the name of the primary key.
             const key = `${ename}_selector`;
-            console.log(key);
             //
+            // const pk = option[key];
             const pk = option[key];
-            console.log(pk);
             //
             //2.3.2. Get the friendly component from the option
             const friend = option.friend__;
-            console.log(friend);
             //
+            //Create the selector option.
             this.create_element(selector, 'option', {value: `${pk}`, textContent: `${friend}`});
         }
+        return selector;
     }
 
 }
@@ -997,13 +999,45 @@ export class report extends baby<void>{
         this.get_element("go").hidden = true;
     }
 }
-
+//
+//A class to be implemented when creating a new class to avoid repetition.
+//Once the class is called, one does not need to do anything else.
+export abstract class terminal extends baby<true>{
+    constructor(
+        //
+        //The mother view to the application.
+        mother: page,
+        //
+        //The html page to load
+        html: string
+    ) {
+        super(mother, html)
+    }
+    //
+    //This method does nothing other than satisfying the contractual
+    // obligation of a baby class.
+    async get_result(): Promise<true> {
+        return true;
+    }   
+}
+//
+//The are two ways of identifying a business.
+export type business = 
+    //
+    //The first is when a business is picked from a selector in which case 
+    //the primary key is needed.
+    {source: 'selector', pk:string} 
+    //
+    //or when the user directly provides the data, in which case the identifiers
+    //of a business are required.
+    | {source: 'user', id: string, name:string};
+//
 //Represents a person/individual that is providing
 //or consuming a services we are developing.
 export class user {
     //
     //The provider supplied data
-    public email: string | null;
+    public name: string | null;
     //
     //The type of this user.
     //A user is a visitor if he has never been registered before
@@ -1022,17 +1056,20 @@ export class user {
     //The products that this user is assigned to.
     public products?: Array<assets.uproduct>
     //
+    //The business
+    public business?: business;
+    //
     //The minimum requirement for authentication is a username and
     //password
-    constructor(email: string | null = null) {
+    constructor(name: string | null = null) {
         //
-        this.email = email;
+        this.name = name;
     }
 
-    //A user is a visitor if the email is not defined
+    //A user is a visitor if the name is not defined
     //otherwise his a regular user.
     is_visitor(): boolean {
-        if (this.email === undefined) return true;
+        if (this.name === undefined) return true;
         else return false;
     }
 

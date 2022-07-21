@@ -13,19 +13,29 @@ import * as quest from "../../../schema/v/code/questionnaire.js"
 //
 //Resolve a template viewer during the design phase
 import * as viewer from "./viewer.js"
-
+//
+//Resolve the level one registration.
+import * as reg from './reg.js'
+//
+//Resolve the modules.
+import * as mod from './module.js'
 //
 //Replica is a column on the application database that is linked to a
 //corresponding one on the user database. Sometimes this link is broken and
 //may need to be re-established.
 type replica = {ename: string, cname: string};
-
 //
 //The application class provides the mechanism for linking services providers
 //to their corresponding consumers. It is the base of the various mutall-based
 //applications, e.g.,chama, tracker, postek e.t.c.
 //An application is a page (with panels)
 export abstract class app extends outlook.page {
+    //
+    //
+    public writer: mod.writer;
+    public messenger: mod.messenger;
+    public accountant: mod.accountant;
+    public scheduler: mod.scheduler;
     //
     //The database name that is retrived from a config file
     public dbname: string;
@@ -71,6 +81,12 @@ export abstract class app extends outlook.page {
         //
         //Set this as teh current application
         app.current = this;
+        //
+        //initialize the modules 
+        this.writer = new mod.writer();
+        this.messenger = new mod.messenger();
+        this.accountant = new mod.accountant();
+        this.scheduler = new mod.scheduler();
         //
         //Ensure that the globally  acessible application url in the shema
         //class is set to that of this document. This is important to support
@@ -209,7 +225,7 @@ export abstract class app extends outlook.page {
     async login(User?: outlook.user) {
         //
         //If no user exists at the local storage get the user (credentials)
-        //through a login process.
+        //through the authentication process.
         if (User === undefined) {
             //
             //1.Create and open the login page for the user to choose the login
@@ -224,10 +240,11 @@ export abstract class app extends outlook.page {
         //3.Use the server to check whether the user is registered with
         //outlook or not
         //
-        //Formulate the sql statement to do the job needed
+        //Formulate the sql statement to retrieve the roles and business of the user.
         //
+        //Retrieve the roles.
         //Select from the user database all the subscription for the user
-        //whose email and the application_id are the given ones
+        //whose name and the application_id are the given ones
         const sql =
             //
             //1. Specify what we want using a "select" clause
@@ -249,8 +266,8 @@ export abstract class app extends outlook.page {
             //3. Specify the conditions that we want to apply i.e "where" clause
             + "WHERE "
             //
-            //Specify the email condition
-            + `user.email='${this.user.email}' `
+            //Specify the name condition
+            + `user.name='${this.user.name}' `
             //
             //Specify the application condition
             + `AND application.id='${this.id}'`;
@@ -261,25 +278,115 @@ export abstract class app extends outlook.page {
             ["mutall_users"],
             "get_sql_data",
             [sql]
-        )
+        );
         //
-        //Extract the role id components from the server result
+        //Extract the role id components from the server and assign them to the
+        //user.
         this.user.role_ids = ids.map(e => e.id);
         //
         //The user is a visitor if he has no previous roles
         this.user.type = this.user.role_ids.length === 0 ? "visitor" : "regular";
         //
         //Register the User if he is a visitor. This effectively updates
-        //the roles property and changes the user to a regular
-        if (this.user.type === "visitor") await this.register();
+        //the roles and business properties and changes the user to a regular.
+        if (this.user.type === "visitor") {
+            //
+            //create a new instance of a complete level one registration of a page.
+            const Regist = new reg.complete_lv1_registration(this);
+            //
+            //Collect the roles and the business.
+            const result = await Regist.administer();//Register the user.
+            //
+            if (result === undefined) 
+                throw new schema.mutall_error(`User aborted registration`);
+            //
+            //Destructure the result
+            const {role_ids, business} = result;
+            //
+            //Assign the roles to the user.
+            this.user.role_ids = role_ids;
+            //
+            //Assign the business to the user.
+            this.user.business = business;
+        }else{
+            //
+            //initialize the business component of the user.
+            this.user.business = await this.get_current_business();
+
+        }
         //
         //Welcome the user to the home page unconditionaly and update the welcome
-        //and servives panels accordingly
+        //and services panels accordingly
         await this.welcome_user();
         //
         //Save the user in local storage to allow re-access to this page
         //without logging in.
         window.localStorage.setItem("user", JSON.stringify(this.user));
+    }
+    async get_current_business():Promise<outlook.business> {
+        //
+        //1. Get the business from the database.
+        //
+        //1.1 Formulate an sql statement.
+        const sql = `
+            select 
+                business.business as pk,
+                business.id,
+                business.name
+            from  
+                member 
+                inner join business on member.business = business.business
+                inner join user on member.user = user.user
+            where 
+                user.name = '${this.user!.name}'
+        `;
+        //
+        //1.2 Get the data from the database.
+        const businesses:Array< {id: string, name: string, pk: string}> = await server.exec(
+            "database",
+            ["mutall_users"],
+            "get_sql_data",
+            [sql]
+        );
+        //
+        //Test the businesses to get the number of businesses a user is registered with.
+        //
+        //Throw an exception if the number of businesses is 0.
+        if(businesses.length === 0) 
+            throw new schema.mutall_error(`The user '${this.user!.name}' has no business associated to.`)
+        //
+        //Create a choices for the user if there is more than one business. 
+        if(businesses.length > 1) {
+            //
+            //Create a new choice for the user to select a business.
+            const selection = businesses.map(business =>({key : pk, id: id, value: name}));
+            //
+            //2. Use the pairs to create a new choices POPUP that returns a selected
+            //table
+            const Choice = new outlook.choices<string>(this.config.general, selection, "role_id", undefined, "#content", "single");
+            //
+            //3. Open the POPUP to select a business.
+            const selected: string[] | undefined = await Choice.administer();
+            //
+            //Get the value of the selected business.
+            if(selected === undefined) throw new schema.mutall_error(`No business was selected for this ${this.user!.name}.`);
+            //
+            //For a single case we expect to get only one element in the array.
+            const pk:string = selected[0];
+            //
+            return {source:"selector", pk};
+        }
+        //
+        //Get the values of the business as there is only one.
+        //
+        //2. Get the id.
+        const id = businesses[0].id;
+        //
+        //3. Get the name.
+        const name = businesses[0].name;
+        //
+        //return the business.
+        return {source:"user", name, id};
     }
     //
     //On successful login, welcome the definite user, i.e., regular or visitor
@@ -293,9 +400,17 @@ export abstract class app extends outlook.page {
         //Modify the appropriate tags
         //
         //Set user paragraph tags
-        this.get_element("user_email").textContent = this.user!.email!;
+        this.get_element("user_name").textContent = this.user!.name!;
         this.get_element("app_id").textContent = this.id!;
         this.get_element("app_name").textContent = this.name!;
+        //
+        //.???
+        const busi = this.user!.business!;
+        if(busi.source === "user") {
+            //
+            this.get_element("business_name").textContent = busi.name;
+        }
+      
         //
         //3.Set the user roles for this application
         const role_element = this.get_element("roles");
@@ -358,7 +473,7 @@ export abstract class app extends outlook.page {
             "app",
             [this.id],
             "available_products",
-            [this.user!.email!]
+            [this.user!.name!]
         )
         //
         //Add the subscribed
@@ -412,7 +527,7 @@ export abstract class app extends outlook.page {
 
     //Returns inbuilt (unindexed) products that are specific to this pplication
     abstract get_products_specific(): Array<outlook.assets.uproduct>;
-
+    //
     //Register the user and return the roles which s/he can play
     // in this application.
     async register(): Promise<Array<string> | undefined> {
@@ -424,6 +539,7 @@ export abstract class app extends outlook.page {
         //Collect the user roles for this application from its
         //products
         const inputs = this.dbase!.get_roles();
+       
         //
         //If these roles are undefined alert the user
         if (inputs === undefined || inputs.length < 0) {
@@ -446,7 +562,7 @@ export abstract class app extends outlook.page {
         this.user!.role_ids = role_ids;
         //
         //1.Collect the data needed for a successful 'first level' registartion.
-        //e.g., username, application name, user_roles, email.
+        //e.g., username, application name, user_roles, name.
         // The data has the following structure "[dbname, ename, alias, cname, exp]".
         const login_db_data: Array<quest.label> = this.get_subscription_data();
         //
@@ -485,10 +601,10 @@ export abstract class app extends outlook.page {
         //Collect the user and appication data
         reg.push(['mutall_users', 'application', [], 'id', this.id]);
         //
-        if (this.user!.email === (undefined || null)) {
-            throw new schema.mutall_error("You cannot login without an email");
+        if (this.user!.name === (undefined || null)) {
+            throw new schema.mutall_error("You cannot login without a user name");
         }
-        reg.push(['mutall_users', 'user', [], 'email', this.user!.email!]);
+        reg.push(['mutall_users', 'user', [], 'name', this.user!.name!]);
         //
         //Collect as much subcription data as there are roles
         //subscribed by the user.
@@ -496,7 +612,7 @@ export abstract class app extends outlook.page {
             //
             //Collect all available pointers to the user to enable us link to
             //the application's specific database.
-            reg.push([app.current.dbname!, myrole, [i], 'email', this.user!.email!]);
+            reg.push([app.current.dbname!, myrole, [i], 'name', this.user!.name!]);
             //
             //Indicate that we need to  save a subscription record
             reg.push(['mutall_users', "subscription", [i], 'is_valid', true]);
@@ -1284,7 +1400,7 @@ export class products extends Map<string, outlook.assets.product>{
         });
     }
 }
-
+//
 //The applications configulation interface
 export interface Iconfig {
     //
@@ -1333,6 +1449,7 @@ export interface Iconfig {
     //This is the general template for collecting simple user data.
     general: string;
     //
+    lv1: string;
     //
     //This is the general template for merging contributions
     merge: string;

@@ -3852,7 +3852,7 @@ class xml extends driver {
         //
         //Load the identity translation style sheet
         $xsl = new DOMDocument;
-        $xsl->load('../library/identity.xsl');
+        $xsl->load('../schema/identity.xsl');
         //
         // Configure the transformer
         $proc = new XSLTProcessor;
@@ -5077,7 +5077,7 @@ function display_definers() {
         //
         //Load the identity translation style sheet
         $xsl = new DOMDocument;
-        $xsl->load('../library/definers.xsl');
+        $xsl->load('../schema/definers.xsl');
         //
         // Configure the transformer
         $proc = new XSLTProcessor;
@@ -5101,7 +5101,7 @@ function display_definers() {
         //
         //Load the identity translation style sheet
         $xsl = new DOMDocument;
-        $xsl->load("../library/services.xsl");
+        $xsl->load("../schema/services.xsl");
         //
         // Configure the transformer
         $proc = new XSLTProcessor;
@@ -5127,7 +5127,7 @@ function display_definers() {
         //
         //Load the identity translation style sheet
         $xsl = new DOMDocument;
-        $xsl->load('../library/identity.xsl');
+        $xsl->load('../schema/identity.xsl');
         //
         // Configure the transformer
         $proc = new XSLTProcessor;

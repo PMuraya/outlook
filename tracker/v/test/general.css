@@ -47,3 +47,19 @@ textarea {
 #message {
     height: 100px;
 }
+
+#content label {
+    display: inline-block;
+}
+
+@media screen and (max-width: 600px) {
+    * {
+        font-size: 18px;
+        padding-top: 5px;
+        margin-top: 20px;
+    }
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
