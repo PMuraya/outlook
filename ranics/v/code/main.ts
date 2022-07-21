@@ -23,6 +23,7 @@ export default class main extends app.app {
     public writer: mod.writer;
     public messenger: mod.messenger;
     public accountant: mod.accountant;
+    public scheduler: mod.scheduler;
     //
     //Initialize the main application.
     constructor(config: app.Iconfig) {
@@ -32,6 +33,7 @@ export default class main extends app.app {
         this.writer = new mod.writer();
         this.messenger = new mod.messenger();
         this.accountant = new mod.accountant();
+        this.scheduler = new mod.scheduler();
     }
     //
     //
@@ -257,7 +259,7 @@ export default class main extends app.app {
 //-the operator
 //-the business associated with.
 class record_stock
-    extends app.terminal
+    extends outlook.terminal
     implements mod.questionnaire {
     //
     //Why declare? To allow us to access the modules currently defined in
@@ -490,7 +492,7 @@ class record_stock
 //-the operator
 //-the business associated with.
 class record_flow
-    extends app.terminal
+    extends outlook.terminal
     implements mod.questionnaire {
     //
     //Why declare? To allow us to access the modules currently defined in
@@ -732,7 +734,7 @@ class record_flow
         //
         //1. Show the current time
         const input = <HTMLInputElement>this.get_element('datetime');
-        input.value = (new Date()).toDateString();
+        input.valueAsDate = new Date();
         //
         //2.Show the operator.
         //
@@ -748,7 +750,7 @@ class record_flow
 }
 //
 //This is the class that display the current vehicle's duration
-class vehicle_duration extends app.terminal{
+class vehicle_duration extends outlook.terminal{
     //
     //The vehicle duration in the parking lot
     public duration?:Array<{reg:string,siku:string, saa1:string,dir1:string,saa2:string, dir2:string, duration:string}>;
